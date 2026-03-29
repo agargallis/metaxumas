@@ -65,7 +65,7 @@ export default function CookieBanner() {
                 className="text-sm font-medium mb-1"
                 style={{ color: 'rgba(31,18,9,0.88)' }}
               >
-                Χρησιμοποιούμε cookies
+                Cookies
               </p>
               <p className="text-xs leading-relaxed" style={{ color: 'rgba(47,29,15,0.54)' }}>
                 Χρησιμοποιούμε cookies για να βελτιώσουμε την εμπειρία σας. Μπορείτε να αποδεχτείτε ή να απορρίψετε τη χρήση τους.{' '}

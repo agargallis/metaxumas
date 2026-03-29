@@ -1,106 +1,133 @@
-import { Helmet } from 'react-helmet-async'
-import { Link } from 'react-router-dom'
-import { Music, Calendar, Clock, Users, ArrowRight, ChevronRight, Guitar, Mic2, Radio, Star } from 'lucide-react'
-import PageHero from '../components/ui/PageHero'
+﻿import { Helmet } from 'react-helmet-async'
+import { Calendar, Clock, Users, Guitar, Mic2, Radio, Star, Play } from 'lucide-react'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
-import { recurringEvents, upcomingEvents } from '../data/events'
-import { formatDate, getDayName } from '../lib/utils'
+import { recurringEvents } from '../data/events'
+import { instagramPosts } from '../data/gallery'
+import { business } from '../data/business'
+
+const recurringVisuals = {
+  r1: {
+    image: business.locationVideoPoster || '/4.png',
+    overlay: 'from-[rgba(120,52,22,0.24)] via-[rgba(60,26,10,0.20)] to-[rgba(38,20,8,0.58)]',
+    badge: 'Παρασκευή βράδυ',
+  },
+  r2: {
+    image: business.locationVideoPoster || '/4.png',
+    overlay: 'from-[rgba(156,87,35,0.22)] via-[rgba(88,39,16,0.20)] to-[rgba(38,20,8,0.58)]',
+    badge: 'Σάββατο live',
+  },
+  r3: {
+    image: business.locationVideoPoster || '/4.png',
+    overlay: 'from-[rgba(141,82,55,0.24)] via-[rgba(76,37,19,0.22)] to-[rgba(38,20,8,0.58)]',
+    badge: 'Κυριακάτικη παρέα',
+  },
+}
+
+const reelCards = [
+  ...instagramPosts.filter(post => post.type === 'reel').map((post, index) => ({
+    id: post.id,
+    title: [
+      'Ζωντανή βραδιά Παρασκευής',
+      'Στιγμές από το Σάββατο',
+      'Ατμόσφαιρα, μουσική, παρέα',
+    ][index] || 'Instagram Reel',
+    description: [
+      'Μικρά στιγμιότυπα από live βραδιές με μουσική, μεζέδες και κόσμο που μένει μέχρι αργά.',
+      'Ένα reel-style placeholder section για να μπει αργότερα πραγματικό Instagram περιεχόμενο.',
+      'Γρήγορη εικόνα από το vibe του χώρου όταν γεμίζει η βραδινή ατμόσφαιρα.',
+    ][index] || 'Instagram reel placeholder.',
+    tag: index === 0 ? 'Live Reel' : 'Instagram Reel',
+  })),
+  {
+    id: 'reel-extra',
+    title: 'Κυριακάτικη μουσική στιγμή',
+    description: 'Ένα ακόμη reel placeholder για στιγμές από live Κυριακής και πιο χαλαρό βραδινό κλείσιμο της εβδομάδας.',
+    tag: 'Instagram Reel',
+  },
+]
+
+function ExpectCard({ item }) {
+  return (
+    <div className="border-t border-[rgba(127,91,48,0.12)] pt-5">
+      <div className="mb-3 flex items-center gap-3">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(212,148,26,0.10)] text-gold-700">
+          <item.Icon size={18} />
+        </span>
+        <h3 className="heading-card text-[rgba(31,18,9,0.9)]">{item.title}</h3>
+      </div>
+      <p className="text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{item.desc}</p>
+    </div>
+  )
+}
 
 function RecurringCard({ event }) {
+  const visual = recurringVisuals[event.id] || recurringVisuals.r1
+
   return (
-    <div className="card-base p-7 relative overflow-hidden group h-full">
-      {/* Side accent */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-wine-500/60 to-transparent group-hover:via-wine-400/80 transition-colors duration-300" />
-
-      <div className="pl-3">
-        {/* Day badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(122,30,46,0.10)] border border-[rgba(122,30,46,0.18)] text-wine-700 text-xs font-medium mb-5">
-          <Calendar size={12} />
-          {event.day}
-        </div>
-
-        {event.highlight && (
-          <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-gold-500/15 text-gold-400 border border-gold-500/20">
-            Highlight
+    <div className="overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.62)] shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm">
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img src={visual.image} alt={event.title} className="h-full w-full object-cover" />
+        <div className={`absolute inset-0 bg-gradient-to-br ${visual.overlay}`} />
+        <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-5">
+          <span className="rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(255,246,234,0.92)] backdrop-blur-sm">
+            {visual.badge}
           </span>
-        )}
+          <span className="rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(255,246,234,0.92)] backdrop-blur-sm">
+            {event.time}
+          </span>
+        </div>
+        <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+          <p className="mb-1 text-xs uppercase tracking-[0.18em] text-[rgba(255,238,219,0.72)]">{event.day}</p>
+          <h3 className="font-serif text-[1.55rem] font-semibold leading-tight text-white">{event.title}</h3>
+        </div>
+      </div>
 
-        <h3 className="font-serif text-xl font-semibold text-[rgba(31,18,9,0.9)] mb-2 group-hover:text-gold-700 transition-colors">
-          {event.title}
-        </h3>
-        <p className="text-sm text-[rgba(47,29,15,0.56)] leading-relaxed mb-5">{event.description}</p>
+      <div className="p-5 sm:p-6">
+        <p className="mb-5 text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{event.description}</p>
 
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-xs text-[rgba(47,29,15,0.46)]">
+        <div className="space-y-2 text-xs text-[rgba(47,29,15,0.46)]">
+          <div className="flex items-center gap-2">
             <Clock size={12} className="text-gold-500/60" />
             <span>Έναρξη: {event.time}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[rgba(47,29,15,0.46)]">
-            <Music size={12} className="text-gold-500/60" />
+          <div className="flex items-center gap-2">
+            <Mic2 size={12} className="text-gold-500/60" />
             <span>{event.genre}</span>
           </div>
-          {event.reservationRequired && (
-            <div className="flex items-center gap-2 text-xs text-[rgba(47,29,15,0.46)]">
+          {event.reservationRequired ? (
+            <div className="flex items-center gap-2">
               <Users size={12} className="text-gold-500/60" />
               <span>Συνιστάται κράτηση</span>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
   )
 }
 
-function UpcomingEventCard({ event }) {
-  const dateLabel = formatDate(event.date)
-  const dayLabel  = getDayName(event.date)
-
+function ReelCard({ reel }) {
   return (
-    <div className="card-base overflow-hidden group">
-      {/* Date strip */}
-      <div className="h-1 bg-gradient-to-r from-wine-600/40 via-gold-500/40 to-transparent" />
-
-      <div className="p-6">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div>
-            <p className="text-xs text-gold-400/70 font-medium tracking-wide uppercase mb-1">{dayLabel}</p>
-            <p className="text-sm font-medium text-[rgba(47,29,15,0.58)]">{dateLabel}</p>
-          </div>
-          <div className="text-right">
-            <span className="text-xs text-[rgba(47,29,15,0.38)]">{event.time}</span>
-          </div>
-        </div>
-
-        <h3 className="font-serif text-lg font-semibold text-[rgba(31,18,9,0.9)] mb-2 group-hover:text-gold-700 transition-colors">
-          {event.title}
-        </h3>
-        <p className="text-sm text-[rgba(47,29,15,0.56)] mb-4 leading-relaxed">{event.description}</p>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {event.tags?.map(tag => (
-            <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(127,91,48,0.06)] border border-[rgba(127,91,48,0.12)] text-[rgba(47,29,15,0.46)]">
-              {tag}
+    <div className="space-y-4">
+      <div className="relative min-h-[18rem] overflow-hidden rounded-[2rem] border border-[rgba(145,97,39,0.12)] bg-[linear-gradient(145deg,rgba(226,184,153,0.92),rgba(249,232,214,0.94))]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.64),transparent_36%)]" />
+        <div className="relative z-10 flex h-full flex-col justify-between p-5">
+          <div className="flex items-center justify-between gap-3">
+            <span className="rounded-full border border-white/70 bg-white/72 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(60,36,20,0.7)]">
+              {reel.tag}
             </span>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between pt-4 border-t border-[rgba(127,91,48,0.10)]">
-          <div>
-            {event.artist && event.artist !== '[Καλλιτέχνης]' && (
-              <p className="text-xs text-[rgba(47,29,15,0.46)]">🎤 {event.artist}</p>
-            )}
-            <p className="text-xs text-[rgba(47,29,15,0.38)]">{event.price}</p>
+            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/72 text-[rgba(74,40,18,0.76)]">
+              <Play size={16} />
+            </span>
           </div>
-          {event.reservationRequired && (
-            <Link
-              to="/reservations"
-              className="text-xs text-gold-400 hover:text-gold-300 flex items-center gap-1 transition-colors"
-            >
-              Κράτηση <ChevronRight size={12} />
-            </Link>
-          )}
+          <p className="text-sm text-[rgba(60,36,20,0.82)]">Video placeholder</p>
         </div>
+      </div>
+
+      <div className="border-b border-[rgba(127,91,48,0.12)] pb-4">
+        <h3 className="heading-card mb-2 text-[rgba(31,18,9,0.88)]">{reel.title}</h3>
+        <p className="text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{reel.description}</p>
       </div>
     </div>
   )
@@ -111,26 +138,43 @@ export default function LiveMusic() {
     <PageTransition>
       <Helmet>
         <title>Ζωντανή Μουσική | Μεταξύ Μας</title>
-        <meta name="description" content="Ζωντανή μουσική κάθε Παρασκευή και Σάββατο — ελληνική λαϊκή, ρεμπέτικο, acoustic. Κλείστε τραπέζι για τη μουσική σας βραδιά." />
+        <meta
+          name="description"
+          content="Ζωντανή μουσική κάθε εβδομάδα στο Μεταξύ Μας, με ελληνικό πρόγραμμα, acoustic βραδιές και ειδικές μουσικές εκδηλώσεις."
+        />
       </Helmet>
 
-      <PageHero
-        label="Ζωντανή Μουσική"
-        title="Βραδιές που δεν ξεχνιούνται"
-        subtitle="Κάθε εβδομάδα ζωντανά σχήματα, ζωντανές στιγμές — ελληνική μουσική στη ψυχή της."
-      />
-
-      {/* Recurring events */}
-      <section className="section-padding">
+      <section className="section-padding pt-6 sm:pt-8">
         <div className="container-wide">
-          <SectionReveal className="mb-12">
-            <p className="label-upper mb-3">Εβδομαδιαίο Πρόγραμμα</p>
-            <h2 className="heading-section text-[rgba(31,18,9,0.9)] mb-2">Τακτικές Βραδιές</h2>
-            <div className="divider-gold !mx-0" />
+          <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
+            <p className="label-upper mb-3">Τι να περιμένετε!</p>
+            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Live βραδιές με σωστό ρυθμό και ατμόσφαιρα.</h2>
           </SectionReveal>
 
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {recurringEvents.map(event => (
+          <StaggerReveal className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              { Icon: Guitar, title: 'Ελληνική Λαϊκή', desc: 'Αγαπημένα τραγούδια live, σε βραδιές που μένουν παρεΐστικες και ζεστές.' },
+              { Icon: Mic2, title: 'Ρεμπέτικο', desc: 'Αυθεντικός ήχος, πιο άμεσος χαρακτήρας και μουσική που ταιριάζει με το τραπέζι.' },
+              { Icon: Radio, title: 'Acoustic Βραδιές', desc: 'Πιο ήπιες στιγμές με καθαρό ήχο, κρασί και κουβέντα χωρίς υπερβολή.' },
+              { Icon: Star, title: 'Ειδικές Εκδηλώσεις', desc: 'Θεματικές μουσικές βραδιές και μικρά αφιερώματα όταν το πρόγραμμα το ζητά.' },
+            ].map(item => (
+              <StaggerItem key={item.title}>
+                <ExpectCard item={item} />
+              </StaggerItem>
+            ))}
+          </StaggerReveal>
+        </div>
+      </section>
+
+      <section className="section-padding pt-0">
+        <div className="container-wide">
+          <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
+            <p className="label-upper mb-3">Εβδομαδιαίο Πρόγραμμα</p>
+            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Τακτικές Βραδιές</h2>
+          </SectionReveal>
+
+          <StaggerReveal className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {recurringEvents.filter(event => event.day !== 'Τετάρτη').map(event => (
               <StaggerItem key={event.id}>
                 <RecurringCard event={event} />
               </StaggerItem>
@@ -139,89 +183,22 @@ export default function LiveMusic() {
         </div>
       </section>
 
-      {/* Upcoming one-time events */}
-      <section className="section-padding border-y border-[rgba(127,91,48,0.10)]" style={{ background: 'var(--bg-raised)' }}>
+      <section className="section-padding border-y border-[rgba(127,91,48,0.10)]">
         <div className="container-wide">
-          <SectionReveal className="mb-12">
-            <p className="label-upper mb-3">Προσεχώς</p>
-            <h2 className="heading-section text-[rgba(31,18,9,0.9)] mb-2">Επερχόμενες Εκδηλώσεις</h2>
-            <div className="divider-gold !mx-0" />
+          <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
+            <p className="label-upper mb-3">Instagram Reels!</p>
+            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Στιγμιότυπα από τις live βραδιές</h2>
           </SectionReveal>
 
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {upcomingEvents.map(event => (
-              <StaggerItem key={event.id}>
-                <UpcomingEventCard event={event} />
-              </StaggerItem>
-            ))}
-          </StaggerReveal>
-
-          <SectionReveal>
-            <div className="p-8 rounded-3xl bg-[rgba(255,251,246,0.72)] border border-[rgba(127,91,48,0.12)] border-dashed text-center">
-              <Music size={28} className="text-gold-500/40 mx-auto mb-3" />
-              <p className="text-sm text-[rgba(47,29,15,0.48)] mb-1">Περισσότερες εκδηλώσεις προσεχώς</p>
-              <p className="text-xs text-[rgba(47,29,15,0.36)]">Ακολουθήστε μας στο Instagram για τελευταίες ανακοινώσεις</p>
-            </div>
-          </SectionReveal>
-        </div>
-      </section>
-
-      {/* Artist / venue info */}
-      <section className="section-padding">
-        <div className="container-narrow">
-          <SectionReveal className="text-center mb-14">
-            <p className="label-upper mb-3">Η Μουσική μας Ψυχή</p>
-            <h2 className="heading-section text-[rgba(31,18,9,0.9)] mb-4">Τι να περιμένετε</h2>
-            <div className="divider-gold" />
-            <p className="body-lead">
-              Το «Μεταξύ Μας» επιλέγει με φροντίδα τα σχήματα που φιλοξενεί.
-              Από νέους καλλιτέχνες της ελληνικής σκηνής ως καταξιωμένα ονόματα
-              του ρεμπέτικου — η μουσική εδώ είναι αυθεντική.
-            </p>
-          </SectionReveal>
-
-          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {[
-              { Icon: Guitar, title: 'Ελληνική Λαϊκή', desc: 'Τα αγαπημένα τραγούδια που ξέρουμε όλοι — live, με πάθος.' },
-              { Icon: Mic2,   title: 'Ρεμπέτικο',       desc: 'Η ρίζα της ελληνικής μουσικής — ειλικρινές και αυθεντικό.' },
-              { Icon: Radio,  title: 'Acoustic Βραδιές', desc: 'Ήπια, ατμοσφαιρική μουσική για χαλαρές στιγμές.' },
-              { Icon: Star,   title: 'Ειδικές Εκδηλώσεις', desc: 'Εορταστικές βραδιές, αφιερώματα και surprises.' },
-            ].map(item => (
-              <StaggerItem key={item.title}>
-                <div className="card-base p-6 flex items-start gap-4">
-                  <span className="p-2.5 rounded-xl bg-gold-500/10 text-gold-400 shrink-0">
-                    <item.Icon size={18} />
-                  </span>
-                  <div>
-                    <h3 className="font-serif font-semibold text-[rgba(31,18,9,0.9)] mb-1">{item.title}</h3>
-                    <p className="text-sm text-[rgba(47,29,15,0.56)]">{item.desc}</p>
-                  </div>
+          <StaggerReveal className="mx-auto flex max-w-6xl flex-wrap justify-center gap-8">
+            {reelCards.map(reel => (
+              <StaggerItem key={reel.id}>
+                <div className="w-full max-w-[17.5rem]">
+                  <ReelCard reel={reel} />
                 </div>
               </StaggerItem>
             ))}
           </StaggerReveal>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="section-padding" style={{ background: 'var(--bg-raised)' }}>
-        <div className="container-narrow text-center">
-          <SectionReveal>
-            <p className="label-upper mb-4">Μην χάσετε τη βραδιά</p>
-            <h2 className="heading-section text-[rgba(31,18,9,0.9)] mb-4">Κλείστε τραπέζι<br /><span className="text-gold-700">για μουσική βραδιά</span></h2>
-            <p className="body-lead mb-8 max-w-md mx-auto">
-              Οι θέσεις για τις βραδιές ζωντανής μουσικής γεμίζουν γρήγορα.
-              Εξασφαλίστε τη θέση σας έγκαιρα.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/reservations" className="btn-primary text-base px-8 py-4">
-                Κράτηση για Μουσική Βραδιά
-              </Link>
-              <Link to="/contact" className="btn-outline text-base px-8 py-4">
-                Επικοινωνία <ArrowRight size={16} />
-              </Link>
-            </div>
-          </SectionReveal>
         </div>
       </section>
     </PageTransition>

@@ -1,8 +1,8 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { motion, AnimatePresence } from 'motion/react'
-import { CheckCircle, AlertCircle, Phone, Clock, Users, MessageSquare, Sun, Moon, Music, AlertTriangle } from 'lucide-react'
+import { CheckCircle, AlertCircle, Phone, Clock, Users, MessageSquare, Sun, Moon, AlertTriangle } from 'lucide-react'
 import PageHero from '../components/ui/PageHero'
 import SectionReveal from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
@@ -15,17 +15,17 @@ function SuccessMessage() {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="text-center py-16 px-8"
+      className="px-8 py-16 text-center"
     >
-      <div className="w-16 h-16 rounded-full bg-olive-800/30 border border-olive-600/30 flex items-center justify-center mx-auto mb-5">
+      <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-olive-600/30 bg-olive-800/30">
         <CheckCircle size={28} className="text-olive-400" />
       </div>
-      <h3 className="font-serif text-2xl font-semibold text-[rgba(31,18,9,0.9)] mb-3">
+      <h3 className="mb-3 font-serif text-2xl font-semibold text-[rgba(31,18,9,0.9)]">
         Η κράτησή σας ελήφθη!
       </h3>
-      <p className="text-sm text-[rgba(47,29,15,0.6)] max-w-md mx-auto leading-relaxed">
+      <p className="mx-auto max-w-md text-sm leading-relaxed text-[rgba(47,29,15,0.6)]">
         Σας ευχαριστούμε. Θα επικοινωνήσουμε μαζί σας σύντομα για επιβεβαίωση.
-        Αν δεν λάβετε απάντηση εντός 24 ωρών, παρακαλούμε επικοινωνήστε τηλεφωνικά.
+        Αν δεν λάβετε απάντηση εντός 24 ωρών, παρακαλούμε επικοινωνήστε μαζί μας τηλεφωνικά.
       </p>
       <a href={`tel:${business.phone}`} className="btn-outline mt-6 inline-flex">
         <Phone size={15} />
@@ -40,9 +40,9 @@ function ErrorMessage({ message }) {
     <motion.div
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex items-start gap-3 p-4 rounded-xl bg-[rgba(122,30,46,0.10)] border border-[rgba(122,30,46,0.18)] text-sm text-wine-700"
+      className="flex items-start gap-3 rounded-xl border border-[rgba(122,30,46,0.18)] bg-[rgba(122,30,46,0.10)] p-4 text-sm text-wine-700"
     >
-      <AlertCircle size={16} className="shrink-0 mt-0.5" />
+      <AlertCircle size={16} className="mt-0.5 shrink-0" />
       <p>{message || 'Παρουσιάστηκε σφάλμα. Παρακαλούμε προσπαθήστε ξανά ή επικοινωνήστε τηλεφωνικά.'}</p>
     </motion.div>
   )
@@ -60,7 +60,6 @@ export default function Reservations() {
   } = useForm({ mode: 'onBlur' })
 
   const onSubmit = async (data) => {
-    // Honeypot check
     if (data._honeypot) return
 
     setLoading(true)
@@ -69,18 +68,18 @@ export default function Reservations() {
     try {
       const res = await fetch(FORMSPREE_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          name:         data.name,
-          phone:        data.phone,
-          email:        data.email,
-          date:         data.date,
-          time:         data.time,
-          guests:       data.guests,
-          seating:      data.seating,
-          occasion:     data.occasion,
-          notes:        data.notes,
-          _subject:     `Νέα Κράτηση — ${data.name} (${data.date} ${data.time})`,
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          date: data.date,
+          time: data.time,
+          guests: data.guests,
+          seating: data.seating,
+          occasion: data.occasion,
+          notes: data.notes,
+          _subject: `Νέα Κράτηση - ${data.name} (${data.date} ${data.time})`,
         }),
       })
 
@@ -92,7 +91,7 @@ export default function Reservations() {
         setServerError(json?.errors?.[0]?.message || null)
       }
     } catch {
-      setServerError('Δεν ήταν δυνατή η αποστολή. Ελέγξτε τη σύνδεσή σας.')
+      setServerError('Δεν ήταν δυνατή η αποστολή. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.')
     } finally {
       setLoading(false)
     }
@@ -102,20 +101,22 @@ export default function Reservations() {
     <PageTransition>
       <Helmet>
         <title>Κράτηση Τραπεζιού | Μεταξύ Μας</title>
-        <meta name="description" content="Κλείστε τραπέζι στο Μεταξύ Μας — για πρωινό, βραδινό ή ζωντανή μουσική βραδιά. Online κράτηση γρήγορα και εύκολα." />
+        <meta
+          name="description"
+          content="Κλείστε τραπέζι στο Μεταξύ Μας για καφέ, μεζέδες ή βραδιές ζωντανής μουσικής. Online αίτημα κράτησης γρήγορα και εύκολα."
+        />
       </Helmet>
 
       <PageHero
+        minimal
         label="Κρατήσεις"
         title="Κλείστε το τραπέζι σας"
-        subtitle="Εξασφαλίστε τη θέση σας — ειδικά για βραδιές ζωντανής μουσικής."
+        subtitle="Εξασφαλίστε τη θέση σας, ειδικά για βραδιές ζωντανής μουσικής."
       />
 
       <section className="section-padding">
         <div className="container-wide">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-12 xl:gap-16">
-
-            {/* Form */}
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_340px] xl:gap-16">
             <div>
               <AnimatePresence mode="wait">
                 {submitted ? (
@@ -129,20 +130,13 @@ export default function Reservations() {
                     noValidate
                     className="space-y-6"
                   >
-                    {/* Honeypot — hidden from real users */}
                     <div className="hidden" aria-hidden="true">
-                      <input
-                        type="text"
-                        tabIndex={-1}
-                        autoComplete="off"
-                        {...register('_honeypot')}
-                      />
+                      <input type="text" tabIndex={-1} autoComplete="off" {...register('_honeypot')} />
                     </div>
 
                     {serverError && <ErrorMessage message={serverError} />}
 
-                    {/* Row 1: Name + Phone */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                       <div>
                         <label htmlFor="name" className="form-label">
                           Ονοματεπώνυμο <span className="text-wine-400">*</span>
@@ -151,14 +145,13 @@ export default function Reservations() {
                           id="name"
                           type="text"
                           autoComplete="name"
-                          placeholder="Γιώργης Παπαδόπουλος"
+                          placeholder="Γιώργος Παπαδόπουλος"
                           className={`form-field ${errors.name ? 'border-wine-600/60' : ''}`}
                           {...register('name', { required: 'Το όνομα είναι υποχρεωτικό' })}
                         />
-                        {errors.name && (
-                          <p className="text-xs text-wine-400 mt-1">{errors.name.message}</p>
-                        )}
+                        {errors.name && <p className="mt-1 text-xs text-wine-400">{errors.name.message}</p>}
                       </div>
+
                       <div>
                         <label htmlFor="phone" className="form-label">
                           Τηλέφωνο <span className="text-wine-400">*</span>
@@ -177,13 +170,10 @@ export default function Reservations() {
                             },
                           })}
                         />
-                        {errors.phone && (
-                          <p className="text-xs text-wine-400 mt-1">{errors.phone.message}</p>
-                        )}
+                        {errors.phone && <p className="mt-1 text-xs text-wine-400">{errors.phone.message}</p>}
                       </div>
                     </div>
 
-                    {/* Email */}
                     <div>
                       <label htmlFor="email" className="form-label">
                         Email <span className="text-wine-400">*</span>
@@ -202,13 +192,10 @@ export default function Reservations() {
                           },
                         })}
                       />
-                      {errors.email && (
-                        <p className="text-xs text-wine-400 mt-1">{errors.email.message}</p>
-                      )}
+                      {errors.email && <p className="mt-1 text-xs text-wine-400">{errors.email.message}</p>}
                     </div>
 
-                    {/* Row 2: Date + Time */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                       <div>
                         <label htmlFor="date" className="form-label">
                           Ημερομηνία <span className="text-wine-400">*</span>
@@ -220,10 +207,9 @@ export default function Reservations() {
                           className={`form-field ${errors.date ? 'border-wine-600/60' : ''}`}
                           {...register('date', { required: 'Επιλέξτε ημερομηνία' })}
                         />
-                        {errors.date && (
-                          <p className="text-xs text-wine-400 mt-1">{errors.date.message}</p>
-                        )}
+                        {errors.date && <p className="mt-1 text-xs text-wine-400">{errors.date.message}</p>}
                       </div>
+
                       <div>
                         <label htmlFor="time" className="form-label">
                           Ώρα <span className="text-wine-400">*</span>
@@ -253,14 +239,11 @@ export default function Reservations() {
                             <option value="23:00">23:00</option>
                           </optgroup>
                         </select>
-                        {errors.time && (
-                          <p className="text-xs text-wine-400 mt-1">{errors.time.message}</p>
-                        )}
+                        {errors.time && <p className="mt-1 text-xs text-wine-400">{errors.time.message}</p>}
                       </div>
                     </div>
 
-                    {/* Row 3: Guests + Seating */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                       <div>
                         <label htmlFor="guests" className="form-label">
                           Αριθμός Ατόμων <span className="text-wine-400">*</span>
@@ -271,15 +254,16 @@ export default function Reservations() {
                           {...register('guests', { required: 'Επιλέξτε αριθμό ατόμων' })}
                         >
                           <option value="">Επιλέξτε</option>
-                          {[1,2,3,4,5,6,7,8,9,10].map(n => (
-                            <option key={n} value={n}>{n} {n === 1 ? 'άτομο' : 'άτομα'}</option>
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                            <option key={n} value={n}>
+                              {n} {n === 1 ? 'άτομο' : 'άτομα'}
+                            </option>
                           ))}
                           <option value="11+">11+ άτομα</option>
                         </select>
-                        {errors.guests && (
-                          <p className="text-xs text-wine-400 mt-1">{errors.guests.message}</p>
-                        )}
+                        {errors.guests && <p className="mt-1 text-xs text-wine-400">{errors.guests.message}</p>}
                       </div>
+
                       <div>
                         <label htmlFor="seating" className="form-label">Θέση Καθίσματος</label>
                         <select id="seating" className="form-field" {...register('seating')}>
@@ -292,7 +276,6 @@ export default function Reservations() {
                       </div>
                     </div>
 
-                    {/* Occasion */}
                     <div>
                       <label htmlFor="occasion" className="form-label">Αφορμή (προαιρετικά)</label>
                       <select id="occasion" className="form-field" {...register('occasion')}>
@@ -306,7 +289,6 @@ export default function Reservations() {
                       </select>
                     </div>
 
-                    {/* Notes */}
                     <div>
                       <label htmlFor="notes" className="form-label">Σημειώσεις / Ειδικά αιτήματα</label>
                       <textarea
@@ -318,28 +300,26 @@ export default function Reservations() {
                       />
                     </div>
 
-                    {/* Disclaimer */}
-                    <div className="p-4 rounded-xl bg-[rgba(255,251,246,0.72)] border border-[rgba(127,91,48,0.12)] text-xs text-[rgba(47,29,15,0.44)] leading-relaxed">
+                    <div className="border-t border-[rgba(127,91,48,0.12)] pt-4 text-xs leading-relaxed text-[rgba(47,29,15,0.44)]">
                       <p className="flex items-start gap-2">
-                        <AlertTriangle size={13} className="text-gold-400/60 shrink-0 mt-0.5" />
+                        <AlertTriangle size={13} className="mt-0.5 shrink-0 text-gold-400/60" />
                         <span>
-                          <strong className="text-[rgba(31,18,9,0.72)]">Σημαντικό:</strong> Η online κράτηση αποτελεί
-                          αίτημα. Η επιβεβαίωση θα σας αποσταλεί μέσω email ή τηλεφώνου εντός 24 ωρών.
-                          Για επείγουσες κρατήσεις ή για αύριο, παρακαλούμε επικοινωνήστε τηλεφωνικά.
-                          Κρατήσεις για βραδιές ζωντανής μουσικής εξαρτώνται από διαθεσιμότητα.
+                          <strong className="text-[rgba(31,18,9,0.72)]">Σημαντικό:</strong> Η online κράτηση αποτελεί αίτημα.
+                          Η επιβεβαίωση θα σας σταλεί μέσω email ή τηλεφώνου εντός 24 ωρών. Για επείγουσες
+                          κρατήσεις ή για αύριο, παρακαλούμε επικοινωνήστε τηλεφωνικά. Οι κρατήσεις για βραδιές
+                          ζωντανής μουσικής εξαρτώνται από διαθεσιμότητα.
                         </span>
                       </p>
                     </div>
 
-                    {/* Submit */}
                     <button
                       type="submit"
                       disabled={loading}
-                      className="btn-primary w-full justify-center text-base py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="btn-primary w-full justify-center py-4 text-base disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {loading ? (
                         <>
-                          <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                           </svg>
@@ -354,35 +334,32 @@ export default function Reservations() {
               </AnimatePresence>
             </div>
 
-            {/* Sidebar info */}
             <div>
               <SectionReveal className="space-y-6 lg:sticky lg:top-28">
-                {/* Phone */}
-                <div className="card-base p-6">
-                  <div className="flex items-center gap-3 mb-3">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-3 flex items-center gap-3">
                     <Phone size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Τηλεφωνική Κράτηση</h3>
                   </div>
-                  <p className="text-xs text-[rgba(47,29,15,0.56)] mb-3">Για άμεση εξυπηρέτηση ή επείγουσες κρατήσεις:</p>
-                  <a href={`tel:${business.phone}`} className="btn-primary text-sm w-full justify-center py-3">
+                  <p className="mb-3 text-xs text-[rgba(47,29,15,0.56)]">Για άμεση εξυπηρέτηση ή επείγουσες κρατήσεις:</p>
+                  <a href={`tel:${business.phone}`} className="btn-primary w-full justify-center py-3 text-sm">
                     <Phone size={14} />
                     {business.phoneDisplay}
                   </a>
                 </div>
 
-                {/* Hours */}
-                <div className="card-base p-6">
-                  <div className="flex items-center gap-3 mb-4">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-4 flex items-center gap-3">
                     <Clock size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ωράριο Λειτουργίας</h3>
                   </div>
                   <div className="space-y-3">
                     {business.hours.map((row, i) => (
-                      <div key={i} className="pb-3 border-b border-[rgba(127,91,48,0.10)] last:border-0 last:pb-0">
-                        <p className="text-xs text-[rgba(47,29,15,0.42)] mb-1">{row.days}</p>
-                        <p className="text-sm text-[rgba(47,29,15,0.68)] flex items-center gap-2 flex-wrap">
+                      <div key={i} className="border-b border-[rgba(127,91,48,0.10)] pb-3 last:border-0 last:pb-0">
+                        <p className="mb-1 text-xs text-[rgba(47,29,15,0.42)]">{row.days}</p>
+                        <p className="flex flex-wrap items-center gap-2 text-sm text-[rgba(47,29,15,0.68)]">
                           <span className="inline-flex items-center gap-1"><Sun size={11} className="text-gold-400/70" />{row.morning}</span>
-                          <span className="text-[rgba(47,29,15,0.24)]">·</span>
+                          <span className="text-[rgba(47,29,15,0.24)]">•</span>
                           <span className="inline-flex items-center gap-1"><Moon size={11} className="text-wine-600/70" />{row.evening}</span>
                         </p>
                       </div>
@@ -390,27 +367,23 @@ export default function Reservations() {
                   </div>
                 </div>
 
-                {/* Groups */}
-                <div className="card-base p-6">
-                  <div className="flex items-center gap-3 mb-3">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-3 flex items-center gap-3">
                     <Users size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ομαδικές Κρατήσεις</h3>
                   </div>
-                  <p className="text-xs text-[rgba(47,29,15,0.56)] leading-relaxed">
-                    Για πάνω από 10 άτομα ή για ιδιωτικές εκδηλώσεις,
-                    επικοινωνήστε μαζί μας τηλεφωνικά.
+                  <p className="text-xs leading-relaxed text-[rgba(47,29,15,0.56)]">
+                    Για πάνω από 10 άτομα ή για ιδιωτικές εκδηλώσεις, επικοινωνήστε μαζί μας τηλεφωνικά.
                   </p>
                 </div>
 
-                {/* Note */}
-                <div className="card-base p-6">
-                  <div className="flex items-center gap-3 mb-3">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-3 flex items-center gap-3">
                     <MessageSquare size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Σημείωση</h3>
                   </div>
-                  <p className="text-xs text-[rgba(47,29,15,0.56)] leading-relaxed">
-                    Λόγω υψηλής ζήτησης, ιδίως για βραδιές ζωντανής μουσικής,
-                    συνιστούμε κράτηση 2–3 ημέρες νωρίτερα.
+                  <p className="text-xs leading-relaxed text-[rgba(47,29,15,0.56)]">
+                    Λόγω υψηλής ζήτησης, ιδίως για βραδιές ζωντανής μουσικής, συνιστούμε κράτηση 2-3 ημέρες νωρίτερα.
                   </p>
                 </div>
               </SectionReveal>

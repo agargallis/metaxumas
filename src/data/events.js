@@ -1,23 +1,14 @@
-/**
- * Live Music Events Data
- * ─────────────────────────────────────────────────────────────────
- * Add upcoming live nights here.
- * recurring: true = weekly/regular event (no specific date needed)
- * date: ISO string for one-time events
- * ─────────────────────────────────────────────────────────────────
- */
-
-export const recurringEvents = [
+﻿export const recurringEvents = [
   {
     id: 'r1',
     day: 'Παρασκευή',
     dayShort: 'Παρ',
     title: 'Ζωντανή Μουσική Βραδιά',
-    description: 'Κάθε Παρασκευή βράδυ, ζωντανό σχήμα και μεζέδες — η καλύτερη παρέα για να τελειώσεις την εβδομάδα.',
+    description: 'Κάθε Παρασκευή βράδυ, ζωντανό σχήμα και μεζέδες για να κλείσει η εβδομάδα όπως πρέπει.',
     time: '21:30',
     genre: 'Ελληνική Λαϊκή',
-    vibe: 'Χαλαρό & Ζεστό',
-    artist: null, // [PLACEHOLDER: add artist name when confirmed]
+    vibe: 'Ζεστό και παρεΐστικο',
+    artist: null,
     reservationRequired: true,
     highlight: true,
   },
@@ -26,24 +17,37 @@ export const recurringEvents = [
     day: 'Σάββατο',
     dayShort: 'Σαβ',
     title: 'Σαββατιάτικη Βραδιά',
-    description: 'Το Σάββατο το «Μεταξύ Μας» γίνεται ταβέρνα στα καλά: ζωντανή μουσική, πάθος, και τραπέζι που δεν θέλεις να αφήσεις.',
+    description: 'Το Σάββατο το «Μεταξύ Μας» γεμίζει μουσική, κρασί και τραπέζια που μένουν ως αργά.',
     time: '21:00',
-    genre: 'Ελληνικό Λαϊκό / Ρεμπέτικο',
-    vibe: 'Γιορτινό & Ζωντανό',
-    artist: null, // [PLACEHOLDER]
+    genre: 'Λαϊκό / Ρεμπέτικο',
+    vibe: 'Γιορτινό και ζωντανό',
+    artist: null,
     reservationRequired: true,
     highlight: true,
   },
   {
     id: 'r3',
+    day: 'Κυριακή',
+    dayShort: 'Κυρ',
+    title: 'Κυριακάτικη Μουσική Παρέα',
+    description: 'Μια πιο ζεστή Κυριακάτικη βραδιά με ελληνικό πρόγραμμα, κρασί και τραπέζια που κλείνουν τη εβδομάδα όμορφα.',
+    time: '20:30',
+    genre: 'Λαϊκό / Έντεχνο',
+    vibe: 'Χαλαρό και παρεΐστικο',
+    artist: null,
+    reservationRequired: true,
+    highlight: true,
+  },
+  {
+    id: 'r4',
     day: 'Τετάρτη',
     dayShort: 'Τετ',
     title: 'Acoustic Βραδιά',
-    description: 'Μεσοβδόμαδα ανάσα — ήχοι acoustic, ατμόσφαιρα καφενείου, και το τέλειο κρασί για συντροφιά.',
+    description: 'Μια πιο ήπια μουσική βραδιά με ακουστικό ήχο και ατμόσφαιρα για κρασί και κουβέντα.',
     time: '20:30',
     genre: 'Acoustic / Indie Greek',
-    vibe: 'Ήπιο & Ατμοσφαιρικό',
-    artist: null, // [PLACEHOLDER]
+    vibe: 'Ήπιο και ατμοσφαιρικό',
+    artist: null,
     reservationRequired: false,
     highlight: false,
   },
@@ -52,42 +56,42 @@ export const recurringEvents = [
 export const upcomingEvents = [
   {
     id: 'u1',
-    date: '2025-04-18', // [PLACEHOLDER: update date]
+    date: '2026-04-10',
     title: 'Βραδιά Ρεμπέτικου',
-    description: 'Μια ξεχωριστή βραδιά αφιερωμένη στο ρεμπέτικο — με παραδοσιακά όργανα, ιστορίες και ψυχή.',
+    description: 'Μια ξεχωριστή βραδιά αφιερωμένη στο ρεμπέτικο, με παραδοσιακά όργανα και αυθεντική ατμόσφαιρα.',
     time: '21:00',
     genre: 'Ρεμπέτικο',
-    artist: '[Καλλιτέχνης]', // [PLACEHOLDER]
+    artist: '[Καλλιτέχνης]',
     capacity: 60,
-    price: 'Ελεύθερη Είσοδος',
+    price: 'Ελεύθερη είσοδος',
     reservationRequired: true,
-    tags: ['Ρεμπέτικο', 'Παράδοση', 'Ξεχωριστό'],
+    tags: ['Ρεμπέτικο', 'Παράδοση', 'Live'],
   },
   {
     id: 'u2',
-    date: '2025-04-25', // [PLACEHOLDER: update date]
-    title: 'Ιδιαίτερη Βραδιά — Εθνικό Εορτασμός',
-    description: 'Στις 25 Απριλίου, μια βραδιά γεμάτη ελληνικές μελωδίες, μεζέδες και ζεστή συντροφιά.',
-    time: '20:00',
+    date: '2026-04-17',
+    title: 'Ειδική Βραδιά με Ελληνικό Πρόγραμμα',
+    description: 'Ελληνικές μελωδίες, μεζέδες και ζεστή ατμόσφαιρα για μια βραδιά που στήνεται γύρω από την παρέα.',
+    time: '20:30',
     genre: 'Ελληνική Λαϊκή',
-    artist: '[Καλλιτέχνης]', // [PLACEHOLDER]
+    artist: '[Καλλιτέχνης]',
     capacity: 80,
-    price: 'Ελεύθερη Είσοδος',
+    price: 'Ελεύθερη είσοδος',
     reservationRequired: true,
-    tags: ['Εθνική Επέτειος', 'Ειδική Βραδιά'],
+    tags: ['Ελληνικό πρόγραμμα', 'Παρέα', 'Live'],
   },
   {
     id: 'u3',
-    date: '2025-05-03', // [PLACEHOLDER: update date]
+    date: '2026-04-24',
     title: 'Jazz & Greek Fusion Νύχτα',
-    description: 'Σύγχρονοι Έλληνες μουσικοί παντρεύουν jazz με ελληνικές μελωδίες — μια πρωτότυπη ακουστική εμπειρία.',
+    description: 'Σύγχρονοι ήχοι που παντρεύουν jazz με ελληνικές μελωδίες σε μια πιο ιδιαίτερη μουσική βραδιά.',
     time: '21:30',
     genre: 'Jazz Fusion / Greek',
-    artist: '[Καλλιτέχνης]', // [PLACEHOLDER]
+    artist: '[Καλλιτέχνης]',
     capacity: 50,
-    price: 'Ελεύθερη Είσοδος',
+    price: 'Ελεύθερη είσοδος',
     reservationRequired: true,
-    tags: ['Jazz', 'Fusion', 'Πρωτότυπο'],
+    tags: ['Jazz', 'Fusion', 'Special'],
   },
 ]
 

@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async'
+﻿import { Helmet } from 'react-helmet-async'
 import PageHero from '../components/ui/PageHero'
 import SectionReveal from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
@@ -7,14 +7,8 @@ import { business } from '../data/business'
 function Section({ title, children }) {
   return (
     <SectionReveal className="mb-10">
-      <h2
-        className="heading-card mb-4 text-[rgba(31,18,9,0.88)]"
-      >
-        {title}
-      </h2>
-      <div className="space-y-3 text-sm leading-relaxed text-[rgba(47,29,15,0.62)]">
-        {children}
-      </div>
+      <h2 className="heading-card mb-4 text-[rgba(31,18,9,0.88)]">{title}</h2>
+      <div className="space-y-3 text-sm leading-relaxed text-[rgba(47,29,15,0.62)]">{children}</div>
     </SectionReveal>
   )
 }
@@ -24,115 +18,55 @@ export default function Terms() {
     <PageTransition>
       <Helmet>
         <title>Όροι Χρήσης | Μεταξύ Μας</title>
-        <meta name="description" content="Όροι και προϋποθέσεις χρήσης του ιστότοπου Μεταξύ Μας." />
+        <meta name="description" content="Όροι και προϋποθέσεις χρήσης του ιστοτόπου του Μεταξύ Μας." />
       </Helmet>
 
       <PageHero
+        minimal
         label="Νομικά"
         title="Όροι Χρήσης"
-        subtitle="Παρακαλούμε διαβάστε προσεκτικά τους όρους χρήσης πριν χρησιμοποιήσετε τον ιστότοπό μας."
+        subtitle="Παρακαλούμε διαβάστε τους όρους χρήσης πριν χρησιμοποιήσετε τον ιστότοπο του Μεταξύ Μας."
       />
 
-      <section className="section-padding">
+      <section className="section-padding pt-6 sm:pt-8">
         <div className="container-narrow">
-
           <SectionReveal className="mb-10">
-            <div
-              className="p-5 rounded-2xl text-sm"
-              style={{ background: 'rgba(212,148,26,0.08)', border: '1px solid rgba(212,148,26,0.16)', color: 'rgba(47,29,15,0.62)' }}
-            >
+            <p className="border-y border-[rgba(127,91,48,0.12)] py-3 text-sm text-[rgba(47,29,15,0.62)]">
               Τελευταία ενημέρωση: Μάρτιος 2026
-            </div>
+            </p>
           </SectionReveal>
 
           <Section title="1. Αποδοχή Όρων">
-            <p>
-              Με τη χρήση του παρόντος ιστότοπου (<strong style={{ color: 'rgba(31,18,9,0.82)' }}>metaximas.gr</strong>),
-              αποδέχεστε πλήρως τους παρόντες Όρους Χρήσης. Εάν διαφωνείτε με οποιονδήποτε όρο, παρακαλούμε
-              αποφύγετε τη χρήση του ιστότοπου.
-            </p>
+            <p>Με τη χρήση του ιστοτόπου αποδέχεστε τους παρόντες όρους χρήσης. Αν δεν συμφωνείτε, παρακαλούμε να μη χρησιμοποιείτε τον ιστότοπο.</p>
           </Section>
 
-          <Section title="2. Υπηρεσίες Ιστότοπου">
-            <p>
-              Ο ιστότοπος του «{business.name}» παρέχει πληροφορίες σχετικά με τις υπηρεσίες, το μενού,
-              τις εκδηλώσεις ζωντανής μουσικής και τη δυνατότητα online κράτησης τραπεζιού.
-            </p>
-            <p>
-              Διατηρούμε το δικαίωμα να τροποποιούμε, αναστέλλουμε ή διακόπτουμε οποιαδήποτε πτυχή
-              των υπηρεσιών μας χωρίς προειδοποίηση.
-            </p>
+          <Section title="2. Πληροφορίες Ιστοτόπου">
+            <p>Ο ιστότοπος του <strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong> παρέχει πληροφορίες για το μενού, τις μουσικές βραδιές, τις κρατήσεις και τα στοιχεία επικοινωνίας του χώρου.</p>
+            <p>Κάνουμε προσπάθεια ώστε οι πληροφορίες να είναι σωστές και ενημερωμένες, αλλά ενδέχεται να αλλάξουν χωρίς προηγούμενη ειδοποίηση.</p>
           </Section>
 
           <Section title="3. Κρατήσεις">
-            <p>
-              Η υποβολή φόρμας κράτησης μέσω του ιστότοπου αποτελεί <strong style={{ color: 'rgba(31,18,9,0.82)' }}>αίτημα κράτησης</strong> και όχι επιβεβαίωση.
-              Η κράτηση επιβεβαιώνεται μόνο μετά από επικοινωνία μαζί σας (τηλεφωνικά ή με email).
-            </p>
-            <p>
-              Σε περίπτωση ακύρωσης, παρακαλούμε να μας ενημερώσετε τουλάχιστον 2 ώρες πριν την ώρα
-              κράτησης, ώστε να μπορέσουμε να εξυπηρετήσουμε άλλους επισκέπτες.
-            </p>
+            <p>Η αποστολή φόρμας κράτησης αποτελεί αίτημα και όχι οριστική επιβεβαίωση. Η κράτηση θεωρείται έγκυρη μόνο μετά από επιβεβαίωση από την επιχείρηση.</p>
+            <p>Για κρατήσεις τελευταίας στιγμής ή για μεγάλες παρέες προτείνεται τηλεφωνική επικοινωνία στο <a href={`tel:${business.phone}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.phoneDisplay}</a>.</p>
           </Section>
 
           <Section title="4. Πνευματική Ιδιοκτησία">
-            <p>
-              Όλο το περιεχόμενο του ιστότοπου (κείμενα, εικόνες, λογότυπο, σχεδιασμός) αποτελεί
-              πνευματική ιδιοκτησία του «{business.name}» ή χρησιμοποιείται κατόπιν αδείας.
-            </p>
-            <p>
-              Απαγορεύεται η αναπαραγωγή, διανομή ή τροποποίηση οποιουδήποτε τμήματος του ιστότοπου
-              χωρίς προηγούμενη γραπτή άδεια.
-            </p>
+            <p>Το περιεχόμενο του ιστοτόπου, όπως κείμενα, εικόνες, λογότυπα και ο σχεδιασμός του, ανήκουν στο {business.name} ή χρησιμοποιούνται νόμιμα από αυτόν.</p>
+            <p>Απαγορεύεται η αντιγραφή, αναπαραγωγή ή εμπορική χρήση του περιεχομένου χωρίς προηγούμενη έγγραφη άδεια.</p>
           </Section>
 
           <Section title="5. Περιορισμός Ευθύνης">
-            <p>
-              Ο ιστότοπος παρέχεται «ως έχει». Δεν παρέχουμε εγγυήσεις για την αδιάλειπτη ή αλάνθαστη
-              λειτουργία του. Δεν φέρουμε ευθύνη για τυχόν ζημίες που προκύπτουν από τη χρήση ή
-              την αδυναμία χρήσης του ιστότοπου.
-            </p>
-            <p>
-              Τα δεδομένα τιμών και ωραρίων ενδέχεται να μεταβάλλονται. Παρακαλούμε επικοινωνήστε
-              μαζί μας για τις πιο ενημερωμένες πληροφορίες.
-            </p>
+            <p>Ο ιστότοπος παρέχεται ως έχει. Η επιχείρηση δεν ευθύνεται για προσωρινή μη διαθεσιμότητα, τεχνικά σφάλματα ή έμμεση ζημία που μπορεί να προκύψει από τη χρήση του.</p>
           </Section>
 
-          <Section title="6. Σύνδεσμοι σε Εξωτερικούς Ιστότοπους">
-            <p>
-              Ο ιστότοπός μας ενδέχεται να περιέχει συνδέσμους προς εξωτερικούς ιστότοπους (π.χ. Google Maps,
-              Instagram, Facebook). Δεν φέρουμε ευθύνη για το περιεχόμενο ή τις πρακτικές απορρήτου
-              αυτών των ιστότοπων.
-            </p>
+          <Section title="6. Σύνδεσμοι Τρίτων">
+            <p>Ο ιστότοπος μπορεί να περιλαμβάνει συνδέσμους προς τρίτες υπηρεσίες, όπως Google Maps ή social media. Το {business.name} δεν ευθύνεται για το περιεχόμενο ή τις πολιτικές αυτών των υπηρεσιών.</p>
           </Section>
 
-          <Section title="7. Εφαρμοστέο Δίκαιο">
-            <p>
-              Οι παρόντες όροι διέπονται από το ελληνικό δίκαιο και για οποιαδήποτε διαφορά αρμόδια
-              είναι τα δικαστήρια της Ελλάδας.
-            </p>
+          <Section title="7. Επικοινωνία">
+            <p>Για οποιαδήποτε απορία σχετικά με τους όρους χρήσης, επικοινωνήστε μαζί μας:</p>
+            <p><strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong><br />{business.address.street}, {business.address.area}, {business.address.city}<br />Email: <a href={`mailto:${business.email}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.email}</a><br />Τηλ: <a href={`tel:${business.phone}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.phoneDisplay}</a></p>
           </Section>
-
-          <Section title="8. Τροποποιήσεις Όρων">
-            <p>
-              Διατηρούμε το δικαίωμα να τροποποιούμε τους παρόντες όρους ανά πάσα στιγμή.
-              Οι αλλαγές τίθενται σε ισχύ από τη δημοσίευσή τους. Συνιστούμε να επισκέπτεστε
-              περιοδικά τη σελίδα αυτή.
-            </p>
-          </Section>
-
-          <Section title="9. Επικοινωνία">
-            <p>
-              Για οποιαδήποτε απορία σχετικά με τους όρους χρήσης:
-            </p>
-            <p>
-              <strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong><br />
-              {business.address.street}, {business.address.area}, {business.address.city}<br />
-              Email: <a href={`mailto:${business.email}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.email}</a><br />
-              Τηλ: <a href={`tel:${business.phone}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.phoneDisplay}</a>
-            </p>
-          </Section>
-
         </div>
       </section>
     </PageTransition>

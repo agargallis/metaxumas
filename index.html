@@ -1,42 +1,66 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="el">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1c1c1e" />
+    <meta name="theme-color" content="#5a3418" />
+    <meta name="color-scheme" content="light" />
+    <style>
+      html {
+        background: #f4e7d3;
+      }
 
-    <!-- Primary SEO -->
-    <title>Μεταξύ Μας | Καφέ & Μεζεδοπωλείο</title>
-    <meta name="description" content="Μεταξύ Μας — ένας ζεστός χώρος στην Ελλάδα που το πρωί μυρίζει φρέσκο καφέ και το βράδυ γεμίζει με ελληνικούς μεζέδες και ζωντανή μουσική." />
-    <meta name="keywords" content="Μεταξύ Μας, καφέ, μεζεδοπωλείο, ταβέρνα, ζωντανή μουσική, ελληνικό εστιατόριο" />
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background-color: #f4e7d3;
+        background-image:
+          radial-gradient(circle at 50% -10%, rgba(150, 77, 26, 0.22) 0%, transparent 28%),
+          radial-gradient(circle at top left, rgba(207, 145, 70, 0.16) 0%, transparent 26%),
+          radial-gradient(circle at top right, rgba(118, 47, 28, 0.10) 0%, transparent 22%),
+          linear-gradient(180deg, rgba(248, 237, 220, 0.99) 0%, rgba(242, 226, 201, 0.99) 52%, rgba(232, 208, 176, 0.99) 100%);
+        color: #241308;
+      }
 
-    <!-- Open Graph -->
+      #root {
+        min-height: 100vh;
+        isolation: isolate;
+      }
+    </style>
+
+    <title>Μεταξύ Μας | Καφέ, Μεζεδοπωλείο και Ζωντανή Μουσική</title>
+    <meta
+      name="description"
+      content="Το Μεταξύ Μας στο Περιστέρι συνδυάζει καφέ, μεζέδες, ποτό και ζωντανή μουσική σε έναν ζεστό χώρο για κάθε ώρα της ημέρας."
+    />
+    <meta
+      name="keywords"
+      content="Μεταξύ Μας, καφέ, μεζεδοπωλείο, ζωντανή μουσική, Περιστέρι, μεζέδες, ποτό, κρασί"
+    />
+
     <meta property="og:type" content="restaurant" />
-    <meta property="og:title" content="Μεταξύ Μας | Καφέ · Μεζεδοπωλείο · Ζωντανή Μουσική" />
-    <meta property="og:description" content="Από τον πρωινό καφέ ως τους βραδινούς μεζέδες — ένας χώρος που νιώθεις σαν στο σπίτι." />
+    <meta property="og:title" content="Μεταξύ Μας | Καφέ, Μεζεδοπωλείο και Ζωντανή Μουσική" />
+    <meta
+      property="og:description"
+      content="Από τον πρωινό καφέ μέχρι τις μουσικές βραδιές, ένας χώρος στο Περιστέρι για παρέα, φαγητό και ατμόσφαιρα."
+    />
     <meta property="og:image" content="/og-image.jpg" />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
-    <!-- Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Restaurant",
-      "name": "Μεταξύ Μας",
-      "description": "Καφέ, μεζεδοπωλείο και χώρος ζωντανής μουσικής",
-      "servesCuisine": "Greek",
-      "priceRange": "€€",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "GR"
-      },
-      "openingHours": ["Mo-Fr 09:00-02:00", "Sa-Su 10:00-03:00"]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Μεταξύ Μας",
+        "description": "Καφέ, μεζεδοπωλείο και χώρος ζωντανής μουσικής στο Περιστέρι.",
+        "servesCuisine": "Greek",
+        "priceRange": "€€",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "GR"
+        },
+        "openingHours": ["Mo-Fr 09:00-02:00", "Sa-Su 10:00-03:00"]
+      }
     </script>
   </head>
   <body>

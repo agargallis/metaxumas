@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 import { Cookie, ScrollText, Shield } from 'lucide-react'
 import { business } from '../data/business'
 import logoSrc from '../assets/images/logo.png'
@@ -13,22 +13,9 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer
-      className="relative overflow-hidden border-t"
-      style={{
-        background: 'linear-gradient(180deg, rgba(252,248,241,0.96) 0%, rgba(244,236,225,0.98) 100%)',
-        borderColor: 'rgba(145,97,39,0.12)',
-      }}
-    >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-      />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <footer>
+      <div className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 sm:pb-20 lg:px-8 lg:py-20">
+        <div className="mx-auto mb-10 h-px w-32 bg-gradient-to-r from-transparent via-[rgba(190,129,28,0.42)] to-transparent sm:mb-12 sm:w-44" />
         <div className="flex flex-col items-center text-center">
           <Link to="/" className="mb-5 inline-block">
             <img src={logoSrc} alt="Μεταξύ Μας" className="h-14 w-auto object-contain opacity-90" />
@@ -42,7 +29,7 @@ export default function Footer() {
           className="mt-10 flex flex-col items-center gap-5 border-t pt-8 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center"
           style={{ borderColor: 'rgba(145,97,39,0.12)' }}
         >
-          <p className="justify-self-start text-xs text-[rgba(45,28,12,0.36)]">
+          <p className="justify-self-start text-center text-xs text-[rgba(45,28,12,0.36)] md:text-left">
             © {year} {business.name}. Όλα τα δικαιώματα διατηρούνται.
           </p>
 
@@ -59,7 +46,7 @@ export default function Footer() {
             ))}
           </div>
 
-          <p className="justify-self-end text-xs text-[rgba(45,28,12,0.36)]">
+          <p className="justify-self-end text-center text-xs text-[rgba(45,28,12,0.36)] md:text-right">
             Δημιουργήθηκε από την{' '}
             <a
               href="https://ubd.gr"

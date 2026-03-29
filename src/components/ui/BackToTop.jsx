@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ChevronUp } from 'lucide-react'
 
@@ -21,7 +21,7 @@ export default function BackToTop() {
           exit={{ opacity: 0, y: 16, scale: 0.85 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-40 flex p-3.5 rounded-full backdrop-blur-sm shadow-warm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+          className="fixed bottom-[max(0.9rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] z-40 flex rounded-full p-3 shadow-warm backdrop-blur-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 sm:p-3.5"
           style={{
             background: 'rgba(212,148,26,0.15)',
             border: '1px solid rgba(212,148,26,0.35)',

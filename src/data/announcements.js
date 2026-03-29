@@ -42,7 +42,7 @@ export const announcements = [
     date: '2025-03-15',
     pinned: false,
     published: true,
-    cta: { label: 'Δείτε το Μενού', href: '/menu' },
+    cta: { label: 'Δείτε το μενού', href: '/menu' },
   },
   {
     id: 'a4',

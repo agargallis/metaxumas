@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
@@ -22,12 +22,12 @@ import { business } from '../data/business'
 import { cn, formatDate, announcementBadgeColor } from '../lib/utils'
 
 const typeFilters = [
-  { value: 'all',     label: 'Όλα',             Icon: null },
-  { value: 'music',   label: 'Μουσική',          Icon: Music },
-  { value: 'menu',    label: 'Μενού',            Icon: UtensilsCrossed },
-  { value: 'special', label: 'Ειδικές Βραδιές',  Icon: Star },
-  { value: 'holiday', label: 'Αργίες',           Icon: CalendarDays },
-  { value: 'notice',  label: 'Ανακοινώσεις',     Icon: Info },
+  { value: 'all',     label: 'ΞΞ»Ξ±',             Icon: null },
+  { value: 'music',   label: 'ΞΞΏΟ…ΟƒΞΉΞΊΞ®',          Icon: Music },
+  { value: 'menu',    label: 'ΞΞµΞ½ΞΏΟ',            Icon: UtensilsCrossed },
+  { value: 'special', label: 'Ξ•ΞΉΞ΄ΞΉΞΊΞ­Ο‚ Ξ’ΟΞ±Ξ΄ΞΉΞ­Ο‚',  Icon: Star },
+  { value: 'holiday', label: 'Ξ‘ΟΞ³Ξ―ΞµΟ‚',           Icon: CalendarDays },
+  { value: 'notice',  label: 'Ξ‘Ξ½Ξ±ΞΊΞΏΞΉΞ½ΟΟƒΞµΞΉΟ‚',     Icon: Info },
 ]
 
 const socialLinks = [
@@ -74,7 +74,7 @@ function AnnouncementCard({ announcement, index }) {
             {announcement.pinned && (
               <span className="flex items-center gap-1 text-xs text-gold-700/70">
                 <Pin size={11} />
-                Καρφιτσωμένο
+                ΞΞ±ΟΟ†ΞΉΟ„ΟƒΟ‰ΞΌΞ­Ξ½ΞΏ
               </span>
             )}
           </div>
@@ -112,7 +112,7 @@ function AnnouncementCard({ announcement, index }) {
               onClick={() => setExpanded(v => !v)}
               className="text-sm text-gold-700 hover:text-gold-600 transition-colors flex items-center gap-1"
             >
-              {expanded ? 'Λιγότερα' : 'Διαβάστε περισσότερα'}
+              {expanded ? 'Ξ›ΞΉΞ³ΟΟ„ΞµΟΞ±' : 'Ξ”ΞΉΞ±Ξ²Ξ¬ΟƒΟ„Ξµ Ο€ΞµΟΞΉΟƒΟƒΟΟ„ΞµΟΞ±'}
               <ArrowRight size={13} className={cn('transition-transform', expanded && 'rotate-90')} />
             </button>
           )}
@@ -143,14 +143,14 @@ export default function Announcements() {
   return (
     <PageTransition>
       <Helmet>
-        <title>Νέα & Ανακοινώσεις | Μεταξύ Μας</title>
-        <meta name="description" content="Τελευταίες ανακοινώσεις, ειδικές βραδιές, αλλαγές ωραρίου και νέα από το Μεταξύ Μας." />
+        <title>ΞΞ­Ξ± & Ξ‘Ξ½Ξ±ΞΊΞΏΞΉΞ½ΟΟƒΞµΞΉΟ‚ | ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚</title>
+        <meta name="description" content="Ξ¤ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―ΞµΟ‚ Ξ±Ξ½Ξ±ΞΊΞΏΞΉΞ½ΟΟƒΞµΞΉΟ‚, ΞµΞΉΞ΄ΞΉΞΊΞ­Ο‚ Ξ²ΟΞ±Ξ΄ΞΉΞ­Ο‚, Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚ Ο‰ΟΞ±ΟΞ―ΞΏΟ… ΞΊΞ±ΞΉ Ξ½Ξ­Ξ± Ξ±Ο€Ο Ο„ΞΏ ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚." />
       </Helmet>
 
       <PageHero
-        label="Νέα & Ανακοινώσεις"
-        title="Τελευταίες Ειδήσεις"
-        subtitle="Ειδικές βραδιές, αλλαγές ωραρίου, νέα μενού — μείνετε ενημερωμένοι."
+        label="ΞΞ­Ξ± & Ξ‘Ξ½Ξ±ΞΊΞΏΞΉΞ½ΟΟƒΞµΞΉΟ‚"
+        title="Ξ¤ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―ΞµΟ‚ Ξ•ΞΉΞ΄Ξ®ΟƒΞµΞΉΟ‚"
+        subtitle="Ξ•ΞΉΞ΄ΞΉΞΊΞ­Ο‚ Ξ²ΟΞ±Ξ΄ΞΉΞ­Ο‚, Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚ Ο‰ΟΞ±ΟΞ―ΞΏΟ…, Ξ½Ξ­Ξ± ΞΌΞµΞ½ΞΏΟ β€” ΞΌΞµΞ―Ξ½ΞµΟ„Ξµ ΞµΞ½Ξ·ΞΌΞµΟΟ‰ΞΌΞ­Ξ½ΞΏΞΉ."
       />
 
       <section className="section-padding">
@@ -178,7 +178,7 @@ export default function Announcements() {
           <div className="space-y-5">
             {filtered.length === 0 ? (
               <div className="text-center py-16 text-[rgba(47,29,15,0.38)]">
-                <p>Δεν υπάρχουν ανακοινώσεις σε αυτή την κατηγορία.</p>
+                <p>Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ Ξ±Ξ½Ξ±ΞΊΞΏΞΉΞ½ΟΟƒΞµΞΉΟ‚ ΟƒΞµ Ξ±Ο…Ο„Ξ® Ο„Ξ·Ξ½ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ±.</p>
               </div>
             ) : (
               filtered.map((a, i) => (
@@ -190,10 +190,10 @@ export default function Announcements() {
           {/* Social follow */}
           <SectionReveal className="mt-14">
             <div className="card-base p-8 text-center">
-              <p className="label-upper mb-3">Μείνετε ενημερωμένοι</p>
-              <h3 className="heading-card text-[rgba(31,18,9,0.9)] mb-3">Ακολουθήστε μας</h3>
+              <p className="label-upper mb-3">ΞΞµΞ―Ξ½ΞµΟ„Ξµ ΞµΞ½Ξ·ΞΌΞµΟΟ‰ΞΌΞ­Ξ½ΞΏΞΉ</p>
+              <h3 className="heading-card text-[rgba(31,18,9,0.9)] mb-3">Ξ‘ΞΊΞΏΞ»ΞΏΟ…ΞΈΞ®ΟƒΟ„Ξµ ΞΌΞ±Ο‚</h3>
               <p className="text-sm text-[rgba(47,29,15,0.56)] mb-6">
-                Για τελευταία νέα, live stories και πρώτη πληροφόρηση για events.
+                Ξ“ΞΉΞ± Ο„ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ± Ξ½Ξ­Ξ±, live stories ΞΊΞ±ΞΉ Ο€ΟΟΟ„Ξ· Ο€Ξ»Ξ·ΟΞΏΟ†ΟΟΞ·ΟƒΞ· Ξ³ΞΉΞ± events.
               </p>
               {socialLinks.length > 0 ? (
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -211,9 +211,9 @@ export default function Announcements() {
                   ))}
                 </div>
               ) : (
-                <Link to="/contact" className="btn-outline text-sm">
-                  Επικοινωνήστε μαζί μας <ArrowRight size={14} />
-                </Link>
+                <a href={`tel:${business.phone}`} className="btn-outline text-sm">
+                  Καλέστε μας <ArrowRight size={14} />
+                </a>
               )}
             </div>
           </SectionReveal>
@@ -222,3 +222,5 @@ export default function Announcements() {
     </PageTransition>
   )
 }
+
+
