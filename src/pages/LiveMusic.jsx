@@ -1,50 +1,49 @@
-﻿import { Helmet } from 'react-helmet-async'
-import { Calendar, Clock, Users, Guitar, Mic2, Radio, Star, Play } from 'lucide-react'
+﻿import { useRef, useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { Clock, Users, Guitar, Mic2, Radio, Star, Pause, PlayCircle, X } from 'lucide-react'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
 import PageHero from '../components/ui/PageHero'
 import PageTransition from '../components/ui/PageTransition'
 import { recurringEvents } from '../data/events'
-import { instagramPosts } from '../data/gallery'
 import { business } from '../data/business'
+import { cn } from '../lib/utils'
 
 const recurringVisuals = {
   r1: {
-    image: business.locationVideoPoster || '/4.png',
+    image: '/music1.png',
     overlay: 'from-[rgba(120,52,22,0.24)] via-[rgba(60,26,10,0.20)] to-[rgba(38,20,8,0.58)]',
     badge: 'Παρασκευή βράδυ',
   },
   r2: {
-    image: business.locationVideoPoster || '/4.png',
+    image: '/music2.png',
     overlay: 'from-[rgba(156,87,35,0.22)] via-[rgba(88,39,16,0.20)] to-[rgba(38,20,8,0.58)]',
     badge: 'Σάββατο live',
   },
   r3: {
-    image: business.locationVideoPoster || '/4.png',
+    image: '/music3.png',
     overlay: 'from-[rgba(141,82,55,0.24)] via-[rgba(76,37,19,0.22)] to-[rgba(38,20,8,0.58)]',
     badge: 'Κυριακάτικη παρέα',
   },
 }
 
-const reelCards = [
-  ...instagramPosts.filter(post => post.type === 'reel').map((post, index) => ({
-    id: post.id,
-    title: [
-      'Ζωντανή βραδιά Παρασκευής',
-      'Στιγμές από το Σάββατο',
-      'Ατμόσφαιρα, μουσική, παρέα',
-    ][index] || 'Instagram Reel',
-    description: [
-      'Μικρά στιγμιότυπα από live βραδιές με μουσική, μεζέδες και κόσμο που μένει μέχρι αργά.',
-      'Ένα reel-style placeholder section για να μπει αργότερα πραγματικό Instagram περιεχόμενο.',
-      'Γρήγορη εικόνα από το vibe του χώρου όταν γεμίζει η βραδινή ατμόσφαιρα.',
-    ][index] || 'Instagram reel placeholder.',
-    tag: index === 0 ? 'Live Reel' : 'Instagram Reel',
-  })),
+const reelItems = [
   {
-    id: 'reel-extra',
-    title: 'Κυριακάτικη μουσική στιγμή',
-    description: 'Ένα ακόμη reel placeholder για στιγμές από live Κυριακής και πιο χαλαρό βραδινό κλείσιμο της εβδομάδας.',
-    tag: 'Instagram Reel',
+    id: 'reel-1',
+    video: '/videoa1.mp4',
+    poster: '/a1.jpg',
+    description: 'Δημήτρης Βλάχος και Πέτρος Τριανταφύλλου με Καζαντζίδη μέχρι να σβήσει ο ήλιος…',
+  },
+  {
+    id: 'reel-3',
+    video: '/videoa3.mp4',
+    poster: '/a3.jpg',
+    description: 'Οι νύχτες αποκτούν ρυθμό στο «Μεταξύ Μας»!',
+  },
+  {
+    id: 'reel-2',
+    video: '/videoa2.mp4',
+    poster: '/a2.jpg',
+    description: 'Στο «Μεταξύ Μας» η διασκέδαση… γίνεται εμπειρία!',
   },
 ]
 
@@ -62,13 +61,56 @@ function ExpectCard({ item }) {
   )
 }
 
-function RecurringCard({ event }) {
+function MusicModal({ event, visual, onClose }) {
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = e => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [onClose])
+
+  if (!event) return null
+
+  return (
+    <div className="fixed inset-0 z-[120] flex items-center justify-center px-4 py-8 sm:px-6" role="dialog" aria-modal="true" aria-label={event.title}>
+      <button
+        type="button"
+        aria-label="Κλείσιμο"
+        className="absolute inset-0 bg-[rgba(38,20,8,0.34)] backdrop-blur-md"
+        onClick={onClose}
+      />
+      <div className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-[rgba(255,255,255,0.22)] shadow-[0_32px_120px_rgba(49,24,10,0.28)]">
+        <div className="relative">
+          <img src={visual.image} alt={event.title} className="max-h-[80vh] w-full object-contain" />
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-[rgba(255,248,238,0.14)] text-white shadow-[0_8px_20px_rgba(20,10,4,0.26)] backdrop-blur-sm transition-colors hover:bg-[rgba(255,248,238,0.24)]"
+            aria-label="Κλείσιμο"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RecurringCard({ event, onOpen }) {
   const visual = recurringVisuals[event.id] || recurringVisuals.r1
 
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.62)] shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm">
+    <button
+      type="button"
+      onClick={() => onOpen(event)}
+      className="group w-full overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.62)] text-left shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_66px_rgba(98,61,27,0.10)]"
+    >
       <div className="relative aspect-[4/3] overflow-hidden">
-        <img src={visual.image} alt={event.title} className="h-full w-full object-cover" />
+        <img src={visual.image} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
         <div className={`absolute inset-0 bg-gradient-to-br ${visual.overlay}`} />
         <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-5">
           <span className="rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(255,246,234,0.92)] backdrop-blur-sm">
@@ -104,38 +146,85 @@ function RecurringCard({ event }) {
           ) : null}
         </div>
       </div>
-    </div>
+    </button>
   )
 }
 
-function ReelCard({ reel }) {
-  return (
-    <div className="space-y-4">
-      <div className="relative min-h-[18rem] overflow-hidden rounded-[2rem] border border-[rgba(145,97,39,0.12)] bg-[linear-gradient(145deg,rgba(226,184,153,0.92),rgba(249,232,214,0.94))]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.64),transparent_36%)]" />
-        <div className="relative z-10 flex h-full flex-col justify-between p-5">
-          <div className="flex items-center justify-between gap-3">
-            <span className="rounded-full border border-white/70 bg-white/72 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(60,36,20,0.7)]">
-              {reel.tag}
-            </span>
-            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/72 text-[rgba(74,40,18,0.76)]">
-              <Play size={16} />
-            </span>
-          </div>
-          <p className="text-sm text-[rgba(60,36,20,0.82)]">Video placeholder</p>
-        </div>
-      </div>
+function ReelCard({ item }) {
+  const videoRef = useRef(null)
+  const feedbackTimeoutRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [feedback, setFeedback] = useState(null)
 
-      <div className="border-b border-[rgba(127,91,48,0.12)] pb-4">
-        <h3 className="heading-card mb-2 text-[rgba(31,18,9,0.88)]">{reel.title}</h3>
-        <p className="text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{reel.description}</p>
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current)
+    }
+  }, [])
+
+  const togglePlayback = async () => {
+    if (!videoRef.current) return
+    if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current)
+
+    if (videoRef.current.paused) {
+      setFeedback(null)
+      try {
+        await videoRef.current.play()
+        setIsPlaying(true)
+      } catch {
+        setIsPlaying(false)
+      }
+    } else {
+      videoRef.current.pause()
+      setIsPlaying(false)
+      setFeedback('pause')
+      feedbackTimeoutRef.current = setTimeout(() => setFeedback(null), 650)
+    }
+  }
+
+  return (
+    <div className="flex flex-col">
+      <div className="relative overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)]">
+        <video
+          ref={videoRef}
+          src={item.video}
+          poster={item.poster}
+          preload="metadata"
+          playsInline
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onEnded={() => setIsPlaying(false)}
+          className="aspect-[9/16] w-full object-cover"
+        />
+        <button
+          type="button"
+          onClick={togglePlayback}
+          aria-label={isPlaying ? 'Παύση βίντεο' : 'Αναπαραγωγή βίντεο'}
+          className={cn(
+            'absolute inset-0 flex items-center justify-center transition-colors duration-300',
+            isPlaying
+              ? 'bg-transparent hover:bg-[linear-gradient(180deg,rgba(28,15,7,0.04),rgba(28,15,7,0.12))]'
+              : 'bg-[linear-gradient(180deg,rgba(28,15,7,0.04),rgba(28,15,7,0.14))] hover:bg-[linear-gradient(180deg,rgba(28,15,7,0.08),rgba(28,15,7,0.18))]'
+          )}
+        >
+          {!isPlaying || feedback === 'pause' ? (
+            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-[rgba(255,248,238,0.14)] text-white shadow-[0_12px_32px_rgba(20,10,4,0.26)] backdrop-blur-sm transition-transform duration-300 hover:scale-105">
+              {feedback === 'pause' ? <Pause size={24} /> : <PlayCircle size={28} />}
+            </span>
+          ) : null}
+        </button>
       </div>
+      <p className="mt-4 text-center text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{item.description}</p>
     </div>
   )
 }
 
 export default function LiveMusic() {
+  const [activeEvent, setActiveEvent] = useState(null)
+  const activeVisual = activeEvent ? (recurringVisuals[activeEvent.id] || recurringVisuals.r1) : null
+
   return (
+    <>
     <PageTransition>
       <Helmet>
         <title>Ζωντανή Μουσική | Μεταξύ Μας</title>
@@ -172,41 +261,56 @@ export default function LiveMusic() {
       <section className="section-padding pt-0">
         <div className="container-wide">
           <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
-            <p className="label-upper mb-3">Εβδομαδιαίο Πρόγραμμα!</p>
-            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Τακτικές Βραδιές.</h2>
+            <p className="label-upper mb-3">ΜΕΡΙΚΑ ΑΠΟ ΤΑ LIVES ΜΑΣ!</p>
+            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Δες τις μουσικές ανακοινώσεις μας.</h2>
           </SectionReveal>
 
           <StaggerReveal className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {recurringEvents.filter(event => event.day !== 'Τετάρτη').map(event => (
               <StaggerItem key={event.id}>
-                <RecurringCard event={event} />
+                <RecurringCard event={event} onOpen={setActiveEvent} />
               </StaggerItem>
             ))}
           </StaggerReveal>
         </div>
       </section>
 
-      <section className="section-padding border-y border-[rgba(127,91,48,0.10)] pb-10">
+      <section className="section-padding pt-0 pb-10">
         <div className="container-wide">
           <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
             <p className="label-upper mb-3">Instagram Reels!</p>
             <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Στιγμιότυπα από τις live βραδιές.</h2>
           </SectionReveal>
 
-          <StaggerReveal className="mx-auto flex max-w-6xl flex-wrap justify-center gap-8">
-            {reelCards.map(reel => (
-              <StaggerItem key={reel.id}>
-                <div className="w-full max-w-[17.5rem]">
-                  <ReelCard reel={reel} />
-                </div>
+          <StaggerReveal className="mx-auto grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-3">
+            {reelItems.map(item => (
+              <StaggerItem key={item.id}>
+                <ReelCard item={item} />
               </StaggerItem>
             ))}
           </StaggerReveal>
+
+          <SectionReveal className="mt-10 flex justify-center">
+            <a
+              href={business.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline flex items-center gap-2 text-sm"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" width={16} height={16} aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+              </svg>
+              Δες περισσότερα στο Instagram
+            </a>
+          </SectionReveal>
         </div>
       </section>
     </PageTransition>
+
+    {activeEvent ? <MusicModal event={activeEvent} visual={activeVisual} onClose={() => setActiveEvent(null)} /> : null}
+    </>
   )
 }
-
-
 

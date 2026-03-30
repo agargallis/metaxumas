@@ -14,8 +14,8 @@ export default function Footer() {
 
   return (
     <footer>
-      <div className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 sm:pb-20 lg:px-8 lg:py-20">
-        <div className="mx-auto mb-10 h-px w-32 bg-gradient-to-r from-transparent via-[rgba(190,129,28,0.42)] to-transparent sm:mb-12 sm:w-44" />
+      <div className="mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:py-20">
+        <div className="mx-auto mb-6 h-px w-32 bg-gradient-to-r from-transparent via-[rgba(190,129,28,0.42)] to-transparent sm:mb-12 sm:w-44" />
         <div className="flex flex-col items-center text-center">
           <Link to="/" className="mb-5 inline-block">
             <img src={logoSrc} alt="Μεταξύ Μας" className="h-14 w-auto object-contain opacity-90" />

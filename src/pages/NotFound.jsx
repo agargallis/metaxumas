@@ -11,10 +11,10 @@ export default function NotFound() {
   return (
     <PageTransition>
       <Helmet>
-        <title>404 β€” Ξ£ΞµΞ»Ξ―Ξ΄Ξ± Ξ΄ΞµΞ½ Ξ²ΟΞ­ΞΈΞ·ΞΊΞµ | ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚</title>
+        <title>404 - Σελίδα δεν βρέθηκε | Μεταξύ Μας</title>
       </Helmet>
 
-      <div className="relative min-h-[calc(100vh-7rem)] overflow-hidden px-6 py-16" style={{ background: 'var(--bg)' }}>
+      <div className="relative min-h-screen overflow-hidden px-6 py-16" style={{ background: 'var(--bg)' }}>
         <div
           className="pointer-events-none absolute left-1/2 top-8 h-[32rem] w-[32rem] -translate-x-1/2 rounded-full opacity-90 blur-3xl"
           style={{
@@ -31,14 +31,14 @@ export default function NotFound() {
           style={{ background: 'radial-gradient(circle, rgba(193,122,98,0.12) 0%, transparent 72%)' }}
         />
 
-        <div className="relative z-10 mx-auto flex min-h-[calc(100vh-11rem)] max-w-3xl items-center justify-center">
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-3xl items-center justify-center">
           <div className="text-center">
             <motion.img
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease }}
               src={logoSrc}
-              alt="ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚"
+              alt="Μεταξύ Μας"
               className="mx-auto mb-8 h-16 w-auto object-contain opacity-90"
               style={{ filter: 'drop-shadow(0 16px 28px rgba(175,120,36,0.12))' }}
             />
@@ -65,7 +65,7 @@ export default function NotFound() {
               transition={{ duration: 0.55, delay: 0.28, ease }}
               className="mx-auto mt-7 max-w-2xl text-[clamp(2rem,4.5vw,3.4rem)] leading-tight text-[rgba(31,18,9,0.92)]"
             >
-              Ξ— ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ξ΄ΞµΞ½ Ξ²ΟΞ­ΞΈΞ·ΞΊΞµ.
+              Η σελίδα δεν βρέθηκε.
             </motion.h1>
 
             <motion.p
@@ -74,7 +74,7 @@ export default function NotFound() {
               transition={{ duration: 0.5, delay: 0.38, ease }}
               className="mx-auto mt-5 max-w-xl text-[1rem] leading-8 text-[rgba(47,29,15,0.60)]"
             >
-              ΞœΞ¬Ξ»Ξ»ΞΏΞ½ Ξ· Ξ΄ΞΉΞ±Ξ΄ΟΞΏΞΌΞ® Ο΄ΞµΞ½ ΟΏΞ΄Ξ·Ξ³ΞµΞ― Ξ Ξ»Ξ­ΞΏΞ½ ΞµΞ΄Ο. ΞœΟ€ΞΏΟΞµΞ―Ο‚ Ξ½Ξ± ΞµΟ€ΞΉΟƒΟ„ΟΞ­ΟΞµΞΉΟ‚ ΟƒΟ„Ξ·Ξ½ Ξ±ΟΟ‡ΞΉΞΊΞ® Ξ® Ξ½Ξ± Ξ΄ΞµΞΉΟ‚ Ο„ΞΏ ΞΌΞµΞ½ΞΏΟ.
+              Μάλλον η διαδρομή δεν οδηγεί πλέον εδώ. Μπορείς να επιστρέψεις στην αρχική ή να δεις το μενού.
             </motion.p>
 
             <motion.div
@@ -85,14 +85,14 @@ export default function NotFound() {
             >
               <Link to="/" className="btn-primary text-sm px-7">
                 <Home size={15} />
-                Ξ‘ΟΟ‡ΞΉΞΊΞ® Ξ£ΞµΞ»Ξ―Ξ΄Ξ±
+                Αρχική Σελίδα
               </Link>
               <Link to="/menu" className="btn-outline text-sm px-7">
                 <UtensilsCrossed size={15} />
-                Ξ”ΞµΞ―Ο„Ξµ Ο„ΞΏ ΞΞµΞ½ΞΏΟ
+                Δείτε το Μενού
               </Link>
               <Link to="/reservations" className="inline-flex items-center gap-2 text-sm text-[rgba(45,28,12,0.62)] transition-colors duration-200 hover:text-gold-700">
-                ΞΟΞ¬Ο„Ξ·ΟƒΞ· <ArrowRight size={14} />
+                Κράτηση <ArrowRight size={14} />
               </Link>
             </motion.div>
           </div>

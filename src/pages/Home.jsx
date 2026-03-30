@@ -25,7 +25,6 @@ import { featuredReviews, ratingStats } from '../data/reviews'
 import { instagramPosts } from '../data/gallery'
 import { cn } from '../lib/utils'
 import logoSrc from '../assets/images/4.png'
-import logoPlaceholder from '../assets/images/logo.png'
 
 const spring = [0.22, 1, 0.36, 1]
 
@@ -39,6 +38,7 @@ const photos = instagramPosts.slice(0, 3).map((post, index) => ({
     'Η βραδινή πλευρά του μαγαζιού, πιο ζωντανή αλλά πάντα οικεία.',
   ][index] || 'Μια premium γωνιά του χώρου.',
   caption: post.caption,
+  image: ['/l1.png', '/l2.png', '/l3.png'][index],
   accent: [
     'linear-gradient(145deg, rgba(237,196,141,0.92), rgba(250,237,214,0.94))',
     'linear-gradient(145deg, rgba(225,171,145,0.92), rgba(247,223,208,0.94))',
@@ -167,11 +167,11 @@ function PhotoCard({ item, onOpen }) {
           <div className="absolute left-1/2 top-6 h-px w-28 -translate-x-1/2 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.76),transparent)]" />
           <div className="absolute inset-0 rounded-[1.55rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.36)]" />
 
-          <div className="relative z-10 flex h-full items-center justify-center px-8 py-8">
+          <div className="absolute inset-0">
             <img
-              src={logoPlaceholder}
-              alt="Μεταξύ Μας logo"
-              className="max-h-32 w-auto object-contain opacity-95 drop-shadow-[0_18px_32px_rgba(90,53,24,0.18)] sm:max-h-36"
+              src={item.image}
+              alt={item.title}
+              className="h-full w-full object-cover"
             />
           </div>
         </div>
@@ -224,11 +224,11 @@ function PhotoModal({ item, onClose }) {
             </button>
           </div>
 
-          <div className="relative z-10 flex min-h-[21rem] items-center justify-center px-8 py-10 sm:min-h-[28rem]">
+          <div className="relative z-10 min-h-[21rem] sm:min-h-[28rem]">
             <img
-              src={logoPlaceholder}
-              alt="Μεταξύ Μας logo"
-              className="max-h-52 w-auto object-contain drop-shadow-[0_22px_40px_rgba(90,53,24,0.22)] sm:max-h-72"
+              src={item.image}
+              alt={item.title}
+              className="h-full w-full object-cover"
             />
           </div>
         </div>
