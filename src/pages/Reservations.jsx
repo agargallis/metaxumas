@@ -159,15 +159,12 @@ function RecaptchaBox({ onVerify, resetSignal }) {
   }, [resetSignal, onVerify])
 
   return (
-    <div className="rounded-[1.4rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.56)] p-4 text-center shadow-[0_10px_28px_rgba(98,61,27,0.04)] sm:text-left">
-      <p className="mb-3 text-[0.68rem] font-medium uppercase tracking-[0.18em] text-[rgba(45,28,12,0.52)]">
-        Google reCAPTCHA
-      </p>
-      <div className="flex justify-center sm:justify-start">
-        <div ref={containerRef} className="min-h-[78px] w-full max-w-[304px]" />
+    <div className="flex flex-col items-center">
+      <div className="flex justify-center">
+        <div ref={containerRef} className="min-h-[78px] w-[304px] max-w-full" />
       </div>
-      {!loaded && !error ? <p className="mt-2 text-center text-xs text-[rgba(47,29,15,0.46)] sm:text-left">Φόρτωση checkbox ασφαλείας...</p> : null}
-      {error ? <p className="mt-2 text-center text-xs text-wine-400 sm:text-left">{error}</p> : null}
+      {!loaded && !error ? <p className="mt-2 text-center text-xs text-[rgba(47,29,15,0.46)]">Φόρτωση checkbox ασφαλείας...</p> : null}
+      {error ? <p className="mt-2 text-center text-xs text-wine-400">{error}</p> : null}
     </div>
   )
 }
