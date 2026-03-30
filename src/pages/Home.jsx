@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
@@ -11,9 +11,10 @@ import {
   Instagram,
   MapPin,
   Music2,
-  Mail,
+  Pause,
   PlayCircle,
   X,
+  PhoneCall,
 } from 'lucide-react'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
 import StarRating from '../components/ui/StarRating'
@@ -107,7 +108,7 @@ function Hero() {
           <img
             src={logoSrc}
             alt="Μεταξύ Μας"
-            className="mx-auto h-16 w-auto object-contain sm:h-[5.5rem]"
+            className="hero-mark-float mx-auto h-16 w-auto object-contain sm:h-[5.5rem]"
             style={{ filter: 'drop-shadow(0 16px 28px rgba(175,120,36,0.12))' }}
           />
 
@@ -150,41 +151,31 @@ function Hero() {
 function PhotoCard({ item, onOpen }) {
   return (
     <div className="group">
-      <div className="relative overflow-hidden rounded-[2.2rem] border border-[rgba(145,97,39,0.12)] bg-[rgba(251,243,230,0.62)] p-3 shadow-[0_20px_44px_rgba(109,71,33,0.08)] transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_28px_60px_rgba(109,71,33,0.12)]">
-        <button
-          type="button"
-          onClick={() => onOpen(item)}
-          className="relative block min-h-[19rem] w-full overflow-hidden rounded-[1.65rem] border border-[rgba(255,255,255,0.34)] text-left transition-transform duration-500 group-hover:scale-[1.01]"
+      <button
+        type="button"
+        onClick={() => onOpen(item)}
+        className="relative block w-full overflow-hidden rounded-[2rem] border border-[rgba(213,174,116,0.16)] p-3 text-left text-[rgba(255,244,226,0.9)] shadow-[0_20px_48px_rgba(63,40,25,0.22)] transition-all duration-500 hover:-translate-y-1 hover:border-[rgba(233,191,120,0.24)] hover:shadow-[0_28px_66px_rgba(50,30,16,0.28)]"
+        style={{ background: 'linear-gradient(180deg, rgba(63,40,25,0.94) 0%, rgba(49,31,19,0.92) 100%)' }}
+        aria-label={`Άνοιγμα εικόνας: ${item.title}`}
+      >
+        <div
+          className="relative aspect-[4/4.6] overflow-hidden rounded-[1.55rem] border border-[rgba(255,255,255,0.34)] transition-transform duration-500 group-hover:scale-[1.015]"
           style={{ background: item.accent }}
-          aria-label={`Άνοιγμα εικόνας: ${item.title}`}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.64),transparent_34%)]" />
-          <div className="absolute inset-x-0 bottom-0 h-36 bg-[linear-gradient(180deg,transparent_0%,rgba(88,52,25,0.08)_42%,rgba(58,34,18,0.22)_100%)]" />
-          <div className="absolute left-5 top-5 h-px w-12 bg-[linear-gradient(90deg,rgba(255,255,255,0.82),transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.7),transparent_32%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,transparent_0%,rgba(88,52,25,0.06)_40%,rgba(58,34,18,0.22)_100%)]" />
+          <div className="absolute left-1/2 top-6 h-px w-28 -translate-x-1/2 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.76),transparent)]" />
+          <div className="absolute inset-0 rounded-[1.55rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.36)]" />
 
-          <div className="relative z-10 flex h-full flex-col justify-between p-5">
-            <div className="h-6" />
-
-            <div className="flex flex-1 items-center justify-center px-6 py-4">
-              <img
-                src={logoPlaceholder}
-                alt="Μεταξύ Μας logo"
-                className="max-h-28 w-auto object-contain opacity-95 drop-shadow-[0_16px_28px_rgba(90,53,24,0.18)] sm:max-h-32"
-              />
-            </div>
-
-            <p className="mx-auto max-w-[17rem] text-center text-sm leading-relaxed text-[rgba(69,40,20,0.78)]">{item.note}</p>
+          <div className="relative z-10 flex h-full items-center justify-center px-8 py-8">
+            <img
+              src={logoPlaceholder}
+              alt="Μεταξύ Μας logo"
+              className="max-h-32 w-auto object-contain opacity-95 drop-shadow-[0_18px_32px_rgba(90,53,24,0.18)] sm:max-h-36"
+            />
           </div>
-        </button>
-
-        <div className="px-1 pb-1 pt-5 text-center">
-          <div className="mb-3 flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-[linear-gradient(90deg,rgba(190,129,28,0.62),transparent)]" />
-            <p className="text-[0.62rem] uppercase tracking-[0.18em] text-[rgba(111,70,28,0.56)]">{item.eyebrow}</p>
-          </div>
-          <h3 className="heading-card mb-2 text-[rgba(31,18,9,0.88)]">{item.title}</h3>
         </div>
-      </div>
+      </button>
     </div>
   )
 }
@@ -222,11 +213,7 @@ function PhotoModal({ item, onClose }) {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.62),transparent_34%)]" />
           <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(180deg,transparent_0%,rgba(88,52,25,0.10)_45%,rgba(58,34,18,0.26)_100%)]" />
 
-          <div className="relative z-10 flex items-start justify-between gap-4">
-            <div>
-              <p className="label-upper mb-3 !text-[rgba(90,52,24,0.72)]">{item.eyebrow}</p>
-              <h3 className="heading-section max-w-xl text-[rgba(31,18,9,0.92)]">{item.title}</h3>
-            </div>
+          <div className="relative z-10 flex items-start justify-end">
             <button
               type="button"
               onClick={onClose}
@@ -237,17 +224,12 @@ function PhotoModal({ item, onClose }) {
             </button>
           </div>
 
-          <div className="relative z-10 flex min-h-[16rem] items-center justify-center px-8 py-10">
+          <div className="relative z-10 flex min-h-[21rem] items-center justify-center px-8 py-10 sm:min-h-[28rem]">
             <img
               src={logoPlaceholder}
               alt="Μεταξύ Μας logo"
-              className="max-h-48 w-auto object-contain drop-shadow-[0_22px_40px_rgba(90,53,24,0.22)] sm:max-h-56"
+              className="max-h-52 w-auto object-contain drop-shadow-[0_22px_40px_rgba(90,53,24,0.22)] sm:max-h-72"
             />
-          </div>
-
-          <div className="relative z-10 max-w-2xl">
-            <p className="text-base leading-8 text-[rgba(58,33,16,0.78)]">{item.note}</p>
-            <p className="mt-4 text-sm leading-7 text-[rgba(58,33,16,0.62)]">{item.caption}</p>
           </div>
         </div>
       </div>
@@ -278,9 +260,9 @@ function StorySection() {
           </div>
         </SectionReveal>
 
-        <SectionHeading label="Ο Χώρος Μας!" title="Μια πιο προσεγμένη ματιά στον χώρο." />
+        <SectionHeading label="Ο Χώρος Μας!" title="Μια σύντομη &quot;μυρωδιά&quot; από το μαγαζί μας." />
 
-        <StaggerReveal className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 xl:gap-10">
+        <StaggerReveal className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-8">
           {photos.map(photo => (
             <StaggerItem key={photo.id}>
               <PhotoCard item={photo} onOpen={setActivePhoto} />
@@ -348,6 +330,38 @@ function ListRow({
 function HouseHighlights() {
   const liveItems = recurringEvents.filter(event => event.highlight).slice(0, 3)
   const hasLocationVideo = Boolean(business.locationVideoSrc)
+  const videoRef = useRef(null)
+  const feedbackTimeoutRef = useRef(null)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [videoFeedback, setVideoFeedback] = useState(null)
+
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current)
+    }
+  }, [])
+
+  const toggleVideoPlayback = async () => {
+    if (!videoRef.current) return
+
+    if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current)
+
+    if (videoRef.current.paused) {
+      setVideoFeedback(null)
+
+      try {
+        await videoRef.current.play()
+        setIsVideoPlaying(true)
+      } catch {
+        setIsVideoPlaying(false)
+      }
+    } else {
+      videoRef.current.pause()
+      setIsVideoPlaying(false)
+      setVideoFeedback('pause')
+      feedbackTimeoutRef.current = setTimeout(() => setVideoFeedback(null), 650)
+    }
+  }
 
   return (
     <SectionWrap>
@@ -357,14 +371,36 @@ function HouseHighlights() {
         <SectionReveal className="h-full">
           <div className="relative min-h-[22rem] h-full overflow-hidden rounded-[2rem] bg-[linear-gradient(135deg,rgba(91,50,24,0.84),rgba(188,126,71,0.36))] shadow-[0_24px_60px_rgba(98,61,27,0.08)] xl:min-h-0">
             {hasLocationVideo ? (
-              <video
-                src={business.locationVideoSrc}
-                poster={business.locationVideoPoster || '/4.png'}
-                controls
-                preload="metadata"
-                playsInline
-                className="h-full w-full object-cover"
-              />
+              <>
+                <video
+                  ref={videoRef}
+                  src={business.locationVideoSrc}
+                  poster={business.locationVideoPoster || '/4.png'}
+                  preload="metadata"
+                  playsInline
+                  onPlay={() => setIsVideoPlaying(true)}
+                  onPause={() => setIsVideoPlaying(false)}
+                  onEnded={() => setIsVideoPlaying(false)}
+                  className="h-full w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={toggleVideoPlayback}
+                  aria-label={isVideoPlaying ? 'Παύση βίντεο' : 'Αναπαραγωγή βίντεο'}
+                  className={cn(
+                    'absolute inset-0 flex items-center justify-center transition-colors duration-300',
+                    isVideoPlaying
+                      ? 'bg-transparent hover:bg-[linear-gradient(180deg,rgba(28,15,7,0.04),rgba(28,15,7,0.12))]'
+                      : 'bg-[linear-gradient(180deg,rgba(28,15,7,0.04),rgba(28,15,7,0.14))] hover:bg-[linear-gradient(180deg,rgba(28,15,7,0.08),rgba(28,15,7,0.18))]'
+                  )}
+                >
+                  {!isVideoPlaying || videoFeedback === 'pause' ? (
+                    <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-[rgba(255,248,238,0.14)] text-white shadow-[0_12px_32px_rgba(20,10,4,0.26)] backdrop-blur-sm transition-transform duration-300 hover:scale-105">
+                      {videoFeedback === 'pause' ? <Pause size={24} /> : <PlayCircle size={28} />}
+                    </span>
+                  ) : null}
+                </button>
+              </>
             ) : null}
 
             {!hasLocationVideo ? (
@@ -389,15 +425,17 @@ function HouseHighlights() {
 
         <SectionReveal variant="slideRight">
           <div className="overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.58)] px-5 py-5 shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm sm:px-6 sm:py-6">
-
-            <div className="mb-5 flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(122,30,46,0.08)] text-wine-700">
+            <div className="mb-5 flex items-center justify-center gap-3 text-center">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[rgba(122,30,46,0.08)] text-wine-700">
                 <Music2 size={18} />
               </span>
-              <div>
-                <p className="label-upper mb-1 !text-[0.58rem]">Live πρόγραμμα</p>
-                <h3 className="heading-card text-[rgba(31,18,9,0.9)]">Οι βραδιές που γεμίζουν πιο γρήγορα</h3>
+              <div className="min-w-0">
+                <p className="label-upper mb-1 !text-[0.58rem]">Lives</p>
+                <h3 className="heading-card text-[rgba(31,18,9,0.9)]">Παρασκευή, Σάββατο & Κυριακή</h3>
               </div>
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[rgba(122,30,46,0.08)] text-wine-700">
+                <Music2 size={18} />
+              </span>
             </div>
 
             <div>
@@ -412,9 +450,9 @@ function HouseHighlights() {
               ))}
             </div>
 
-            <div className="mt-8 flex justify-start">
+            <div className="mt-8 flex justify-center">
               <Link to="/live-music" className="btn-outline text-sm">
-                Δείτε περισσότερα <ArrowRight size={15} />
+                Δες λεπτομέρειες <ArrowRight size={15} />
               </Link>
             </div>
           </div>
@@ -427,7 +465,7 @@ function HouseHighlights() {
 function ReviewsSection() {
   return (
     <SectionWrap>
-      <SectionHeading label="Οι Κριτικές Μας!" title="Τι λένε οι πελάτες μας;" />
+      <SectionHeading label="Οι Κριτικές Μας!" title="Τι λένε οι επισκέπτες μας;" />
 
       <div className="grid grid-cols-1 gap-10 xl:grid-cols-[16rem_minmax(0,1fr)]">
         <SectionReveal className="h-full">
@@ -441,15 +479,15 @@ function ReviewsSection() {
             <div className="flex items-end justify-center gap-3 xl:justify-start">
               <span className="font-display text-6xl leading-none text-gold-700">{ratingStats.average}</span>
               <div className="pb-1">
-                <StarRating rating={ratingStats.average} size={14} />
+                <StarRating rating={ratingStats.average} size={14} fullOnFraction />
                 <p className="mt-2 text-xs text-[rgba(47,29,15,0.56)]">{ratingStats.total}+ αξιολογήσεις</p>
               </div>
             </div>
           </a>
         </SectionReveal>
 
-        <StaggerReveal className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {featuredReviews.slice(0, 2).map(review => (
+        <StaggerReveal className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {featuredReviews.slice(0, 3).map(review => (
             <StaggerItem key={review.id}>
               <a
                 href={review.url || business.googleReviewsUrl || business.address.mapsUrl}
@@ -487,11 +525,11 @@ function LocationSection() {
 
   return (
     <SectionWrap className="pb-10">
-      <SectionHeading label="Η Τοποθεσία Μας!" title="Μάθετε για εμάς." />
+      <SectionHeading label="Η Τοποθεσία Μας!" title="Μάθε πληροφορίες για εμάς." />
 
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.08fr)_minmax(20rem,0.92fr)] xl:items-stretch">
         <SectionReveal className="h-full">
-          <div className="aspect-[16/11] overflow-hidden rounded-[2rem] bg-[rgba(247,241,232,0.88)] shadow-[0_18px_44px_rgba(98,61,27,0.06)]">
+          <div className="h-full min-h-[22rem] overflow-hidden rounded-[2rem] bg-[rgba(247,241,232,0.88)] shadow-[0_18px_44px_rgba(98,61,27,0.06)] xl:min-h-0">
             {hasMapEmbed ? (
               <iframe
                 src={business.address.mapsEmbed}
@@ -514,12 +552,11 @@ function LocationSection() {
 
         <SectionReveal variant="slideRight">
           <div className="overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.58)] px-5 py-5 shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm sm:px-6 sm:py-6">
-
             <div className="space-y-1">
               <ListRow
                 eyebrow="Διεύθυνση"
-                title={`${business.address.street}, ${business.address.area}, ${business.address.city}`}
-                body="Βρείτε μας εύκολα για καφέ το πρωί ή μουσική βραδιά αργότερα."
+                title={`${business.address.street}, ${business.address.area}`}
+                body="Βρες μας εύκολα για καφέ το πρωί ή μουσική βραδιά αργότερα."
                 trailing={<MapPin size={17} className="text-gold-600" />}
                 titleHref={business.address.mapsUrl}
                 titleExternal
@@ -528,7 +565,7 @@ function LocationSection() {
               <ListRow
                 eyebrow="Ωράριο"
                 title={business.hoursSimple}
-                body={business.hours.slice(0, 3).map(row => `${row.days}: ${row.morning} · ${row.evening}`).join(' | ')}
+                body={business.hoursLocationSummary}
                 trailing={<Clock size={17} className="text-wine-700" />}
               />
 
@@ -536,13 +573,13 @@ function LocationSection() {
                 eyebrow="Επικοινωνία"
                 title={business.phoneDisplay}
                 body={business.email}
-                trailing={<Mail size={17} className="text-olive-700" />}
+                trailing={<PhoneCall size={17} className="text-olive-700" />}
                 titleHref={`tel:${business.phone}`}
                 bodyHref={`mailto:${business.email}`}
               />
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex justify-center">
               <a
                 href={business.address.mapsUrl}
                 target="_blank"
@@ -579,11 +616,3 @@ export default function Home() {
     </PageTransition>
   )
 }
-
-
-
-
-
-
-
-

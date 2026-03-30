@@ -162,11 +162,7 @@ export default function Navbar() {
             />
 
             <div className="relative z-10 flex min-h-full flex-col px-5 pb-8 pt-24 sm:px-6">
-              <div className="pointer-events-none absolute inset-x-0 top-[28%] flex justify-center opacity-[0.16]">
-                <img src="/4.png" alt="" className="h-auto w-[10.5rem] max-w-[46vw] object-contain" />
-              </div>
-
-              <nav className="flex flex-1 flex-col" aria-label="Κινητή πλοήγηση">
+              <nav className="flex flex-col" aria-label="Κινητή πλοήγηση">
                 {navLinks.map((link, index) => (
                   <motion.div
                     key={link.to}
@@ -197,7 +193,11 @@ export default function Navbar() {
                 ))}
               </nav>
 
-              <div className="mt-8">
+              <div className="flex flex-1 items-center justify-center px-4">
+                <img src="/4.png" alt="Μεταξύ Μας" className="h-auto w-[11.75rem] max-w-[54vw] object-contain opacity-[0.18]" />
+              </div>
+
+              <div className="mt-auto">
                 <div className="flex flex-col gap-3">
                   <Link
                     to="/reservations"
@@ -218,5 +218,3 @@ export default function Navbar() {
     </>
   )
 }
-
-

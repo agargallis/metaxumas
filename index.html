@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="canonical" href="https://metaxumas.gr/" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#5a3418" />
     <meta name="color-scheme" content="light" />
@@ -29,7 +31,7 @@
       }
     </style>
 
-    <title>Μεταξύ Μας | Καφέ, Μεζεδοπωλείο και Ζωντανή Μουσική</title>
+    <title>Μεταξύ Μας | Μεζεδοπωλείο & Καφέ</title>
     <meta
       name="description"
       content="Το Μεταξύ Μας στο Περιστέρι συνδυάζει καφέ, μεζέδες, ποτό και ζωντανή μουσική σε έναν ζεστό χώρο για κάθε ώρα της ημέρας."
@@ -40,26 +42,92 @@
     />
 
     <meta property="og:type" content="restaurant" />
-    <meta property="og:title" content="Μεταξύ Μας | Καφέ, Μεζεδοπωλείο και Ζωντανή Μουσική" />
+    <meta property="og:title" content="Μεταξύ Μας | Καφέ & Μεζεδοπωλείο" />
     <meta
       property="og:description"
       content="Από τον πρωινό καφέ μέχρι τις μουσικές βραδιές, ένας χώρος στο Περιστέρι για παρέα, φαγητό και ατμόσφαιρα."
     />
-    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:url" content="https://metaxumas.gr/" />
+    <meta property="og:image" content="https://metaxumas.gr/logo.png" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Restaurant",
+        "@id": "https://metaxumas.gr/#restaurant",
         "name": "Μεταξύ Μας",
+        "url": "https://metaxumas.gr/",
+        "logo": "https://metaxumas.gr/logo.png",
+        "image": "https://metaxumas.gr/logo.png",
         "description": "Καφέ, μεζεδοπωλείο και χώρος ζωντανής μουσικής στο Περιστέρι.",
         "servesCuisine": "Greek",
         "priceRange": "€€",
+        "telephone": "+302105758201",
+        "email": "metaxumasouzeri@gmail.com",
+        "sameAs": [
+          "https://instagram.com/metaxu.mas",
+          "https://www.facebook.com/togetherinperisteri",
+          "https://www.tiktok.com/@metaxi_mas_kafe_meze"
+        ],
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "Ασκληπιού 20",
+          "addressLocality": "Περιστέρι",
+          "postalCode": "121 35",
           "addressCountry": "GR"
         },
-        "openingHours": ["Mo-Fr 09:00-02:00", "Sa-Su 10:00-03:00"]
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "https://schema.org/Monday",
+            "opens": "00:00",
+            "closes": "00:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "https://schema.org/Tuesday",
+              "https://schema.org/Wednesday",
+              "https://schema.org/Thursday"
+            ],
+            "opens": "09:00",
+            "closes": "13:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "https://schema.org/Tuesday",
+              "https://schema.org/Wednesday",
+              "https://schema.org/Thursday"
+            ],
+            "opens": "17:00",
+            "closes": "23:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "https://schema.org/Friday",
+            "opens": "09:00",
+            "closes": "13:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "https://schema.org/Friday",
+            "opens": "17:00",
+            "closes": "01:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "https://schema.org/Saturday",
+            "opens": "11:00",
+            "closes": "01:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "https://schema.org/Sunday",
+            "opens": "11:00",
+            "closes": "01:00"
+          }
+        ]
       }
     </script>
   </head>

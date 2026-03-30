@@ -91,7 +91,7 @@ export default function Reviews() {
             <div className="mx-auto mb-16 grid max-w-3xl grid-cols-1 gap-8 md:grid-cols-2">
               <div className="card-base p-8 text-center">
                 <p className="font-display mb-2 text-7xl text-gold-700">{ratingStats.average}</p>
-                <StarRating rating={ratingStats.average} size={22} className="mb-2 justify-center" />
+                <StarRating rating={ratingStats.average} size={22} className="mb-2 justify-center" fullOnFraction />
                 <p className="text-sm text-[rgba(47,29,15,0.56)]">{ratingStats.total}+ αξιολογήσεις στο Google</p>
                 <a href={reviewsUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost mt-4 justify-center text-xs">
                   Δείτε στο Google <ExternalLink size={12} />
@@ -162,3 +162,5 @@ export default function Reviews() {
     </PageTransition>
   )
 }
+
+

@@ -4,11 +4,13 @@ import SectionReveal from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
 import { business } from '../data/business'
 
+const accentLinkStyle = { color: 'var(--gold)', textDecoration: 'none' }
+
 function Section({ title, children }) {
   return (
-    <SectionReveal className="mb-10">
+    <SectionReveal className="mb-10 text-center">
       <h2 className="heading-card mb-4 text-[rgba(31,18,9,0.88)]">{title}</h2>
-      <div className="space-y-3 text-sm leading-relaxed text-[rgba(47,29,15,0.62)]">{children}</div>
+      <div className="space-y-3 text-center text-sm leading-relaxed text-[rgba(47,29,15,0.62)]">{children}</div>
     </SectionReveal>
   )
 }
@@ -29,9 +31,9 @@ export default function Terms() {
       />
 
       <section className="section-padding pt-6 sm:pt-8">
-        <div className="container-narrow">
-          <SectionReveal className="mb-10">
-            <p className="border-y border-[rgba(127,91,48,0.12)] py-3 text-sm text-[rgba(47,29,15,0.62)]">
+        <div className="container-narrow text-center">
+          <SectionReveal className="mb-10 text-center">
+            <p className="border-y border-[rgba(127,91,48,0.12)] py-3 text-center text-sm text-[rgba(47,29,15,0.62)]">
               Τελευταία ενημέρωση: Μάρτιος 2026
             </p>
           </SectionReveal>
@@ -47,7 +49,7 @@ export default function Terms() {
 
           <Section title="3. Κρατήσεις">
             <p>Η αποστολή φόρμας κράτησης αποτελεί αίτημα και όχι οριστική επιβεβαίωση. Η κράτηση θεωρείται έγκυρη μόνο μετά από επιβεβαίωση από την επιχείρηση.</p>
-            <p>Για κρατήσεις τελευταίας στιγμής ή για μεγάλες παρέες προτείνεται τηλεφωνική επικοινωνία στο <a href={`tel:${business.phone}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.phoneDisplay}</a>.</p>
+            <p>Για κρατήσεις τελευταίας στιγμής ή για μεγάλες παρέες προτείνεται τηλεφωνική επικοινωνία στο <a href={`tel:${business.phone}`} style={accentLinkStyle}>{business.phoneDisplay}</a>.</p>
           </Section>
 
           <Section title="4. Πνευματική Ιδιοκτησία">
@@ -65,7 +67,15 @@ export default function Terms() {
 
           <Section title="7. Επικοινωνία">
             <p>Για οποιαδήποτε απορία σχετικά με τους όρους χρήσης, επικοινωνήστε μαζί μας:</p>
-            <p><strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong><br />{business.address.street}, {business.address.area}, {business.address.city}<br />Email: <a href={`mailto:${business.email}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.email}</a><br />Τηλ: <a href={`tel:${business.phone}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.phoneDisplay}</a></p>
+            <p>
+              <strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong>
+              <br />
+              {business.address.street}, {business.address.area}, {business.address.city}
+              <br />
+              Email: <a href={`mailto:${business.email}`} style={accentLinkStyle}>{business.email}</a>
+              <br />
+              Τηλ: <a href={`tel:${business.phone}`} style={accentLinkStyle}>{business.phoneDisplay}</a>
+            </p>
           </Section>
         </div>
       </section>

@@ -1,6 +1,7 @@
 ﻿import { Helmet } from 'react-helmet-async'
 import { Calendar, Clock, Users, Guitar, Mic2, Radio, Star, Play } from 'lucide-react'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
+import PageHero from '../components/ui/PageHero'
 import PageTransition from '../components/ui/PageTransition'
 import { recurringEvents } from '../data/events'
 import { instagramPosts } from '../data/gallery'
@@ -144,19 +145,21 @@ export default function LiveMusic() {
         />
       </Helmet>
 
-      <section className="section-padding pt-6 sm:pt-8">
-        <div className="container-wide">
-          <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
-            <p className="label-upper mb-3">Τι να περιμένετε!</p>
-            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Live βραδιές με σωστό ρυθμό και ατμόσφαιρα.</h2>
-          </SectionReveal>
+      <PageHero
+        minimal
+        className="pb-2 sm:pb-3"
+        label="Τι να περιμένετε!"
+        title="Live βραδιές με ξεχωριστούς καλλιτέχνες."
+      />
 
+      <section className="section-padding pt-4 sm:pt-6">
+        <div className="container-wide">
           <StaggerReveal className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {[
-              { Icon: Guitar, title: 'Ελληνική Λαϊκή', desc: 'Αγαπημένα τραγούδια live, σε βραδιές που μένουν παρεΐστικες και ζεστές.' },
-              { Icon: Mic2, title: 'Ρεμπέτικο', desc: 'Αυθεντικός ήχος, πιο άμεσος χαρακτήρας και μουσική που ταιριάζει με το τραπέζι.' },
-              { Icon: Radio, title: 'Acoustic Βραδιές', desc: 'Πιο ήπιες στιγμές με καθαρό ήχο, κρασί και κουβέντα χωρίς υπερβολή.' },
-              { Icon: Star, title: 'Ειδικές Εκδηλώσεις', desc: 'Θεματικές μουσικές βραδιές και μικρά αφιερώματα όταν το πρόγραμμα το ζητά.' },
+              { Icon: Guitar, title: 'Παλαιά Λαϊκά', desc: 'Αγαπημένα τραγούδια live, σε βραδιές που μένουν παρεΐστικες και ζεστές.' },
+              { Icon: Mic2, title: 'Ρεμπέτικα', desc: 'Αυθεντικός ήχος, πιο άμεσος χαρακτήρας και μουσική που ταιριάζει με το τραπέζι.' },
+              { Icon: Radio, title: 'Ακουστικά Προγράμματα', desc: 'Πιο ήπιες στιγμές με καθαρό ήχο, κρασί και κουβέντα χωρίς υπερβολή.' },
+              { Icon: Star, title: 'Έντεχνα', desc: 'Μουσικές βραδιές με έντεχνα τραγούδια και ιδιαίτερο χαρακτήρα.' },
             ].map(item => (
               <StaggerItem key={item.title}>
                 <ExpectCard item={item} />
@@ -169,8 +172,8 @@ export default function LiveMusic() {
       <section className="section-padding pt-0">
         <div className="container-wide">
           <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
-            <p className="label-upper mb-3">Εβδομαδιαίο Πρόγραμμα</p>
-            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Τακτικές Βραδιές</h2>
+            <p className="label-upper mb-3">Εβδομαδιαίο Πρόγραμμα!</p>
+            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Τακτικές Βραδιές.</h2>
           </SectionReveal>
 
           <StaggerReveal className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -183,11 +186,11 @@ export default function LiveMusic() {
         </div>
       </section>
 
-      <section className="section-padding border-y border-[rgba(127,91,48,0.10)]">
+      <section className="section-padding border-y border-[rgba(127,91,48,0.10)] pb-10">
         <div className="container-wide">
           <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
             <p className="label-upper mb-3">Instagram Reels!</p>
-            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Στιγμιότυπα από τις live βραδιές</h2>
+            <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Στιγμιότυπα από τις live βραδιές.</h2>
           </SectionReveal>
 
           <StaggerReveal className="mx-auto flex max-w-6xl flex-wrap justify-center gap-8">
@@ -204,3 +207,6 @@ export default function LiveMusic() {
     </PageTransition>
   )
 }
+
+
+

@@ -1,5 +1,6 @@
 ﻿import { motion } from 'motion/react'
 import { cn } from '../../lib/utils'
+import heroMark from '../../assets/images/4.png'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -9,7 +10,7 @@ export default function PageHero({
   subtitle,
   className = '',
   minimal = false,
-  imageSrc,
+  imageSrc = heroMark,
   imageAlt = '',
 }) {
   return (
@@ -39,8 +40,8 @@ export default function PageHero({
 
       <div
         className={cn(
-          'relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8',
-          minimal ? 'pb-6 pt-3 sm:pb-8 sm:pt-5 lg:pt-8' : 'pb-14 pt-12 sm:pb-16 sm:pt-16 lg:pt-20',
+          'relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6',
+          minimal ? 'pb-6 pt-8 sm:pb-8 sm:pt-14' : 'pb-14 pt-8 sm:pb-16 sm:pt-14',
         )}
       >
         {imageSrc ? (
@@ -51,8 +52,8 @@ export default function PageHero({
             src={imageSrc}
             alt={imageAlt}
             className={cn(
-              'mx-auto w-auto object-contain',
-              minimal ? 'mb-5 h-14 sm:h-16' : 'mb-6 h-16 sm:h-20',
+              'hero-mark-float mx-auto w-auto object-contain',
+              minimal ? 'mb-5 h-16 sm:h-[5.5rem]' : 'mb-6 h-16 sm:h-[5.5rem]',
             )}
             style={{ filter: 'drop-shadow(0 14px 28px rgba(175,120,36,0.12))' }}
           />
@@ -69,17 +70,19 @@ export default function PageHero({
           </motion.p>
         ) : null}
 
-        <motion.h1
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.07, ease }}
-          className={cn(
-            'mx-auto max-w-[48rem] text-[rgba(31,18,9,0.92)]',
-            minimal ? 'font-display text-[clamp(2.5rem,5vw,4.3rem)] leading-[0.96] tracking-[-0.03em]' : 'heading-section',
-          )}
-        >
-          {title}
-        </motion.h1>
+        {title ? (
+          <motion.h1
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.07, ease }}
+            className={cn(
+              'mx-auto max-w-[48rem] text-[rgba(31,18,9,0.92)]',
+              minimal ? 'font-display text-[clamp(2.5rem,5vw,4.3rem)] leading-[0.96] tracking-[-0.03em]' : 'heading-section',
+            )}
+          >
+            {title}
+          </motion.h1>
+        ) : null}
 
         {!minimal ? (
           <motion.div
@@ -93,5 +96,11 @@ export default function PageHero({
     </section>
   )
 }
+
+
+
+
+
+
 
 

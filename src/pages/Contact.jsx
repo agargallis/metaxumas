@@ -1,6 +1,6 @@
-import { Helmet } from 'react-helmet-async'
+﻿import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
-import { MapPin, Phone, Mail, Clock, Instagram, Facebook, ExternalLink, Sun, Moon } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Instagram, Facebook, ExternalLink } from 'lucide-react'
 import PageHero from '../components/ui/PageHero'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
@@ -34,14 +34,14 @@ export default function Contact() {
   return (
     <PageTransition>
       <Helmet>
-        <title>Επικοινωνία & Τοποθεσία | Μεταξύ Μας</title>
-        <meta name="description" content={`Μεταξύ Μας — ${business.address.street}, ${business.address.area}. Τηλ: ${business.phoneDisplay}. Ωράριο: ${business.hoursSimple}`} />
+        <title>Ξ•Ο€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ―Ξ± & Ξ¤ΞΏΟ€ΞΏΞΈΞµΟƒΞ―Ξ± | ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚</title>
+        <meta name="description" content={`ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚ β€” ${business.address.street}, ${business.address.area}. Ξ¤Ξ·Ξ»: ${business.phoneDisplay}. Ξ©ΟΞ¬ΟΞΉΞΏ: ${business.hoursSimple}`} />
       </Helmet>
 
       <PageHero
-        label="Επικοινωνία"
-        title="Βρείτε μας"
-        subtitle="Είμαστε εδώ για εσάς — διαδικτυακά, τηλεφωνικά ή αυτοπροσώπως."
+        label="Ξ•Ο€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ―Ξ±"
+        title="Ξ’ΟΞµΞ―Ο„Ξµ ΞΌΞ±Ο‚"
+        subtitle="Ξ•Ξ―ΞΌΞ±ΟƒΟ„Ξµ ΞµΞ΄Ο Ξ³ΞΉΞ± ΞµΟƒΞ¬Ο‚ β€” Ξ΄ΞΉΞ±Ξ΄ΞΉΞΊΟ„Ο…Ξ±ΞΊΞ¬, Ο„Ξ·Ξ»ΞµΟ†Ο‰Ξ½ΞΉΞΊΞ¬ Ξ® Ξ±Ο…Ο„ΞΏΟ€ΟΞΏΟƒΟΟ€Ο‰Ο‚."
       />
 
       <section className="section-padding">
@@ -51,8 +51,8 @@ export default function Contact() {
             {/* Left: Map + Address */}
             <div>
               <SectionReveal className="mb-6">
-                <p className="label-upper mb-3">Τοποθεσία</p>
-                <h2 className="heading-card mb-2 text-[rgba(31,18,9,0.9)]">Πού θα μας βρείτε</h2>
+                <p className="label-upper mb-3">Ξ¤ΞΏΟ€ΞΏΞΈΞµΟƒΞ―Ξ±</p>
+                <h2 className="heading-card mb-2 text-[rgba(31,18,9,0.9)]">Ξ ΞΏΟ ΞΈΞ± ΞΌΞ±Ο‚ Ξ²ΟΞµΞ―Ο„Ξµ</h2>
               </SectionReveal>
 
               {/* Map embed */}
@@ -69,16 +69,16 @@ export default function Contact() {
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
-                      title="Χάρτης Μεταξύ Μας"
+                      title="Ξ§Ξ¬ΟΟ„Ξ·Ο‚ ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚"
                     />
                     Get your embed URL from: Google Maps > Share > Embed a map
                   */}
                   <div className="w-full h-full flex flex-col items-center justify-center gap-4 text-center px-8">
                     <MapPin size={36} className="text-gold-500/40" />
                     <p className="text-sm text-[rgba(47,29,15,0.48)] leading-relaxed">
-                      <strong className="text-[rgba(31,18,9,0.7)]">Χάρτης Placeholder</strong><br />
-                      Αντικαταστήστε με πραγματικό Google Maps embed.<br />
-                      Δείτε οδηγίες στο αρχείο <code className="text-gold-700 text-xs">Contact.jsx</code>
+                      <strong className="text-[rgba(31,18,9,0.7)]">Ξ§Ξ¬ΟΟ„Ξ·Ο‚ Placeholder</strong><br />
+                      Ξ‘Ξ½Ο„ΞΉΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΟƒΟ„Ξµ ΞΌΞµ Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΉΞΊΟ Google Maps embed.<br />
+                      Ξ”ΞµΞ―Ο„Ξµ ΞΏΞ΄Ξ·Ξ³Ξ―ΞµΟ‚ ΟƒΟ„ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ <code className="text-gold-700 text-xs">Contact.jsx</code>
                     </p>
                     <a
                       href={business.address.mapsUrl}
@@ -87,7 +87,7 @@ export default function Contact() {
                       className="btn-outline text-xs"
                     >
                       <ExternalLink size={12} />
-                      Άνοιγμα στο Google Maps
+                      Ξ†Ξ½ΞΏΞΉΞ³ΞΌΞ± ΟƒΟ„ΞΏ Google Maps
                     </a>
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default function Contact() {
                 <StaggerItem>
                   <ContactCard
                     icon={MapPin}
-                    label="Διεύθυνση"
+                    label="Ξ”ΞΉΞµΟΞΈΟ…Ξ½ΟƒΞ·"
                     value={`${business.address.street}, ${business.address.area}, ${business.address.city}`}
                     href={business.address.mapsUrl}
                     isExternal
@@ -107,7 +107,7 @@ export default function Contact() {
                 <StaggerItem>
                   <ContactCard
                     icon={Phone}
-                    label="Τηλέφωνο"
+                    label="Ξ¤Ξ·Ξ»Ξ­Ο†Ο‰Ξ½ΞΏ"
                     value={business.phoneDisplay}
                     href={`tel:${business.phone}`}
                   />
@@ -123,7 +123,7 @@ export default function Contact() {
                 <StaggerItem>
                   <ContactCard
                     icon={Clock}
-                    label="Ωράριο"
+                    label="Ξ©ΟΞ¬ΟΞΉΞΏ"
                     value={business.hoursSimple}
                   />
                 </StaggerItem>
@@ -137,30 +137,34 @@ export default function Contact() {
                 <div className="card-base p-7">
                   <div className="flex items-center gap-3 mb-5">
                     <Clock size={16} className="text-gold-400" />
-                    <h3 className="font-serif text-lg font-semibold text-[rgba(31,18,9,0.9)]">Ωράριο Λειτουργίας</h3>
+                    <h3 className="font-serif text-lg font-semibold text-[rgba(31,18,9,0.9)]">Ξ©ΟΞ¬ΟΞΉΞΏ Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³Ξ―Ξ±Ο‚</h3>
                   </div>
                   <div className="space-y-4">
                     {business.hours.map((row, i) => (
-                      <div key={i} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 pb-4 border-b border-[rgba(127,91,48,0.10)] last:border-0 last:pb-0">
+                      <div key={i} className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 pb-4 border-b border-[rgba(127,91,48,0.10)] last:border-0 last:pb-0">
                         <p className="text-sm font-medium text-[rgba(31,18,9,0.72)]">{row.days}</p>
-                        <div className="flex gap-3 text-sm text-[rgba(47,29,15,0.58)]">
-                          <span className="inline-flex items-center gap-1"><Sun size={11} className="text-gold-400/60" />{row.morning}</span>
-                          <span className="text-[rgba(47,29,15,0.26)]">·</span>
-                          <span className="inline-flex items-center gap-1"><Moon size={11} className="text-wine-600/60" />{row.evening}</span>
-                        </div>
+                        {row.closed ? (
+                          <p className="text-sm font-medium text-[rgba(122,30,46,0.78)]">Κλειστά</p>
+                        ) : (
+                          <div className="flex flex-col items-start gap-1 text-sm text-[rgba(47,29,15,0.58)] sm:text-right">
+                            {row.slots.map(slot => (
+                              <span key={slot}>{slot}</span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
                   <p className="mt-5 text-xs text-[rgba(47,29,15,0.42)]">
-                    * Το ωράριο ενδέχεται να τροποποιείται σε εορτές και αργίες.
-                    Ελέγξτε τα{' '}
+                    * Ξ¤ΞΏ Ο‰ΟΞ¬ΟΞΉΞΏ ΞµΞ½Ξ΄Ξ­Ο‡ΞµΟ„Ξ±ΞΉ Ξ½Ξ± Ο„ΟΞΏΟ€ΞΏΟ€ΞΏΞΉΞµΞ―Ο„Ξ±ΞΉ ΟƒΞµ ΞµΞΏΟΟ„Ξ­Ο‚ ΞΊΞ±ΞΉ Ξ±ΟΞ³Ξ―ΞµΟ‚.
+                    Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ±{' '}
                     <a
                       href={business.social.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gold-700 hover:text-gold-600 transition-colors"
                     >
-                      social μας
+                      social ΞΌΞ±Ο‚
                     </a>.
                   </p>
                 </div>
@@ -204,7 +208,7 @@ export default function Contact() {
                           <p className="text-sm font-medium text-[rgba(31,18,9,0.8)] group-hover:text-gold-700 transition-colors">
                             Facebook
                           </p>
-                          <p className="text-xs text-[rgba(47,29,15,0.42)]">Μεταξύ Μας {/* [PLACEHOLDER] */}</p>
+                          <p className="text-xs text-[rgba(47,29,15,0.42)]">ΞΞµΟ„Ξ±ΞΎΟ ΞΞ±Ο‚ {/* [PLACEHOLDER] */}</p>
                         </div>
                         <ExternalLink size={12} className="ml-auto text-[rgba(47,29,15,0.26)] group-hover:text-[rgba(47,29,15,0.46)] transition-colors" />
                       </a>
@@ -216,16 +220,16 @@ export default function Contact() {
               {/* Reservation CTA */}
               <SectionReveal>
                 <div className="card-base p-7 border-gold-500/20 bg-gradient-to-br from-[rgba(212,148,26,0.10)] to-transparent">
-                  <p className="label-upper mb-3">Ετοιμαστείτε</p>
+                  <p className="label-upper mb-3">Ξ•Ο„ΞΏΞΉΞΌΞ±ΟƒΟ„ΞµΞ―Ο„Ξµ</p>
                   <h3 className="font-serif text-xl font-semibold text-[rgba(31,18,9,0.9)] mb-3">
-                    Κλείστε τραπέζι τώρα
+                    ΞΞ»ΞµΞ―ΟƒΟ„Ξµ Ο„ΟΞ±Ο€Ξ­Ξ¶ΞΉ Ο„ΟΟΞ±
                   </h3>
                   <p className="text-sm text-[rgba(47,29,15,0.56)] mb-5 leading-relaxed">
-                    Online κράτηση σε λίγα λεπτά — ή τηλεφωνήστε μας για άμεση εξυπηρέτηση.
+                    Online ΞΊΟΞ¬Ο„Ξ·ΟƒΞ· ΟƒΞµ Ξ»Ξ―Ξ³Ξ± Ξ»ΞµΟ€Ο„Ξ¬ β€” Ξ® Ο„Ξ·Ξ»ΞµΟ†Ο‰Ξ½Ξ®ΟƒΟ„Ξµ ΞΌΞ±Ο‚ Ξ³ΞΉΞ± Ξ¬ΞΌΞµΟƒΞ· ΞµΞΎΟ…Ο€Ξ·ΟΞ­Ο„Ξ·ΟƒΞ·.
                   </p>
                   <div className="flex flex-col gap-3">
                     <Link to="/reservations" className="btn-primary justify-center">
-                      Online Κράτηση
+                      Online ΞΟΞ¬Ο„Ξ·ΟƒΞ·
                     </Link>
                     <a href={`tel:${business.phone}`} className="btn-outline justify-center">
                       <Phone size={15} />
@@ -238,13 +242,13 @@ export default function Contact() {
               {/* FAQ */}
               <SectionReveal>
                 <div className="card-base p-7">
-                  <h3 className="font-serif text-lg font-semibold text-[rgba(31,18,9,0.9)] mb-5">Συχνές Ερωτήσεις</h3>
+                  <h3 className="font-serif text-lg font-semibold text-[rgba(31,18,9,0.9)] mb-5">Ξ£Ο…Ο‡Ξ½Ξ­Ο‚ Ξ•ΟΟ‰Ο„Ξ®ΟƒΞµΞΉΟ‚</h3>
                   <div className="space-y-4">
                     {[
-                      { q: 'Χρειάζεται κράτηση;', a: 'Για βραδιές ζωντανής μουσικής συνιστάται. Για πρωινό χωρίς κράτηση.' },
-                      { q: 'Υπάρχει parking;', a: 'Υπάρχει δημοτικός χώρος στάθμευσης κοντά. [PLACEHOLDER]' },
-                      { q: 'Δέχεστε κατοικίδια;', a: 'Στον εξωτερικό χώρο δεχόμαστε φιλικά κατοικίδια. [PLACEHOLDER]' },
-                      { q: 'Υπάρχουν vegan/vegetarian επιλογές;', a: 'Ναι! Αρκετά πιάτα στο μενού είναι vegan ή vegetarian.' },
+                      { q: 'Ξ§ΟΞµΞΉΞ¬Ξ¶ΞµΟ„Ξ±ΞΉ ΞΊΟΞ¬Ο„Ξ·ΟƒΞ·;', a: 'Ξ“ΞΉΞ± Ξ²ΟΞ±Ξ΄ΞΉΞ­Ο‚ Ξ¶Ο‰Ξ½Ο„Ξ±Ξ½Ξ®Ο‚ ΞΌΞΏΟ…ΟƒΞΉΞΊΞ®Ο‚ ΟƒΟ…Ξ½ΞΉΟƒΟ„Ξ¬Ο„Ξ±ΞΉ. Ξ“ΞΉΞ± Ο€ΟΟ‰ΞΉΞ½Ο Ο‡Ο‰ΟΞ―Ο‚ ΞΊΟΞ¬Ο„Ξ·ΟƒΞ·.' },
+                      { q: 'Ξ¥Ο€Ξ¬ΟΟ‡ΞµΞΉ parking;', a: 'Ξ¥Ο€Ξ¬ΟΟ‡ΞµΞΉ Ξ΄Ξ·ΞΌΞΏΟ„ΞΉΞΊΟΟ‚ Ο‡ΟΟΞΏΟ‚ ΟƒΟ„Ξ¬ΞΈΞΌΞµΟ…ΟƒΞ·Ο‚ ΞΊΞΏΞ½Ο„Ξ¬. [PLACEHOLDER]' },
+                      { q: 'Ξ”Ξ­Ο‡ΞµΟƒΟ„Ξµ ΞΊΞ±Ο„ΞΏΞΉΞΊΞ―Ξ΄ΞΉΞ±;', a: 'Ξ£Ο„ΞΏΞ½ ΞµΞΎΟ‰Ο„ΞµΟΞΉΞΊΟ Ο‡ΟΟΞΏ Ξ΄ΞµΟ‡ΟΞΌΞ±ΟƒΟ„Ξµ Ο†ΞΉΞ»ΞΉΞΊΞ¬ ΞΊΞ±Ο„ΞΏΞΉΞΊΞ―Ξ΄ΞΉΞ±. [PLACEHOLDER]' },
+                      { q: 'Ξ¥Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ vegan/vegetarian ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚;', a: 'ΞΞ±ΞΉ! Ξ‘ΟΞΊΞµΟ„Ξ¬ Ο€ΞΉΞ¬Ο„Ξ± ΟƒΟ„ΞΏ ΞΌΞµΞ½ΞΏΟ ΞµΞ―Ξ½Ξ±ΞΉ vegan Ξ® vegetarian.' },
                     ].map(item => (
                       <div key={item.q} className="pb-4 border-b border-[rgba(127,91,48,0.10)] last:border-0 last:pb-0">
                         <p className="text-sm font-medium text-[rgba(31,18,9,0.82)] mb-1">{item.q}</p>
@@ -261,3 +265,4 @@ export default function Contact() {
     </PageTransition>
   )
 }
+

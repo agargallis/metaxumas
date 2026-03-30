@@ -2,7 +2,7 @@
   {
     id: 'rv1',
     name: 'Danai Tsirtsikou',
-    avatar: 'Μ',
+    avatar: 'D',
     rating: 5,
     date: '2025',
     platform: 'Google',
@@ -14,7 +14,7 @@
   {
     id: 'rv2',
     name: 'ΙΩΑΝΝΗΣ ΜΕΙΜΑΡΟΓΛΟΥ',
-    avatar: 'Ν',
+    avatar: 'I',
     rating: 5,
     date: '2024',
     platform: 'Google',
@@ -25,14 +25,14 @@
   },
   {
     id: 'rv3',
-    name: 'Ελένη Τ.',
-    avatar: 'Ε',
+    name: 'Nikos Siaperas',
+    avatar: 'Ν',
     rating: 5,
-    date: '2024-12',
+    date: '2026',
     platform: 'Google',
-    url: null,
-    text: 'Χαρακτηριστική ατμόσφαιρα, εξυπηρέτηση με χαμόγελο και φαγητό που νιώθεις ότι το έφτιαχναν με αγάπη. Το γαλακτομπούρεκο τους είναι αξεπέραστο. Ιδανικό και για πρωινό και για βραδινή έξοδο.',
-    highlight: 'Αγαπημένο γαλακτομπούρεκο!',
+    url: 'https://maps.app.goo.gl/aKDFK3ZzWn9z9dXb8',
+    text: 'Εξαιρετικό μαγαζί με πολύ ποιοτικό φαγητό. Οι βραδιές με live μουσικές εξαιρετικές.',
+    highlight: '',
     featured: true,
   },
   {
@@ -95,13 +95,25 @@
     highlight: 'Δίκαιες τιμές, νόστιμο φαγητό',
     featured: false,
   },
+  {
+    id: 'rv9',
+    name: 'Nikos Siaperas',
+    avatar: 'Ν',
+    rating: 5,
+    date: '2026',
+    platform: 'Google',
+    url: 'https://maps.app.goo.gl/aKDFK3ZzWn9z9dXb8',
+    text: 'Εξαιρετικό μαγαζί με πολύ ποιοτικό φαγητό. Οι βραδιές με live μουσικές εξαιρετικές.',
+    highlight: '',
+    featured: true,
+  },
 ]
 
 export const featuredReviews = reviews.filter(r => r.featured)
 
 export const ratingStats = {
-  average: 4.9,
-  total: 180,
+  average: 4.8,
+  total: 120,
   breakdown: {
     5: 92,
     4: 6,
@@ -112,3 +124,6 @@ export const ratingStats = {
 }
 
 export default reviews
+
+
+

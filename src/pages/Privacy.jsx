@@ -4,11 +4,13 @@ import SectionReveal from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
 import { business } from '../data/business'
 
+const accentLinkStyle = { color: 'var(--gold)', textDecoration: 'none' }
+
 function Section({ title, children }) {
   return (
-    <SectionReveal className="mb-10">
+    <SectionReveal className="mb-10 text-center">
       <h2 className="heading-card mb-4 text-[rgba(31,18,9,0.88)]">{title}</h2>
-      <div className="space-y-3 text-sm leading-relaxed text-[rgba(47,29,15,0.62)]">{children}</div>
+      <div className="space-y-3 text-center text-sm leading-relaxed text-[rgba(47,29,15,0.62)]">{children}</div>
     </SectionReveal>
   )
 }
@@ -29,16 +31,22 @@ export default function Privacy() {
       />
 
       <section className="section-padding pt-6 sm:pt-8">
-        <div className="container-narrow">
-          <SectionReveal className="mb-10">
-            <p className="border-y border-[rgba(127,91,48,0.12)] py-3 text-sm text-[rgba(47,29,15,0.62)]">
+        <div className="container-narrow text-center">
+          <SectionReveal className="mb-10 text-center">
+            <p className="border-y border-[rgba(127,91,48,0.12)] py-3 text-center text-sm text-[rgba(47,29,15,0.62)]">
               Τελευταία ενημέρωση: Μάρτιος 2026
             </p>
           </SectionReveal>
 
           <Section title="1. Υπεύθυνος Επεξεργασίας">
             <p>Υπεύθυνος επεξεργασίας των προσωπικών δεδομένων είναι η επιχείρηση <strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong>.</p>
-            <p>Διεύθυνση: {business.address.street}, {business.address.area}, {business.address.city}<br />Email: <a href={`mailto:${business.email}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.email}</a><br />Τηλ: <a href={`tel:${business.phone}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.phoneDisplay}</a></p>
+            <p>
+              Διεύθυνση: {business.address.street}, {business.address.area}, {business.address.city}
+              <br />
+              Email: <a href={`mailto:${business.email}`} style={accentLinkStyle}>{business.email}</a>
+              <br />
+              Τηλ: <a href={`tel:${business.phone}`} style={accentLinkStyle}>{business.phoneDisplay}</a>
+            </p>
           </Section>
 
           <Section title="2. Ποια Δεδομένα Συλλέγουμε">
@@ -62,7 +70,7 @@ export default function Privacy() {
           </Section>
 
           <Section title="7. Επικοινωνία">
-            <p>Για οποιοδήποτε ζήτημα σχετίζεται με τα προσωπικά σας δεδομένα, επικοινωνήστε μαζί μας στο <a href={`mailto:${business.email}`} style={{ color: 'var(--gold)', textDecoration: 'underline' }}>{business.email}</a>.</p>
+            <p>Για οποιοδήποτε ζήτημα σχετίζεται με τα προσωπικά σας δεδομένα, επικοινωνήστε μαζί μας στο <a href={`mailto:${business.email}`} style={accentLinkStyle}>{business.email}</a>.</p>
           </Section>
         </div>
       </section>

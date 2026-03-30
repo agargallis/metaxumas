@@ -1,14 +1,142 @@
-﻿import { useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { motion, AnimatePresence } from 'motion/react'
-import { CheckCircle, AlertCircle, Phone, Clock, Users, MessageSquare, Sun, Moon, AlertTriangle } from 'lucide-react'
+import { CheckCircle, AlertCircle, Phone, Clock, Users, MessageSquare, AlertTriangle } from 'lucide-react'
 import PageHero from '../components/ui/PageHero'
 import SectionReveal from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
 import { business } from '../data/business'
 
 const FORMSPREE_URL = `https://formspree.io/f/${business.formspreeId}`
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+const DAY_NAMES = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
+
+function to24HourTime(value) {
+  if (!value) return null
+
+  const normalized = value
+    .replace(/\s+/g, ' ')
+    .replace('π.μ.', 'AM')
+    .replace('μ.μ.', 'PM')
+    .trim()
+
+  const match = normalized.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i)
+  if (!match) return null
+
+  let hours = Number(match[1])
+  const minutes = Number(match[2])
+  const meridiem = match[3].toUpperCase()
+
+  if (meridiem === 'AM') {
+    if (hours === 12) hours = 0
+  } else if (hours !== 12) {
+    hours += 12
+  }
+
+  return hours * 60 + minutes
+}
+
+function getSlotsForDate(dateValue) {
+  if (!dateValue) return null
+
+  const date = new Date(`${dateValue}T12:00:00`)
+  if (Number.isNaN(date.getTime())) return null
+
+  const dayName = DAY_NAMES[date.getDay()]
+  return business.hours.find(row => row.days === dayName) || null
+}
+
+function isTimeWithinShopHours(timeValue, hoursRow) {
+  if (!timeValue || !hoursRow || hoursRow.closed || !hoursRow.slots?.length) return false
+
+  const [hours, minutes] = timeValue.split(':').map(Number)
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) return false
+
+  const selectedMinutes = hours * 60 + minutes
+
+  return hoursRow.slots.some(slot => {
+    const [startLabel, endLabel] = slot.split('–')
+    const start = to24HourTime(startLabel)
+    const end = to24HourTime(endLabel)
+
+    if (start == null || end == null) return false
+    if (end >= start) return selectedMinutes >= start && selectedMinutes <= end
+    return selectedMinutes >= start || selectedMinutes <= end
+  })
+}
+
+function formatHoursLine(hoursRow) {
+  if (!hoursRow) return ''
+  if (hoursRow.closed) return 'Κλειστά'
+  return hoursRow.slots.join(' | ')
+}
+
+function RecaptchaBox({ onVerify, resetSignal }) {
+  const containerRef = useRef(null)
+  const widgetIdRef = useRef(null)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (window.grecaptcha?.render) {
+      setLoaded(true)
+      return undefined
+    }
+
+    let script = document.getElementById('google-recaptcha-script')
+    const handleLoad = () => setLoaded(true)
+
+    if (!script) {
+      script = document.createElement('script')
+      script.id = 'google-recaptcha-script'
+      script.src = 'https://www.google.com/recaptcha/api.js?render=explicit'
+      script.async = true
+      script.defer = true
+      script.addEventListener('load', handleLoad)
+      document.body.appendChild(script)
+    } else {
+      script.addEventListener('load', handleLoad)
+    }
+
+    return () => {
+      script?.removeEventListener('load', handleLoad)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!loaded || !containerRef.current || widgetIdRef.current !== null || !window.grecaptcha?.render) return
+
+    const renderWidget = () => {
+      widgetIdRef.current = window.grecaptcha.render(containerRef.current, {
+        sitekey: RECAPTCHA_SITE_KEY,
+        callback: token => onVerify(token),
+        'expired-callback': () => onVerify(''),
+        'error-callback': () => onVerify(''),
+      })
+    }
+
+    if (window.grecaptcha.ready) {
+      window.grecaptcha.ready(renderWidget)
+    } else {
+      renderWidget()
+    }
+  }, [loaded, onVerify])
+
+  useEffect(() => {
+    if (!resetSignal || widgetIdRef.current === null || !window.grecaptcha?.reset) return
+    window.grecaptcha.reset(widgetIdRef.current)
+    onVerify('')
+  }, [resetSignal, onVerify])
+
+  return (
+    <div className="rounded-[1.4rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.42)] p-4 text-center shadow-[0_10px_28px_rgba(98,61,27,0.04)]">
+      <div className="flex justify-center">
+        <div ref={containerRef} className="min-h-[78px] overflow-hidden" />
+      </div>
+      {!loaded ? <p className="mt-2 text-center text-xs text-[rgba(47,29,15,0.46)]">Φόρτωση ελέγχου ασφαλείας...</p> : null}
+    </div>
+  )
+}
 
 function SuccessMessage() {
   return (
@@ -51,19 +179,31 @@ function ErrorMessage({ message }) {
 export default function Reservations() {
   const [submitted, setSubmitted] = useState(false)
   const [serverError, setServerError] = useState(null)
+  const [captchaError, setCaptchaError] = useState(null)
+  const [captchaToken, setCaptchaToken] = useState('')
+  const [captchaResetCounter, setCaptchaResetCounter] = useState(0)
   const [loading, setLoading] = useState(false)
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({ mode: 'onBlur' })
 
-  const onSubmit = async (data) => {
+  const selectedDate = watch('date')
+  const selectedDayHours = getSlotsForDate(selectedDate)
+
+  const onSubmit = async data => {
     if (data._honeypot) return
+    if (!captchaToken) {
+      setCaptchaError('Ολοκληρώστε πρώτα το Google reCAPTCHA.')
+      return
+    }
 
     setLoading(true)
     setServerError(null)
+    setCaptchaError(null)
 
     try {
       const res = await fetch(FORMSPREE_URL, {
@@ -76,15 +216,16 @@ export default function Reservations() {
           date: data.date,
           time: data.time,
           guests: data.guests,
-          seating: data.seating,
-          occasion: data.occasion,
-          notes: data.notes,
+          comments: data.comments,
+          recaptchaToken: captchaToken,
           _subject: `Νέα Κράτηση - ${data.name} (${data.date} ${data.time})`,
         }),
       })
 
       if (res.ok) {
         setSubmitted(true)
+        setCaptchaToken('')
+        setCaptchaResetCounter(current => current + 1)
         window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
         const json = await res.json()
@@ -109,12 +250,12 @@ export default function Reservations() {
 
       <PageHero
         minimal
-        label="Κρατήσεις"
-        title="Κλείστε το τραπέζι σας"
+        label="Κρατήσεις!"
+        title="Κλείσε το τραπέζι σου."
         subtitle="Εξασφαλίστε τη θέση σας, ειδικά για βραδιές ζωντανής μουσικής."
       />
 
-      <section className="section-padding">
+      <section className="section-padding pt-4 pb-10 sm:pt-6">
         <div className="container-wide">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_340px] xl:gap-16">
             <div>
@@ -128,7 +269,7 @@ export default function Reservations() {
                     animate={{ opacity: 1 }}
                     onSubmit={handleSubmit(onSubmit)}
                     noValidate
-                    className="space-y-6"
+                    className="space-y-6 text-center sm:text-left"
                   >
                     <div className="hidden" aria-hidden="true">
                       <input type="text" tabIndex={-1} autoComplete="off" {...register('_honeypot')} />
@@ -137,7 +278,7 @@ export default function Reservations() {
                     {serverError && <ErrorMessage message={serverError} />}
 
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                      <div>
+                      <div className="text-center sm:text-left">
                         <label htmlFor="name" className="form-label">
                           Ονοματεπώνυμο <span className="text-wine-400">*</span>
                         </label>
@@ -145,14 +286,13 @@ export default function Reservations() {
                           id="name"
                           type="text"
                           autoComplete="name"
-                          placeholder="Γιώργος Παπαδόπουλος"
-                          className={`form-field ${errors.name ? 'border-wine-600/60' : ''}`}
+                          className={`form-field text-center sm:text-left ${errors.name ? 'border-wine-600/60' : ''}`}
                           {...register('name', { required: 'Το όνομα είναι υποχρεωτικό' })}
                         />
                         {errors.name && <p className="mt-1 text-xs text-wine-400">{errors.name.message}</p>}
                       </div>
 
-                      <div>
+                      <div className="text-center sm:text-left">
                         <label htmlFor="phone" className="form-label">
                           Τηλέφωνο <span className="text-wine-400">*</span>
                         </label>
@@ -160,8 +300,7 @@ export default function Reservations() {
                           id="phone"
                           type="tel"
                           autoComplete="tel"
-                          placeholder="69X XXX XXXX"
-                          className={`form-field ${errors.phone ? 'border-wine-600/60' : ''}`}
+                          className={`form-field text-center sm:text-left ${errors.phone ? 'border-wine-600/60' : ''}`}
                           {...register('phone', {
                             required: 'Το τηλέφωνο είναι υποχρεωτικό',
                             pattern: {
@@ -174,7 +313,7 @@ export default function Reservations() {
                       </div>
                     </div>
 
-                    <div>
+                    <div className="text-center sm:text-left">
                       <label htmlFor="email" className="form-label">
                         Email <span className="text-wine-400">*</span>
                       </label>
@@ -182,8 +321,7 @@ export default function Reservations() {
                         id="email"
                         type="email"
                         autoComplete="email"
-                        placeholder="you@example.com"
-                        className={`form-field ${errors.email ? 'border-wine-600/60' : ''}`}
+                        className={`form-field text-center sm:text-left ${errors.email ? 'border-wine-600/60' : ''}`}
                         {...register('email', {
                           required: 'Το email είναι υποχρεωτικό',
                           pattern: {
@@ -196,7 +334,7 @@ export default function Reservations() {
                     </div>
 
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                      <div>
+                      <div className="text-center sm:text-left">
                         <label htmlFor="date" className="form-label">
                           Ημερομηνία <span className="text-wine-400">*</span>
                         </label>
@@ -204,104 +342,74 @@ export default function Reservations() {
                           id="date"
                           type="date"
                           min={new Date().toISOString().split('T')[0]}
-                          className={`form-field ${errors.date ? 'border-wine-600/60' : ''}`}
+                          className={`form-field text-center sm:text-left ${errors.date ? 'border-wine-600/60' : ''}`}
                           {...register('date', { required: 'Επιλέξτε ημερομηνία' })}
                         />
                         {errors.date && <p className="mt-1 text-xs text-wine-400">{errors.date.message}</p>}
                       </div>
 
-                      <div>
+                      <div className="text-center sm:text-left">
                         <label htmlFor="time" className="form-label">
                           Ώρα <span className="text-wine-400">*</span>
                         </label>
-                        <select
+                        <input
                           id="time"
-                          className={`form-field ${errors.time ? 'border-wine-600/60' : ''}`}
-                          {...register('time', { required: 'Επιλέξτε ώρα' })}
-                        >
-                          <option value="">Επιλέξτε ώρα</option>
-                          <optgroup label="Πρωί / Brunch">
-                            <option value="08:00">08:00</option>
-                            <option value="09:00">09:00</option>
-                            <option value="10:00">10:00</option>
-                            <option value="11:00">11:00</option>
-                            <option value="12:00">12:00</option>
-                            <option value="13:00">13:00</option>
-                            <option value="14:00">14:00</option>
-                            <option value="15:00">15:00</option>
-                          </optgroup>
-                          <optgroup label="Βράδυ">
-                            <option value="18:00">18:00</option>
-                            <option value="19:00">19:00</option>
-                            <option value="20:00">20:00</option>
-                            <option value="21:00">21:00</option>
-                            <option value="22:00">22:00</option>
-                            <option value="23:00">23:00</option>
-                          </optgroup>
-                        </select>
+                          type="time"
+                          step="60"
+                          className={`form-field text-center sm:text-left ${errors.time ? 'border-wine-600/60' : ''}`}
+                          {...register('time', {
+                            required: 'Επιλέξτε ώρα',
+                            validate: value => {
+                              if (!selectedDate) return 'Επιλέξτε πρώτα ημερομηνία'
+                              if (!selectedDayHours) return 'Δεν βρέθηκε ωράριο για την επιλεγμένη ημέρα'
+                              if (selectedDayHours.closed) return 'Το κατάστημα είναι κλειστό την επιλεγμένη ημέρα'
+                              return isTimeWithinShopHours(value, selectedDayHours)
+                                ? true
+                                : `Η ώρα πρέπει να είναι μέσα στο ωράριο: ${formatHoursLine(selectedDayHours)}`
+                            },
+                          })}
+                        />
+                        {selectedDate && selectedDayHours ? (
+                          <p className="mt-1 text-xs text-[rgba(47,29,15,0.46)]">
+                            {selectedDayHours.days}: {formatHoursLine(selectedDayHours)}
+                          </p>
+                        ) : null}
                         {errors.time && <p className="mt-1 text-xs text-wine-400">{errors.time.message}</p>}
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                      <div>
-                        <label htmlFor="guests" className="form-label">
-                          Αριθμός Ατόμων <span className="text-wine-400">*</span>
-                        </label>
-                        <select
-                          id="guests"
-                          className={`form-field ${errors.guests ? 'border-wine-600/60' : ''}`}
-                          {...register('guests', { required: 'Επιλέξτε αριθμό ατόμων' })}
-                        >
-                          <option value="">Επιλέξτε</option>
-                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                            <option key={n} value={n}>
-                              {n} {n === 1 ? 'άτομο' : 'άτομα'}
-                            </option>
-                          ))}
-                          <option value="11+">11+ άτομα</option>
-                        </select>
-                        {errors.guests && <p className="mt-1 text-xs text-wine-400">{errors.guests.message}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="seating" className="form-label">Θέση Καθίσματος</label>
-                        <select id="seating" className="form-field" {...register('seating')}>
-                          <option value="">Χωρίς προτίμηση</option>
-                          <option value="indoor">Εσωτερικός χώρος</option>
-                          <option value="outdoor">Εξωτερικός χώρος</option>
-                          <option value="bar">Κοντά στη μπάρα</option>
-                          <option value="music">Κοντά στη σκηνή (για ζωντανή μουσική)</option>
-                        </select>
-                      </div>
+                    <div className="text-center sm:text-left">
+                      <label htmlFor="guests" className="form-label">
+                        Αριθμός Ατόμων <span className="text-wine-400">*</span>
+                      </label>
+                      <input
+                        id="guests"
+                        type="number"
+                        min="1"
+                        step="1"
+                        inputMode="numeric"
+                        className={`form-field text-center sm:text-left ${errors.guests ? 'border-wine-600/60' : ''}`}
+                        {...register('guests', {
+                          required: 'Συμπληρώστε αριθμό ατόμων',
+                          min: { value: 1, message: 'Ο αριθμός ατόμων πρέπει να είναι τουλάχιστον 1' },
+                        })}
+                      />
+                      {errors.guests && <p className="mt-1 text-xs text-wine-400">{errors.guests.message}</p>}
                     </div>
 
-                    <div>
-                      <label htmlFor="occasion" className="form-label">Αφορμή (προαιρετικά)</label>
-                      <select id="occasion" className="form-field" {...register('occasion')}>
-                        <option value="">Απλή επίσκεψη</option>
-                        <option value="birthday">Γενέθλια</option>
-                        <option value="anniversary">Επέτειος</option>
-                        <option value="business">Επαγγελματικό δείπνο</option>
-                        <option value="music">Βραδιά ζωντανής μουσικής</option>
-                        <option value="gathering">Παρέα / Εορτασμός</option>
-                        <option value="other">Άλλο</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="notes" className="form-label">Σημειώσεις / Ειδικά αιτήματα</label>
+                    <div className="text-center sm:text-left">
+                      <label htmlFor="comments" className="form-label">Σχόλια!</label>
                       <textarea
-                        id="notes"
+                        id="comments"
                         rows={4}
-                        placeholder="Αλλεργίες, ειδικές απαιτήσεις, μήνυμα για γενέθλια..."
-                        className="form-field resize-none"
-                        {...register('notes')}
+                        placeholder="Οτιδήποτε θέλετε να γνωρίζουμε για την κράτησή σας..."
+                        className="form-field resize-none text-center sm:text-left"
+                        {...register('comments')}
                       />
                     </div>
 
-                    <div className="border-t border-[rgba(127,91,48,0.12)] pt-4 text-xs leading-relaxed text-[rgba(47,29,15,0.44)]">
-                      <p className="flex items-start gap-2">
+                    <div className="border-t border-[rgba(127,91,48,0.12)] pt-4 text-center text-xs leading-relaxed text-[rgba(47,29,15,0.44)] sm:text-left">
+                      <p className="flex flex-col items-center gap-2 text-center sm:flex-row sm:items-start sm:text-left">
                         <AlertTriangle size={13} className="mt-0.5 shrink-0 text-gold-400/60" />
                         <span>
                           <strong className="text-[rgba(31,18,9,0.72)]">Σημαντικό:</strong> Η online κράτηση αποτελεί αίτημα.
@@ -311,6 +419,15 @@ export default function Reservations() {
                         </span>
                       </p>
                     </div>
+
+                    <RecaptchaBox
+                      onVerify={token => {
+                        setCaptchaToken(token)
+                        setCaptchaError(null)
+                      }}
+                      resetSignal={captchaResetCounter}
+                    />
+                    {captchaError ? <p className="-mt-3 text-center text-xs text-wine-400 sm:text-left">{captchaError}</p> : null}
 
                     <button
                       type="submit"
@@ -326,7 +443,7 @@ export default function Reservations() {
                           Αποστολή...
                         </>
                       ) : (
-                        'Αποστολή Αιτήματος Κράτησης'
+                        'Υποβολή'
                       )}
                     </button>
                   </motion.form>
@@ -335,8 +452,32 @@ export default function Reservations() {
             </div>
 
             <div>
-              <SectionReveal className="space-y-6 lg:sticky lg:top-28">
+              <SectionReveal className="space-y-6 text-center lg:sticky lg:top-28 lg:text-left">
                 <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-4 flex items-center justify-center gap-3 lg:justify-start">
+                    <Clock size={16} className="text-gold-400" />
+                    <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ωράριο Λειτουργίας</h3>
+                  </div>
+
+                  <p className="text-sm leading-relaxed text-[rgba(47,29,15,0.68)] lg:hidden">
+                    {business.hoursLocationSummary}
+                  </p>
+
+                  <div className="hidden space-y-3 lg:block">
+                    {business.hours.map((row, i) => (
+                      <div key={i} className="border-b border-[rgba(127,91,48,0.10)] pb-3 last:border-0 last:pb-0">
+                        <p className="mb-1 text-xs text-[rgba(47,29,15,0.42)]">{row.days}</p>
+                        {row.closed ? (
+                          <p className="text-sm font-medium text-[rgba(122,30,46,0.78)]">Κλειστά</p>
+                        ) : (
+                          <p className="text-sm text-[rgba(47,29,15,0.68)]">{row.slots.join(' | ')}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="hidden border-t border-[rgba(127,91,48,0.12)] pt-6 lg:block">
                   <div className="mb-3 flex items-center gap-3">
                     <Phone size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Τηλεφωνική Κράτηση</h3>
@@ -348,36 +489,17 @@ export default function Reservations() {
                   </a>
                 </div>
 
-                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
-                  <div className="mb-4 flex items-center gap-3">
-                    <Clock size={16} className="text-gold-400" />
-                    <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ωράριο Λειτουργίας</h3>
-                  </div>
-                  <div className="space-y-3">
-                    {business.hours.map((row, i) => (
-                      <div key={i} className="border-b border-[rgba(127,91,48,0.10)] pb-3 last:border-0 last:pb-0">
-                        <p className="mb-1 text-xs text-[rgba(47,29,15,0.42)]">{row.days}</p>
-                        <p className="flex flex-wrap items-center gap-2 text-sm text-[rgba(47,29,15,0.68)]">
-                          <span className="inline-flex items-center gap-1"><Sun size={11} className="text-gold-400/70" />{row.morning}</span>
-                          <span className="text-[rgba(47,29,15,0.24)]">•</span>
-                          <span className="inline-flex items-center gap-1"><Moon size={11} className="text-wine-600/70" />{row.evening}</span>
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                <div className="hidden border-t border-[rgba(127,91,48,0.12)] pt-6 lg:block">
                   <div className="mb-3 flex items-center gap-3">
                     <Users size={16} className="text-gold-400" />
-                    <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ομαδικές Κρατήσεις</h3>
+                    <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ειδικές Κρατήσεις</h3>
                   </div>
                   <p className="text-xs leading-relaxed text-[rgba(47,29,15,0.56)]">
-                    Για πάνω από 10 άτομα ή για ιδιωτικές εκδηλώσεις, επικοινωνήστε μαζί μας τηλεφωνικά.
+                    Για ιδιωτικές εκδηλώσεις, party, μνημόσυνα κλπ. επικοινωνήστε μαζί μας τηλεφωνικά.
                   </p>
                 </div>
 
-                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                <div className="hidden border-t border-[rgba(127,91,48,0.12)] pt-6 lg:block">
                   <div className="mb-3 flex items-center gap-3">
                     <MessageSquare size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Σημείωση</h3>
