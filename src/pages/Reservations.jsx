@@ -75,7 +75,7 @@ function formatHoursLine(hoursRow) {
 function RecaptchaBox({ onVerify, resetSignal }) {
   const containerRef = useRef(null)
   const widgetIdRef = useRef(null)
-  const [loaded, setLoaded] = useState(false)
+  const [ready, setReady] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -85,46 +85,70 @@ function RecaptchaBox({ onVerify, resetSignal }) {
     }
 
     if (window.grecaptcha?.render) {
-      setLoaded(true)
+      setReady(true)
       return undefined
     }
 
+    const callbackName = '__metaxumasRecaptchaOnLoad'
+    const scriptSrc = `https://www.google.com/recaptcha/api.js?onload=${callbackName}&render=explicit`
     let script = document.getElementById('google-recaptcha-script')
-    const handleLoad = event => {
-      event?.currentTarget?.setAttribute('data-loaded', 'true')
-      setLoaded(true)
+    const previousCallback = window[callbackName]
+    const timeoutId = window.setTimeout(() => {
+      if (!window.grecaptcha?.render) {
+        setError('Το Google reCAPTCHA δεν φόρτωσε. Ελέγξτε ad blocker, σύνδεση ή αν το domain επιτρέπεται στο site key.')
+      }
+    }, 8000)
+
+    window[callbackName] = () => {
+      window.clearTimeout(timeoutId)
+      setReady(true)
       setError('')
+      if (typeof previousCallback === 'function') previousCallback()
     }
+
     const handleError = () => {
+      window.clearTimeout(timeoutId)
       setError('Δεν ήταν δυνατή η φόρτωση του Google reCAPTCHA. Κάντε ανανέωση ή ελέγξτε ad blocker / σύνδεση.')
     }
 
     if (!script) {
       script = document.createElement('script')
       script.id = 'google-recaptcha-script'
-      script.src = 'https://www.google.com/recaptcha/api.js?render=explicit'
+      script.src = scriptSrc
       script.async = true
       script.defer = true
-      script.addEventListener('load', handleLoad)
       script.addEventListener('error', handleError)
       document.body.appendChild(script)
     } else {
-      if (script.getAttribute('data-loaded') === 'true') {
-        setLoaded(true)
-      } else {
-        script.addEventListener('load', handleLoad)
+      if (window.grecaptcha?.render) {
+        window.clearTimeout(timeoutId)
+        setReady(true)
+      } else if (script.src !== scriptSrc) {
+        script.remove()
+        script = document.createElement('script')
+        script.id = 'google-recaptcha-script'
+        script.src = scriptSrc
+        script.async = true
+        script.defer = true
+        script.addEventListener('error', handleError)
+        document.body.appendChild(script)
       }
       script.addEventListener('error', handleError)
     }
 
     return () => {
-      script?.removeEventListener('load', handleLoad)
+      window.clearTimeout(timeoutId)
+      if (previousCallback == null) {
+        delete window[callbackName]
+      } else {
+        window[callbackName] = previousCallback
+      }
       script?.removeEventListener('error', handleError)
     }
   }, [])
 
   useEffect(() => {
-    if (!loaded || !containerRef.current || widgetIdRef.current !== null || !window.grecaptcha?.render) return
+    if (!ready || !containerRef.current || widgetIdRef.current !== null || !window.grecaptcha?.render) return
 
     const renderWidget = () => {
       try {
@@ -150,7 +174,7 @@ function RecaptchaBox({ onVerify, resetSignal }) {
     } else {
       renderWidget()
     }
-  }, [loaded, onVerify])
+  }, [ready, onVerify])
 
   useEffect(() => {
     if (!resetSignal || widgetIdRef.current === null || !window.grecaptcha?.reset) return
@@ -163,7 +187,7 @@ function RecaptchaBox({ onVerify, resetSignal }) {
       <div className="flex justify-center">
         <div ref={containerRef} className="min-h-[78px] w-[304px] max-w-full" />
       </div>
-      {!loaded && !error ? <p className="mt-2 text-center text-xs text-[rgba(47,29,15,0.46)]">Φόρτωση checkbox ασφαλείας...</p> : null}
+      {!ready && !error ? <p className="mt-2 text-center text-xs text-[rgba(47,29,15,0.46)]">Φόρτωση checkbox ασφαλείας...</p> : null}
       {error ? <p className="mt-2 text-center text-xs text-wine-400">{error}</p> : null}
     </div>
   )
