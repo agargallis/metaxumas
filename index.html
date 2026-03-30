@@ -4,11 +4,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="preload" href="/fonts/Gecko.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="canonical" href="https://metaxumas.gr/" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#5a3418" />
     <meta name="color-scheme" content="light" />
     <style>
+      @font-face {
+        font-family: 'Gecko';
+        src:
+          local('Gecko'),
+          url('/fonts/Gecko.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: block;
+      }
+
       html {
         background: #f4e7d3;
       }
@@ -23,6 +34,7 @@
           radial-gradient(circle at top right, rgba(118, 47, 28, 0.10) 0%, transparent 22%),
           linear-gradient(180deg, rgba(248, 237, 220, 0.99) 0%, rgba(242, 226, 201, 0.99) 52%, rgba(232, 208, 176, 0.99) 100%);
         color: #241308;
+        font-family: 'Gecko', Georgia, Palatino, serif;
       }
 
       #root {

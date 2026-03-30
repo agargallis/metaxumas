@@ -76,15 +76,28 @@ function RecaptchaBox({ onVerify, resetSignal }) {
   const containerRef = useRef(null)
   const widgetIdRef = useRef(null)
   const [loaded, setLoaded] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY) {
+      setError('Δεν έχει οριστεί το Google reCAPTCHA site key.')
+      return undefined
+    }
+
     if (window.grecaptcha?.render) {
       setLoaded(true)
       return undefined
     }
 
     let script = document.getElementById('google-recaptcha-script')
-    const handleLoad = () => setLoaded(true)
+    const handleLoad = event => {
+      event?.currentTarget?.setAttribute('data-loaded', 'true')
+      setLoaded(true)
+      setError('')
+    }
+    const handleError = () => {
+      setError('Δεν ήταν δυνατή η φόρτωση του Google reCAPTCHA. Κάντε ανανέωση ή ελέγξτε ad blocker / σύνδεση.')
+    }
 
     if (!script) {
       script = document.createElement('script')
@@ -93,13 +106,20 @@ function RecaptchaBox({ onVerify, resetSignal }) {
       script.async = true
       script.defer = true
       script.addEventListener('load', handleLoad)
+      script.addEventListener('error', handleError)
       document.body.appendChild(script)
     } else {
-      script.addEventListener('load', handleLoad)
+      if (script.getAttribute('data-loaded') === 'true') {
+        setLoaded(true)
+      } else {
+        script.addEventListener('load', handleLoad)
+      }
+      script.addEventListener('error', handleError)
     }
 
     return () => {
       script?.removeEventListener('load', handleLoad)
+      script?.removeEventListener('error', handleError)
     }
   }, [])
 
@@ -107,12 +127,22 @@ function RecaptchaBox({ onVerify, resetSignal }) {
     if (!loaded || !containerRef.current || widgetIdRef.current !== null || !window.grecaptcha?.render) return
 
     const renderWidget = () => {
-      widgetIdRef.current = window.grecaptcha.render(containerRef.current, {
-        sitekey: RECAPTCHA_SITE_KEY,
-        callback: token => onVerify(token),
-        'expired-callback': () => onVerify(''),
-        'error-callback': () => onVerify(''),
-      })
+      try {
+        widgetIdRef.current = window.grecaptcha.render(containerRef.current, {
+          sitekey: RECAPTCHA_SITE_KEY,
+          callback: token => {
+            setError('')
+            onVerify(token)
+          },
+          'expired-callback': () => onVerify(''),
+          'error-callback': () => {
+            setError('Παρουσιάστηκε πρόβλημα με το reCAPTCHA. Δοκιμάστε ξανά.')
+            onVerify('')
+          },
+        })
+      } catch {
+        setError('Το Google reCAPTCHA δεν μπόρεσε να εμφανιστεί. Κάντε ανανέωση της σελίδας και δοκιμάστε ξανά.')
+      }
     }
 
     if (window.grecaptcha.ready) {
@@ -129,11 +159,15 @@ function RecaptchaBox({ onVerify, resetSignal }) {
   }, [resetSignal, onVerify])
 
   return (
-    <div className="rounded-[1.4rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.42)] p-4 text-center shadow-[0_10px_28px_rgba(98,61,27,0.04)]">
-      <div className="flex justify-center">
-        <div ref={containerRef} className="min-h-[78px] overflow-hidden" />
+    <div className="rounded-[1.4rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.56)] p-4 text-center shadow-[0_10px_28px_rgba(98,61,27,0.04)] sm:text-left">
+      <p className="mb-3 text-[0.68rem] font-medium uppercase tracking-[0.18em] text-[rgba(45,28,12,0.52)]">
+        Google reCAPTCHA
+      </p>
+      <div className="flex justify-center sm:justify-start">
+        <div ref={containerRef} className="min-h-[78px] w-full max-w-[304px]" />
       </div>
-      {!loaded ? <p className="mt-2 text-center text-xs text-[rgba(47,29,15,0.46)]">Φόρτωση ελέγχου ασφαλείας...</p> : null}
+      {!loaded && !error ? <p className="mt-2 text-center text-xs text-[rgba(47,29,15,0.46)] sm:text-left">Φόρτωση checkbox ασφαλείας...</p> : null}
+      {error ? <p className="mt-2 text-center text-xs text-wine-400 sm:text-left">{error}</p> : null}
     </div>
   )
 }
