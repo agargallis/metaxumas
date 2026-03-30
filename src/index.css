@@ -472,6 +472,7 @@
   .form-field {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
     padding: 0.875rem 1.125rem;
     border-radius: 0.875rem;
     background: rgba(251, 243, 230, 0.78);
@@ -480,6 +481,13 @@
     font-size: 0.875rem;
     transition: all 0.2s;
     outline: none;
+    box-sizing: border-box;
+  }
+
+  input[type="date"].form-field,
+  input[type="time"].form-field {
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .form-field::placeholder {
