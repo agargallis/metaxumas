@@ -49,8 +49,8 @@ const reelItems = [
 
 function ExpectCard({ item }) {
   return (
-    <div className="border-t border-[rgba(127,91,48,0.12)] pt-5">
-      <div className="mb-3 flex items-center gap-3">
+    <div className="border-t border-[rgba(127,91,48,0.12)] pt-5 text-center sm:text-left">
+      <div className="mb-3 flex items-center justify-center gap-3 sm:justify-start">
         <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(212,148,26,0.10)] text-gold-700">
           <item.Icon size={18} />
         </span>
