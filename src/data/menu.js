@@ -222,8 +222,8 @@
     { id: 'g13', name: 'Λουκάνικο πρόβειο', description: '', price: 10.0, featured: false },
     { id: 'g14', name: 'Πανσέτα', description: '', price: 10.0, featured: false },
     { id: 'g15', name: 'Μπριζολάκι φιλέτο', description: '', price: 10.0, featured: false },
-    { id: 'g16', name: 'Παιδάκια κοτόπουλο', description: '', price: 0, featured: false },
-    { id: 'g17', name: 'Παιδάκια αρνί', description: '', price: 0, featured: false },
+    { id: 'g16', name: 'Παϊδάκια κοτόπουλο', description: '', price: 0, featured: false },
+    { id: 'g17', name: 'Παϊδάκια αρνί', description: '', price: 0, featured: false },
     { id: 'g18', name: 'Μπριζόλα χοιρινή λαιμού', description: '', price: 10.0, featured: false },
 
     { id: 'g19', name: 'Μίξ κρεατικών 1', description: 'καλαμάκι χοιρινό, καλαμάκι κοτόπουλο, κεμπάπ, λουκάνικο', price: 10.0, featured: true },
@@ -237,8 +237,8 @@
   description: 'Τιμές ανά κιλό',
   timeOfDay: 'evening',
   items: [
-    { id: 'k1', name: 'Παιδάκια κοτόπουλο', description: '', price: 16.0, featured: false },
-    { id: 'k2', name: 'Παιδάκια αρνί', description: '', price: 38.0, featured: false },
+    { id: 'k1', name: 'Παϊδάκια κοτόπουλο', description: '', price: 16.0, featured: false },
+    { id: 'k2', name: 'Παϊδάκια αρνί', description: '', price: 38.0, featured: false },
     { id: 'k3', name: 'Γύρος χοιρινός', description: '', price: 0, featured: false },
     { id: 'k4', name: 'Πανσέτα', description: '', price: 26.0, featured: false },
   ],

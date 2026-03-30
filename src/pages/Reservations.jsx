@@ -508,7 +508,7 @@ export default function Reservations() {
 
             <div>
               <SectionReveal className="space-y-6 text-center lg:sticky lg:top-28 lg:text-left">
-                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6 lg:border-t-0 lg:pt-0">
                   <div className="mb-4 flex items-center justify-center gap-3 lg:justify-start">
                     <Clock size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ωράριο Λειτουργίας</h3>
@@ -532,8 +532,8 @@ export default function Reservations() {
                   </div>
                 </div>
 
-                <div className="hidden border-t border-[rgba(127,91,48,0.12)] pt-6 lg:block">
-                  <div className="mb-3 flex items-center gap-3">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-3 flex items-center justify-center gap-3 lg:justify-start">
                     <Phone size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Τηλεφωνική Κράτηση</h3>
                   </div>
@@ -544,8 +544,8 @@ export default function Reservations() {
                   </a>
                 </div>
 
-                <div className="hidden border-t border-[rgba(127,91,48,0.12)] pt-6 lg:block">
-                  <div className="mb-3 flex items-center gap-3">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-3 flex items-center justify-center gap-3 lg:justify-start">
                     <Users size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Ειδικές Κρατήσεις</h3>
                   </div>
@@ -554,8 +554,8 @@ export default function Reservations() {
                   </p>
                 </div>
 
-                <div className="hidden border-t border-[rgba(127,91,48,0.12)] pt-6 lg:block">
-                  <div className="mb-3 flex items-center gap-3">
+                <div className="border-t border-[rgba(127,91,48,0.12)] pt-6">
+                  <div className="mb-3 flex items-center justify-center gap-3 lg:justify-start">
                     <MessageSquare size={16} className="text-gold-400" />
                     <h3 className="text-sm font-medium text-[rgba(31,18,9,0.9)]">Σημείωση</h3>
                   </div>

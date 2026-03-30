@@ -471,6 +471,7 @@
 
   .form-field {
     width: 100%;
+    min-width: 0;
     padding: 0.875rem 1.125rem;
     border-radius: 0.875rem;
     background: rgba(251, 243, 230, 0.78);
