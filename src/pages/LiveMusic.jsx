@@ -1,6 +1,7 @@
 ﻿import { useRef, useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Helmet } from 'react-helmet-async'
-import { Clock, Users, Guitar, Mic2, Radio, Star, Pause, PlayCircle, X, CalendarPlus, ChevronDown } from 'lucide-react'
+import { Clock, Users, Guitar, Mic2, Radio, Star, Pause, PlayCircle, X, CalendarPlus, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
 import PageHero from '../components/ui/PageHero'
 import PageTransition from '../components/ui/PageTransition'
@@ -11,16 +12,19 @@ import { cn } from '../lib/utils'
 const recurringVisuals = {
   r1: {
     image: '/music1.png',
+    modalImages: ['/fill1.jpg', '/fill2.jpg'],
     overlay: 'from-[rgba(120,52,22,0.24)] via-[rgba(60,26,10,0.20)] to-[rgba(38,20,8,0.58)]',
     badge: 'Παρασκευή βράδυ',
   },
   r2: {
     image: '/music2.png',
+    modalImages: ['/fill3.jpg', '/fill4.jpg'],
     overlay: 'from-[rgba(156,87,35,0.22)] via-[rgba(88,39,16,0.20)] to-[rgba(38,20,8,0.58)]',
     badge: 'Σάββατο live',
   },
   r3: {
     image: '/music3.png',
+    modalImages: ['/fill5.jpg', '/fill6.jpg'],
     overlay: 'from-[rgba(141,82,55,0.24)] via-[rgba(76,37,19,0.22)] to-[rgba(38,20,8,0.58)]',
     badge: 'Κυριακάτικη παρέα',
   },
@@ -81,6 +85,15 @@ function toICSDate(date) {
   return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
 }
 
+function buildCalendarDetails(event) {
+  return [
+    `Ζωντανή μουσική στο Μεταξύ Μας κάθε ${event.day}.`,
+    `Έναρξη: ${event.time}`,
+    `Μουσικό πρόγραμμα: ${event.genre}`,
+    `Κράτηση: ${business.website}/reservations`,
+  ].join('\n\n')
+}
+
 function makeGoogleCalendarUrl(event) {
   const start = getNextOccurrence(event.day, event.time)
   const end = new Date(start.getTime() + 2.5 * 60 * 60 * 1000)
@@ -89,7 +102,7 @@ function makeGoogleCalendarUrl(event) {
     action: 'TEMPLATE',
     text: `${event.title} — Μεταξύ Μας`,
     dates: `${toICSDate(start)}/${toICSDate(end)}`,
-    details: `${event.description}\n\nΈναρξη: ${event.time} | ${event.genre}\n\nΚράτηση: ${business.website}/reservations`,
+    details: buildCalendarDetails(event),
     location: `${business.address.street}, ${business.address.area}`,
     recur: `RRULE:FREQ=WEEKLY;BYDAY=${byDay}`,
   })
@@ -114,7 +127,7 @@ function downloadICS(event) {
     `DTEND:${toICSDate(end)}`,
     `RRULE:FREQ=WEEKLY;BYDAY=${byDay}`,
     `SUMMARY:${event.title} — Μεταξύ Μας`,
-    `DESCRIPTION:${event.description}\\n\\nΈναρξη: ${event.time} | ${event.genre}`,
+    `DESCRIPTION:${buildCalendarDetails(event).replace(/\n/g, '\\n')}`,
     `LOCATION:${business.address.street}\\, ${business.address.area}`,
     'END:VEVENT',
     'END:VCALENDAR',
@@ -203,20 +216,40 @@ function ExpectCard({ item }) {
 }
 
 function MusicModal({ event, visual, onClose }) {
+  const images = visual?.modalImages?.length ? visual.modalImages : [visual?.image].filter(Boolean)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
+  const [controlsVisible, setControlsVisible] = useState(true)
+
   useEffect(() => {
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    const onKey = e => { if (e.key === 'Escape') onClose() }
+    const onKey = e => {
+      if (e.key === 'Escape') onClose()
+      if (images.length < 2) return
+      if (e.key === 'ArrowLeft') setActiveImageIndex(index => (index - 1 + images.length) % images.length)
+      if (e.key === 'ArrowRight') setActiveImageIndex(index => (index + 1) % images.length)
+    }
     window.addEventListener('keydown', onKey)
     return () => {
       document.body.style.overflow = prev
       window.removeEventListener('keydown', onKey)
     }
-  }, [onClose])
+  }, [images.length, onClose])
+
+  useEffect(() => {
+    setActiveImageIndex(0)
+    setControlsVisible(true)
+  }, [event?.id])
 
   if (!event) return null
 
-  return (
+  const activeImage = images[activeImageIndex]
+  const canNavigate = images.length > 1
+  const showPrevious = () => setActiveImageIndex(index => (index - 1 + images.length) % images.length)
+  const showNext = () => setActiveImageIndex(index => (index + 1) % images.length)
+  const toggleControls = () => setControlsVisible(visible => !visible)
+
+  return createPortal(
     <div className="fixed inset-0 z-[120] flex items-center justify-center px-4 py-8 sm:px-6" role="dialog" aria-modal="true" aria-label={event.title}>
       <button
         type="button"
@@ -224,20 +257,88 @@ function MusicModal({ event, visual, onClose }) {
         className="absolute inset-0 bg-[rgba(38,20,8,0.34)] backdrop-blur-md"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-[rgba(255,255,255,0.22)] shadow-[0_32px_120px_rgba(49,24,10,0.28)]">
-        <div className="relative">
-          <img src={visual.image} alt={event.title} className="max-h-[80vh] w-full object-contain" />
+      <div className="relative z-10 w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[rgba(255,255,255,0.22)] shadow-[0_32px_120px_rgba(49,24,10,0.28)]">
+        <div className="relative flex min-h-[22rem] items-center justify-center bg-[rgba(20,10,4,0.72)] sm:min-h-[30rem]">
+          <img
+            src={activeImage}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full scale-110 object-cover blur-3xl opacity-55"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,248,238,0.08),rgba(20,10,4,0.56))]" />
+          <button
+            type="button"
+            onClick={toggleControls}
+            className="relative z-10 flex w-full items-center justify-center bg-transparent"
+            aria-label={controlsVisible ? 'Απόκρυψη χειριστηρίων' : 'Εμφάνιση χειριστηρίων'}
+          >
+            <img
+              src={activeImage}
+              alt={`${event.title} ${activeImageIndex + 1}`}
+              className="max-h-[80vh] w-full object-contain"
+            />
+          </button>
+          {canNavigate ? (
+            <>
+              <button
+                type="button"
+                onClick={showPrevious}
+                className={cn(
+                  'absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-[rgba(255,248,238,0.14)] text-white shadow-[0_8px_20px_rgba(20,10,4,0.26)] backdrop-blur-sm transition-all duration-200 hover:bg-[rgba(255,248,238,0.24)] sm:left-4 sm:h-12 sm:w-12',
+                  controlsVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
+                )}
+                aria-label="Προηγούμενη φωτογραφία"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={showNext}
+                className={cn(
+                  'absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-[rgba(255,248,238,0.14)] text-white shadow-[0_8px_20px_rgba(20,10,4,0.26)] backdrop-blur-sm transition-all duration-200 hover:bg-[rgba(255,248,238,0.24)] sm:right-4 sm:h-12 sm:w-12',
+                  controlsVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
+                )}
+                aria-label="Επόμενη φωτογραφία"
+              >
+                <ChevronRight size={20} />
+              </button>
+              <div
+                className={cn(
+                  'absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/20 bg-[rgba(20,10,4,0.34)] px-3 py-2 backdrop-blur-sm transition-all duration-200',
+                  controlsVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
+                )}
+              >
+                {images.map((image, index) => (
+                  <button
+                    key={image}
+                    type="button"
+                    onClick={() => setActiveImageIndex(index)}
+                    className={cn(
+                      'h-2.5 w-2.5 rounded-full transition-all',
+                      index === activeImageIndex ? 'bg-white scale-110' : 'bg-white/45 hover:bg-white/75'
+                    )}
+                    aria-label={`Φωτογραφία ${index + 1}`}
+                    aria-pressed={index === activeImageIndex}
+                  />
+                ))}
+              </div>
+            </>
+          ) : null}
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-[rgba(255,248,238,0.14)] text-white shadow-[0_8px_20px_rgba(20,10,4,0.26)] backdrop-blur-sm transition-colors hover:bg-[rgba(255,248,238,0.24)]"
+            className={cn(
+              'absolute right-4 top-4 z-20 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-[rgba(255,248,238,0.14)] text-white shadow-[0_8px_20px_rgba(20,10,4,0.26)] backdrop-blur-sm transition-all duration-200 hover:bg-[rgba(255,248,238,0.24)]',
+              controlsVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
+            )}
             aria-label="Κλείσιμο"
           >
             <X size={18} />
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 

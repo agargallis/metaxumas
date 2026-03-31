@@ -30,7 +30,7 @@ export default function Cookies() {
         subtitle="Πώς χρησιμοποιούνται τα cookies στον ιστότοπο του Μεταξύ Μας."
       />
 
-      <section className="section-padding pt-6 sm:pt-8">
+      <section className="section-padding pb-10 pt-6 sm:pb-12 sm:pt-8">
         <div className="container-narrow text-center">
           <SectionReveal className="mb-10 text-center">
             <p className="border-y border-[rgba(127,91,48,0.12)] py-3 text-center text-sm text-[rgba(47,29,15,0.62)]">

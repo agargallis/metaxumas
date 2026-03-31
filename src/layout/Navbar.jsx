@@ -194,7 +194,7 @@ export default function Navbar() {
               </nav>
 
               <div className="flex flex-1 items-center justify-center px-4">
-                <img src="/4.png" alt="Μεταξύ Μας" className="h-auto w-[11.75rem] max-w-[54vw] object-contain opacity-[0.18]" />
+                <img src="https://i.imgur.com/xiAmv2X.png" alt="Μεταξύ Μας" className="h-auto w-[11.75rem] max-w-[54vw] object-contain opacity-[0.18]" />
               </div>
 
               <div className="mt-auto">

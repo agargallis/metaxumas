@@ -1,4 +1,5 @@
 ﻿import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
@@ -181,6 +182,8 @@ function PhotoCard({ item, onOpen }) {
 }
 
 function PhotoModal({ item, onClose }) {
+  const [controlsVisible, setControlsVisible] = useState(true)
+
   useEffect(() => {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -197,9 +200,13 @@ function PhotoModal({ item, onClose }) {
     }
   }, [onClose])
 
+  useEffect(() => {
+    setControlsVisible(true)
+  }, [item?.id])
+
   if (!item) return null
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[120] flex items-center justify-center px-4 py-8 sm:px-6" role="dialog" aria-modal="true" aria-label={item.title}>
       <button
         type="button"
@@ -208,12 +215,17 @@ function PhotoModal({ item, onClose }) {
         onClick={onClose}
       />
 
-      <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-[2rem] border border-[rgba(255,255,255,0.32)] bg-[rgba(249,239,223,0.84)] shadow-[0_32px_120px_rgba(49,24,10,0.28)] backdrop-blur-xl">
-        <div className="relative min-h-[25rem] overflow-hidden px-6 py-6 sm:px-8 sm:py-8" style={{ background: item.accent }}>
+      <div className="relative z-10 w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[rgba(255,255,255,0.32)] bg-[rgba(249,239,223,0.84)] shadow-[0_32px_120px_rgba(49,24,10,0.28)] backdrop-blur-xl">
+        <div className="relative flex min-h-[22rem] items-center justify-center overflow-hidden px-6 py-6 sm:min-h-[30rem] sm:px-8 sm:py-8" style={{ background: item.accent }}>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.62),transparent_34%)]" />
           <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(180deg,transparent_0%,rgba(88,52,25,0.10)_45%,rgba(58,34,18,0.26)_100%)]" />
 
-          <div className="relative z-10 flex items-start justify-end">
+          <div
+            className={cn(
+              'absolute right-4 top-4 z-20 flex items-start justify-end transition-all duration-200',
+              controlsVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
+            )}
+          >
             <button
               type="button"
               onClick={onClose}
@@ -224,16 +236,22 @@ function PhotoModal({ item, onClose }) {
             </button>
           </div>
 
-          <div className="relative z-10 min-h-[21rem] sm:min-h-[28rem]">
+          <button
+            type="button"
+            onClick={() => setControlsVisible(visible => !visible)}
+            className="relative z-10 flex w-full items-center justify-center bg-transparent"
+            aria-label={controlsVisible ? 'Απόκρυψη χειριστηρίων' : 'Εμφάνιση χειριστηρίων'}
+          >
             <img
               src={item.image}
               alt={item.title}
-              className="h-full w-full object-cover"
+              className="max-h-[80vh] w-full object-contain"
             />
-          </div>
+          </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
@@ -269,6 +287,23 @@ function StorySection() {
             </StaggerItem>
           ))}
         </StaggerReveal>
+
+        <SectionReveal className="mt-8 flex justify-center">
+          <a
+            href="https://shorturl.at/DARze"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-outline inline-flex items-center gap-2 text-sm"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h6.46a5.52 5.52 0 0 1-2.39 3.62v3h3.87c2.26-2.08 3.55-5.14 3.55-8.65Z" />
+              <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.87-3A7.18 7.18 0 0 1 12 19.2a7.2 7.2 0 0 1-6.76-4.97H1.24v3.1A12 12 0 0 0 12 24Z" />
+              <path fill="#FBBC05" d="M5.24 14.23A7.2 7.2 0 0 1 4.84 12c0-.77.14-1.52.4-2.23v-3.1H1.24A12 12 0 0 0 0 12c0 1.94.46 3.77 1.24 5.33l4-3.1Z" />
+              <path fill="#EA4335" d="M12 4.8c1.76 0 3.34.61 4.58 1.8l3.43-3.43C17.95 1.13 15.24 0 12 0A12 12 0 0 0 1.24 6.67l4 3.1A7.2 7.2 0 0 1 12 4.8Z" />
+            </svg>
+            Δες παραπάνω εδώ
+          </a>
+        </SectionReveal>
       </SectionWrap>
 
       {activePhoto ? <PhotoModal item={activePhoto} onClose={() => setActivePhoto(null)} /> : null}
@@ -375,7 +410,7 @@ function HouseHighlights() {
                 <video
                   ref={videoRef}
                   src={business.locationVideoSrc}
-                  poster={business.locationVideoPoster || '/4.png'}
+                  poster={business.locationVideoPoster || '/https://i.imgur.com/xiAmv2X.png'}
                   preload="metadata"
                   playsInline
                   onPlay={() => setIsVideoPlaying(true)}
@@ -405,7 +440,7 @@ function HouseHighlights() {
 
             {!hasLocationVideo ? (
               <div className="absolute inset-0">
-                <img src={business.locationVideoPoster || '/4.png'} alt="Preview live βραδιάς" className="h-full w-full object-cover opacity-28" />
+                <img src={business.locationVideoPoster || '/https://i.imgur.com/xiAmv2X.png'} alt="Preview live βραδιάς" className="h-full w-full object-cover opacity-28" />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(40,22,10,0.18),rgba(40,22,10,0.54))]" />
                 <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
                   <div>

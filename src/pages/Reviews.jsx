@@ -79,7 +79,7 @@ export default function Reviews() {
       </Helmet>
 
       <PageHero
-        imageSrc="/4.png"
+        imageSrc="https://i.imgur.com/xiAmv2X.png"
         imageAlt="Μεταξύ Μας"
         label="Αξιολογήσεις"
         title="Τι λένε οι επισκέπτες μας"

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { motion, AnimatePresence } from 'motion/react'
 import {
@@ -120,7 +120,7 @@ export default function Menu() {
       {/* Print-only full menu — hidden on screen, shown when printing */}
       <div className="print-only" aria-hidden="true">
         <div className="print-header">
-          <img src="/4.png" alt="Μεταξύ Μας" className="print-logo" />
+          <img src="https://i.imgur.com/xiAmv2X.png" alt="Μεταξύ Μας" className="print-logo" />
           <p>Μεζεδοπωλείο &amp; Καφέ · Ασκληπιού 20, Περιστέρι · 210 5758 201</p>
         </div>
         {menuCategories.map(category => (
