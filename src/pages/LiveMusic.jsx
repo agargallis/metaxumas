@@ -417,7 +417,7 @@ export default function LiveMusic() {
               <CalendarPlus size={16} className="mt-0.5 shrink-0 text-gold-500" />
               <p className="leading-relaxed">
                 Πατήστε <strong className="text-[rgba(31,18,9,0.82)]">Ημερολόγιο</strong> σε κάθε βραδιά για να τη προσθέσετε στο{' '}
-                <strong className="text-[rgba(31,18,9,0.82)]">Google Calendar</strong> ή{' '}
+                <strong className="text-[rgba(31,18,9,0.82)]">Google Calendar</strong> ή στο{' '}
                 <strong className="text-[rgba(31,18,9,0.82)]">Apple Calendar</strong>!
               </p>
             </div>

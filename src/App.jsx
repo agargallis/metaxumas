@@ -1,18 +1,16 @@
-import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'motion/react'
 import Layout from './layout/Layout'
 import ScrollToTop from './components/ui/ScrollToTop'
-
-const Home = lazy(() => import('./pages/Home'))
-const Menu = lazy(() => import('./pages/Menu'))
-const LiveMusic = lazy(() => import('./pages/LiveMusic'))
-const Reservations = lazy(() => import('./pages/Reservations'))
-const Reviews = lazy(() => import('./pages/Reviews'))
-const Cookies = lazy(() => import('./pages/Cookies'))
-const Privacy = lazy(() => import('./pages/Privacy'))
-const Terms = lazy(() => import('./pages/Terms'))
-const NotFound = lazy(() => import('./pages/NotFound'))
+import Home from './pages/Home'
+import Menu from './pages/Menu'
+import LiveMusic from './pages/LiveMusic'
+import Reservations from './pages/Reservations'
+import Reviews from './pages/Reviews'
+import Cookies from './pages/Cookies'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
+import NotFound from './pages/NotFound'
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -38,9 +36,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Suspense fallback={null}>
-        <AnimatedRoutes />
-      </Suspense>
+      <AnimatedRoutes />
     </BrowserRouter>
   )
 }
