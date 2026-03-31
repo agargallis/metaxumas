@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { ArrowRight, Home, UtensilsCrossed } from 'lucide-react'
 import PageTransition from '../components/ui/PageTransition'
-import logoSrc from '../assets/images/logo.png'
+import logoSrc from '../assets/images/4.png'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -31,7 +31,7 @@ export default function NotFound() {
           style={{ background: 'radial-gradient(circle, rgba(193,122,98,0.12) 0%, transparent 72%)' }}
         />
 
-        <div className="relative z-10 mx-auto flex min-h-screen max-w-3xl items-center justify-center">
+        <div className="relative z-10 mx-auto flex min-h-[calc(100vh-8rem)] max-w-3xl items-start justify-center pt-6 sm:pt-10">
           <div className="text-center">
             <motion.img
               initial={{ opacity: 0, y: -16 }}
