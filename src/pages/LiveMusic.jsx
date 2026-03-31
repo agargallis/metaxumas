@@ -485,7 +485,7 @@ export default function LiveMusic() {
       <PageHero
         minimal
         className="pb-2 sm:pb-3"
-        label="Τι να περιμένετε!"
+        label="Τι να περιμένεις!"
         title="Live βραδιές με ξεχωριστούς καλλιτέχνες."
       />
 
@@ -517,7 +517,7 @@ export default function LiveMusic() {
             <div className="flex items-start gap-3 rounded-2xl border border-[rgba(212,148,26,0.22)] bg-[rgba(212,148,26,0.07)] px-5 py-4 text-sm text-[rgba(47,29,15,0.70)]">
               <CalendarPlus size={16} className="mt-0.5 shrink-0 text-gold-500" />
               <p className="leading-relaxed">
-                Πατήστε <strong className="text-[rgba(31,18,9,0.82)]">Ημερολόγιο</strong> σε κάθε βραδιά για να τη προσθέσετε στο{' '}
+                Πάτα <strong className="text-[rgba(31,18,9,0.82)]">Ημερολόγιο</strong> σε κάθε βραδιά για να τη προσθέσεις στο{' '}
                 <strong className="text-[rgba(31,18,9,0.82)]">Google Calendar</strong> ή στο{' '}
                 <strong className="text-[rgba(31,18,9,0.82)]">Apple Calendar</strong>!
               </p>
