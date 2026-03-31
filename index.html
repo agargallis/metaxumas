@@ -91,12 +91,6 @@
         "openingHoursSpecification": [
           {
             "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "https://schema.org/Monday",
-            "opens": "00:00",
-            "closes": "00:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
             "dayOfWeek": [
               "https://schema.org/Tuesday",
               "https://schema.org/Wednesday",
@@ -141,6 +135,15 @@
           }
         ]
       }
+    </script>
+
+    <!-- Google Analytics 4 — Replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
     </script>
   </head>
   <body>
