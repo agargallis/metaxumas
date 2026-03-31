@@ -28,7 +28,7 @@ export default class AppErrorBoundary extends React.Component {
           </div>
           <h1 className="heading-card mb-3 text-[rgba(31,18,9,0.92)]">Κάτι πήγε λάθος στην προβολή της σελίδας.</h1>
           <p className="mb-5 max-w-xl text-sm leading-7 text-[rgba(47,29,15,0.62)]">
-            Έγινε runtime σφάλμα στο frontend. Κάντε ανανέωση ή ξαναδοκιμάστε σε λίγα δευτερόλεπτα.
+            Έγινε runtime σφάλμα. Κάντε ανανέωση ή ξαναδοκιμάστε σε λίγα δευτερόλεπτα.
           </p>
           {this.state.error?.message ? (
             <pre className="mb-6 w-full overflow-auto rounded-2xl bg-[rgba(255,255,255,0.62)] p-4 text-left text-xs leading-6 text-[rgba(47,29,15,0.7)]">
