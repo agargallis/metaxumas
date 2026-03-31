@@ -1,6 +1,6 @@
-﻿import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { Clock, Users, Guitar, Mic2, Radio, Star, Pause, PlayCircle, X } from 'lucide-react'
+import { Clock, Users, Guitar, Mic2, Radio, Star, Pause, PlayCircle, X, CalendarPlus, ChevronDown } from 'lucide-react'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
 import PageHero from '../components/ui/PageHero'
 import PageTransition from '../components/ui/PageTransition'
@@ -46,6 +46,147 @@ const reelItems = [
     description: 'Στο «Μεταξύ Μας» η διασκέδαση… γίνεται εμπειρία!',
   },
 ]
+
+const DAY_TO_BYDAY = {
+  'Παρασκευή': 'FR',
+  'Σάββατο': 'SA',
+  'Κυριακή': 'SU',
+  'Τετάρτη': 'WE',
+}
+
+const DAY_JS_INDEX = {
+  'Κυριακή': 0,
+  'Δευτέρα': 1,
+  'Τρίτη': 2,
+  'Τετάρτη': 3,
+  'Πέμπτη': 4,
+  'Παρασκευή': 5,
+  'Σάββατο': 6,
+}
+
+function getNextOccurrence(dayName, timeStr) {
+  const target = DAY_JS_INDEX[dayName]
+  const [hours, minutes] = timeStr.split(':').map(Number)
+  const now = new Date()
+  const todayIndex = now.getDay()
+  let daysUntil = (target - todayIndex + 7) % 7
+  if (daysUntil === 0) daysUntil = 7
+  const next = new Date(now)
+  next.setDate(now.getDate() + daysUntil)
+  next.setHours(hours, minutes, 0, 0)
+  return next
+}
+
+function toICSDate(date) {
+  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+}
+
+function makeGoogleCalendarUrl(event) {
+  const start = getNextOccurrence(event.day, event.time)
+  const end = new Date(start.getTime() + 2.5 * 60 * 60 * 1000)
+  const byDay = DAY_TO_BYDAY[event.day]
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `${event.title} — Μεταξύ Μας`,
+    dates: `${toICSDate(start)}/${toICSDate(end)}`,
+    details: `${event.description}\n\nΈναρξη: ${event.time} | ${event.genre}\n\nΚράτηση: ${business.website}/reservations`,
+    location: `${business.address.street}, ${business.address.area}`,
+    recur: `RRULE:FREQ=WEEKLY;BYDAY=${byDay}`,
+  })
+  return `https://calendar.google.com/calendar/render?${params}`
+}
+
+function downloadICS(event) {
+  const start = getNextOccurrence(event.day, event.time)
+  const end = new Date(start.getTime() + 2.5 * 60 * 60 * 1000)
+  const byDay = DAY_TO_BYDAY[event.day]
+  const uid = `${event.id}-metaxumas@metaxumas.gr`
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Μεταξύ Μας//GR',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTART:${toICSDate(start)}`,
+    `DTEND:${toICSDate(end)}`,
+    `RRULE:FREQ=WEEKLY;BYDAY=${byDay}`,
+    `SUMMARY:${event.title} — Μεταξύ Μας`,
+    `DESCRIPTION:${event.description}\\n\\nΈναρξη: ${event.time} | ${event.genre}`,
+    `LOCATION:${business.address.street}\\, ${business.address.area}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n')
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${event.id}-metaxumas.ics`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+function AddToCalendarButton({ event }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
+  }, [open])
+
+  return (
+    <div ref={ref} className="relative" onClick={e => e.stopPropagation()}>
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-1.5 rounded-full border border-[rgba(127,91,48,0.18)] bg-[rgba(255,249,240,0.80)] px-3 py-1.5 text-xs font-medium text-[rgba(47,29,15,0.68)] transition-colors hover:border-gold-500/40 hover:text-gold-700"
+        aria-label="Προσθήκη στο ημερολόγιο"
+      >
+        <CalendarPlus size={13} />
+        Ημερολόγιο
+        <ChevronDown size={11} className={cn('transition-transform', open && 'rotate-180')} />
+      </button>
+
+      {open && (
+        <div className="absolute bottom-full left-0 mb-2 w-52 overflow-hidden rounded-xl border border-[rgba(127,91,48,0.14)] bg-[rgba(255,249,240,0.98)] shadow-[0_8px_24px_rgba(98,61,27,0.12)] backdrop-blur-sm z-10">
+          <a
+            href={makeGoogleCalendarUrl(event)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 px-4 py-3 text-sm text-[rgba(47,29,15,0.76)] transition-colors hover:bg-[rgba(212,148,26,0.06)] hover:text-gold-700"
+            onClick={() => setOpen(false)}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M3 9h18" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M8 2v4M16 2v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+            Google Calendar
+          </a>
+          <button
+            type="button"
+            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-[rgba(47,29,15,0.76)] transition-colors hover:bg-[rgba(212,148,26,0.06)] hover:text-gold-700 border-t border-[rgba(127,91,48,0.08)]"
+            onClick={() => { downloadICS(event); setOpen(false) }}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
+              <path d="M12 3v13M7 11l5 5 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M3 19h18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+            Apple / iCal (.ics)
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
 
 function ExpectCard({ item }) {
   return (
@@ -104,32 +245,34 @@ function RecurringCard({ event, onOpen }) {
   const visual = recurringVisuals[event.id] || recurringVisuals.r1
 
   return (
-    <button
-      type="button"
-      onClick={() => onOpen(event)}
-      className="group w-full overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.62)] text-left shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_66px_rgba(98,61,27,0.10)]"
-    >
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <img src={visual.image} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-        <div className={`absolute inset-0 bg-gradient-to-br ${visual.overlay}`} />
-        <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-5">
-          <span className="rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(255,246,234,0.92)] backdrop-blur-sm">
-            {visual.badge}
-          </span>
-          <span className="rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(255,246,234,0.92)] backdrop-blur-sm">
-            {event.time}
-          </span>
+    <div className="group w-full overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.62)] text-left shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_66px_rgba(98,61,27,0.10)]">
+      <button
+        type="button"
+        onClick={() => onOpen(event)}
+        className="w-full text-left"
+      >
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <img src={visual.image} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+          <div className={`absolute inset-0 bg-gradient-to-br ${visual.overlay}`} />
+          <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-5">
+            <span className="rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(255,246,234,0.92)] backdrop-blur-sm">
+              {visual.badge}
+            </span>
+            <span className="rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(255,246,234,0.92)] backdrop-blur-sm">
+              {event.time}
+            </span>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+            <p className="mb-1 text-xs uppercase tracking-[0.18em] text-[rgba(255,238,219,0.72)]">{event.day}</p>
+            <h3 className="font-serif text-[1.55rem] font-semibold leading-tight text-white">{event.title}</h3>
+          </div>
         </div>
-        <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-          <p className="mb-1 text-xs uppercase tracking-[0.18em] text-[rgba(255,238,219,0.72)]">{event.day}</p>
-          <h3 className="font-serif text-[1.55rem] font-semibold leading-tight text-white">{event.title}</h3>
-        </div>
-      </div>
+      </button>
 
       <div className="p-5 sm:p-6">
         <p className="mb-5 text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{event.description}</p>
 
-        <div className="space-y-2 text-xs text-[rgba(47,29,15,0.46)]">
+        <div className="space-y-2 text-xs text-[rgba(47,29,15,0.46)] mb-5">
           <div className="flex items-center gap-2">
             <Clock size={12} className="text-gold-500/60" />
             <span>Έναρξη: {event.time}</span>
@@ -145,8 +288,10 @@ function RecurringCard({ event, onOpen }) {
             </div>
           ) : null}
         </div>
+
+        <AddToCalendarButton event={event} />
       </div>
-    </button>
+    </div>
   )
 }
 
@@ -313,4 +458,3 @@ export default function LiveMusic() {
     </>
   )
 }
-
