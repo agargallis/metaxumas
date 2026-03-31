@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+﻿import { useRef, useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Clock, Users, Guitar, Mic2, Radio, Star, Pause, PlayCircle, X, CalendarPlus, ChevronDown } from 'lucide-react'
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
@@ -418,7 +418,7 @@ export default function LiveMusic() {
               <p className="leading-relaxed">
                 Πατήστε <strong className="text-[rgba(31,18,9,0.82)]">Ημερολόγιο</strong> σε κάθε βραδιά για να τη προσθέσετε στο{' '}
                 <strong className="text-[rgba(31,18,9,0.82)]">Google Calendar</strong> ή{' '}
-                <strong className="text-[rgba(31,18,9,0.82)]">Apple Calendar</strong> με εβδομαδιαία επανάληψη!
+                <strong className="text-[rgba(31,18,9,0.82)]">Apple Calendar</strong>!
               </p>
             </div>
           </SectionReveal>
