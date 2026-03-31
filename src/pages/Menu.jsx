@@ -120,6 +120,7 @@ export default function Menu() {
       {/* Print-only full menu — hidden on screen, shown when printing */}
       <div className="print-only" aria-hidden="true">
         <div className="print-header">
+          <img src="/4.png" alt="Μεταξύ Μας" className="print-logo" />
           <h1>Μεταξύ Μας</h1>
           <p>Μεζεδοπωλείο &amp; Καφέ · Ασκληπιού 20, Περιστέρι · 210 5758 201</p>
         </div>
@@ -139,7 +140,9 @@ export default function Menu() {
         ))}
       </div>
 
-      <PageHero minimal label="Γεύσεις & Ποτά!" title="Δες το μενού μας." />
+      <div className="no-print">
+        <PageHero minimal label="Γεύσεις & Ποτά!" title="Δες το μενού μας." />
+      </div>
 
       <section className="section-padding pt-6 pb-10 sm:pt-8 no-print">
         <div className="container-wide">

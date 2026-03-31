@@ -289,7 +289,9 @@ function RecurringCard({ event, onOpen }) {
           ) : null}
         </div>
 
-        <AddToCalendarButton event={event} />
+        <div className="flex justify-center">
+          <AddToCalendarButton event={event} />
+        </div>
       </div>
     </div>
   )
@@ -405,9 +407,20 @@ export default function LiveMusic() {
 
       <section className="section-padding pt-0">
         <div className="container-wide">
-          <SectionReveal className="mx-auto mb-12 max-w-[46rem] text-center">
+          <SectionReveal className="mx-auto mb-8 max-w-[46rem] text-center">
             <p className="label-upper mb-3">ΜΕΡΙΚΑ ΑΠΟ ΤΑ LIVES ΜΑΣ!</p>
             <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Δες τις μουσικές ανακοινώσεις μας.</h2>
+          </SectionReveal>
+
+          <SectionReveal className="mx-auto mb-10 max-w-[46rem]">
+            <div className="flex items-start gap-3 rounded-2xl border border-[rgba(212,148,26,0.22)] bg-[rgba(212,148,26,0.07)] px-5 py-4 text-sm text-[rgba(47,29,15,0.70)]">
+              <CalendarPlus size={16} className="mt-0.5 shrink-0 text-gold-500" />
+              <p className="leading-relaxed">
+                Πατήστε <strong className="text-[rgba(31,18,9,0.82)]">Ημερολόγιο</strong> σε κάθε βραδιά για να τη προσθέσετε στο{' '}
+                <strong className="text-[rgba(31,18,9,0.82)]">Google Calendar</strong> ή{' '}
+                <strong className="text-[rgba(31,18,9,0.82)]">Apple Calendar</strong> με εβδομαδιαία επανάληψη!
+              </p>
+            </div>
           </SectionReveal>
 
           <StaggerReveal className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
