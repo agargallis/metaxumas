@@ -663,7 +663,7 @@
   body {
     background: white !important;
     color: black !important;
-    font-family: Georgia, serif;
+    font-family: 'Gecko', Georgia, serif;
     font-size: 11pt;
   }
 
@@ -685,6 +685,13 @@
     border-bottom: 2px solid #7f5b30;
     padding-bottom: 12pt;
     margin-bottom: 20pt;
+  }
+
+  .print-logo {
+    display: block;
+    width: 90pt;
+    height: auto;
+    margin: 0 auto 10pt;
   }
 
   .print-header h1 {
