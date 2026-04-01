@@ -1,4 +1,4 @@
-﻿export const menuCategories = [
+export const menuCategories = [
   {
   id: 'cafe',
   label: 'Αναψυκτικά',
@@ -84,9 +84,9 @@
     { id: 'w4', name: 'Prosecco', description: '250ml / 500ml', price: 0, featured: false },
   ],
 },
-  {
-  id: 'salads',
-  label: 'Σαλάτες I',
+{
+  id: 'salads-classic',
+  label: 'Σαλάτες',
   icon: 'eco',
   description: 'Φρέσκες σαλάτες',
   timeOfDay: 'evening',
@@ -94,32 +94,32 @@
     { id: 's1', name: 'Του καίσαρα', description: '', price: 0, featured: false },
     { id: 's2', name: 'Baby πατάτα', description: 'κάπαρι, ελιές, ρόκα, φρέσκο κρεμμυδάκι, βαλσάμικο με μέλι', price: 0, featured: false },
     { id: 's3', name: 'Πράσινη', description: 'σύκα, ρόδι, βαλσάμικο με μέλι', price: 0, featured: false },
+    { id: 'sc1', name: 'Αγγουροντομάτα', description: '', price: 4.5, featured: false },
+    { id: 'sc2', name: 'Χωριάτικη', description: '', price: 6.5, featured: true },
+    { id: 'sc3', name: 'Εποχής', description: '', price: 0, featured: false },
+    { id: 'sc4', name: 'Ντακοσαλάτα', description: '', price: 7.0, featured: false },
+    { id: 'sc5', name: 'Χόρτα', description: '', price: 5.0, featured: false },
   ],
 },
 {
-  id: 'cheese-varieties',
-  label: 'Τυροποικιλίες I',
-  icon: 'restaurant',
-  description: 'Επιλογές με τυριά και συνοδευτικά',
+  id: 'cheese-dishes',
+  label: 'Τυροποικιλίες',
+  icon: 'restaurant_menu',
+  description: 'Πιάτα με τυριά',
   timeOfDay: 'evening',
   items: [
-    { id: 't1', name: 'Παστουρμαδόπιτα', description: 'ντομάτα, τυρί', price: 0, featured: false },
-    { id: 't2', name: 'Σφακιανή', description: 'μέλι, σουσάμι', price: 0, featured: false },
-    { id: 't3', name: 'Ταλαγάνι', description: 'μαρμελάδα ντομάτας', price: 0, featured: false },
-    { id: 't4', name: 'Φλογέρα κοτόπουλο', description: 'τυρί', price: 0, featured: false },
-  ],
-},
-{
-  id: 'grill',
-  label: 'Της Ώρας',
-  icon: 'outdoor_grill',
-  description: 'Πιάτα της ώρας',
-  timeOfDay: 'evening',
-  items: [
-    { id: 'g1', name: 'Μπιφτέκι κοτόπουλο', description: '', price: 0, featured: false },
-    { id: 'g2', name: 'Καλαμάκι μοσχαρίσιο', description: '', price: 0, featured: false },
-    { id: 'g3', name: 'Κοτομπουκιές', description: '', price: 0, featured: false },
-    { id: 'g4', name: 'Λουκάνικο μεθυσμένο', description: 'κρεμμύδι, σκόρδο, μπύρα', price: 0, featured: false },
+    { id: 'cv1', name: 'Παστουρμαδόπιτα', description: 'ντομάτα, τυρί', price: 0, featured: false },
+    { id: 'cv2', name: 'Σφακιανή', description: 'μέλι, σουσάμι', price: 0, featured: false },
+    { id: 'cv3', name: 'Ταλαγάνι', description: 'μαρμελάδα ντομάτας', price: 0, featured: false },
+    { id: 'cv4', name: 'Φλογέρα κοτόπουλο', description: 'τυρί', price: 0, featured: false },
+    { id: 'td1', name: 'Σαγανάκι απλό', description: '', price: 4.0, featured: false },
+    { id: 'td2', name: 'Σαγανάκι', description: 'γεμιστό με παστουρμά και σουτζούκι', price: 5.0, featured: false },
+    { id: 'td3', name: 'Τηγανόψωμο', description: '', price: 4.5, featured: false },
+    { id: 'td4', name: 'Μπουγιουρντί', description: 'φέτα, ντομάτα, πιπεριά', price: 4.5, featured: false },
+    { id: 'td5', name: 'Μπουγιουρντί πικάντικο', description: 'φέτα, ντομάτα, πιπεριά, λουκάνικο', price: 5.5, featured: false },
+    { id: 'td6', name: 'Τυροκροκέτες', description: '', price: 4.5, featured: false },
+    { id: 'td7', name: 'Φέτα', description: 'λαδορίγανη', price: 3.5, featured: false },
+    { id: 'td8', name: 'Φέτα', description: 'μέλι, σουσάμι', price: 5.0, featured: false },
   ],
 },
 {
@@ -139,20 +139,6 @@
   ],
 },
 {
-  id: 'salads-classic',
-  label: 'Σαλάτες II',
-  icon: 'eco',
-  description: 'Φρέσκες σαλάτες',
-  timeOfDay: 'evening',
-  items: [
-    { id: 'sc1', name: 'Αγγουροντομάτα', description: '', price: 4.5, featured: false },
-    { id: 'sc2', name: 'Χωριάτικη', description: '', price: 6.5, featured: true },
-    { id: 'sc3', name: 'Εποχής', description: '', price: 0, featured: false },
-    { id: 'sc4', name: 'Ντακοσαλάτα', description: '', price: 7.0, featured: false },
-    { id: 'sc5', name: 'Χόρτα', description: '', price: 5.0, featured: false },
-  ],
-},
-{
   id: 'flogeres',
   label: 'Φλογέρες',
   icon: 'lunch_dining',
@@ -164,23 +150,6 @@
     { id: 'f3', name: 'Παστουρμά', description: '', price: 4.5, featured: false },
     { id: 'f4', name: 'Σουτζούκι', description: '', price: 4.5, featured: false },
     { id: 'f5', name: 'Τυροκαυτεράκι', description: '', price: 4.0, featured: false },
-  ],
-},
-{
-  id: 'cheese-dishes',
-  label: 'Τυροποικιλίες II',
-  icon: 'restaurant_menu',
-  description: 'Πιάτα με τυριά',
-  timeOfDay: 'evening',
-  items: [
-    { id: 'td1', name: 'Σαγανάκι απλό', description: '', price: 4.0, featured: false },
-    { id: 'td2', name: 'Σαγανάκι', description: 'γεμιστό με παστουρμά και σουτζούκι', price: 5.0, featured: false },
-    { id: 'td3', name: 'Τηγανόψωμο', description: '', price: 4.5, featured: false },
-    { id: 'td4', name: 'Μπουγιουρντί', description: 'φέτα, ντομάτα, πιπεριά', price: 4.5, featured: false },
-    { id: 'td5', name: 'Μπουγιουρντί πικάντικο', description: 'φέτα, ντομάτα, πιπεριά, λουκάνικο', price: 5.5, featured: false },
-    { id: 'td6', name: 'Τυροκροκέτες', description: '', price: 4.5, featured: false },
-    { id: 'td7', name: 'Φέτα', description: 'λαδορίγανη', price: 3.5, featured: false },
-    { id: 'td8', name: 'Φέτα', description: 'μέλι, σουσάμι', price: 5.0, featured: false },
   ],
 },
 {
@@ -197,11 +166,15 @@
 },
 {
   id: 'grill-of-the-hour',
-  label: 'Ψητά της ώρας',
+  label: 'Ψητά της Ώρας',
   icon: 'outdoor_grill',
   description: 'Οι μερίδες συνοδεύονται με πατάτες, πίτα, ντομάτα, ντιπ',
   timeOfDay: 'evening',
   items: [
+    { id: 'go1', name: 'Μπιφτέκι κοτόπουλο', description: '', price: 0, featured: false },
+    { id: 'go2', name: 'Καλαμάκι μοσχαρίσιο', description: '', price: 0, featured: false },
+    { id: 'go3', name: 'Κοτομπουκιές', description: '', price: 0, featured: false },
+    { id: 'go4', name: 'Λουκάνικο μεθυσμένο', description: 'κρεμμύδι, σκόρδο, μπύρα', price: 0, featured: false },
     { id: 'g1', name: 'Καλαμάκι χοιρινό (Τεμάχιο)', description: '', price: 2.2, featured: false },
     { id: 'g2', name: 'Καλαμάκι χοιρινό (Μερίδα)', description: '', price: 10.0, featured: false },
 
@@ -264,4 +237,3 @@ export const featuredItems = menuCategories
   .filter(item => item.featured)
 
 export default menuCategories
-
