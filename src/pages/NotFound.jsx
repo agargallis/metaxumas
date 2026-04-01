@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { ArrowRight, Home, UtensilsCrossed } from 'lucide-react'
 import PageTransition from '../components/ui/PageTransition'
-import logoSrc from '../assets/images/4.png'
+const logoSrc = 'https://i.imgur.com/bVglvSP.png'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -89,7 +89,7 @@ export default function NotFound() {
               </Link>
               <Link to="/menu" className="btn-outline text-sm px-7">
                 <UtensilsCrossed size={15} />
-                Δείτε το Μενού
+                Δες το Μενού
               </Link>
               <Link to="/reservations" className="inline-flex items-center gap-2 text-sm text-[rgba(45,28,12,0.62)] transition-colors duration-200 hover:text-gold-700">
                 Κράτηση <ArrowRight size={14} />

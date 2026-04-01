@@ -1,4 +1,4 @@
-﻿import thumb1 from '../assets/images/thumb1.png'
+﻿const thumb1 = 'https://i.imgur.com/k7Zq69c.png'
 
 export const business = {
   name: 'Μεταξύ Μας',

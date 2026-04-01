@@ -1,7 +1,7 @@
 ﻿import { Link } from 'react-router-dom'
 import { Cookie, ScrollText, Shield } from 'lucide-react'
 import { business } from '../data/business'
-import logoSrc from '../assets/images/logo.png'
+const logoSrc = 'https://i.imgur.com/FqLbQhc.png'
 
 const legalLinks = [
   { to: '/privacy', label: 'Απόρρητο', icon: Shield },

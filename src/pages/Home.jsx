@@ -25,7 +25,7 @@ import { recurringEvents } from '../data/events'
 import { featuredReviews, ratingStats } from '../data/reviews'
 import { instagramPosts } from '../data/gallery'
 import { cn } from '../lib/utils'
-import logoSrc from '../assets/images/4.png'
+const logoSrc = 'https://i.imgur.com/bVglvSP.png'
 
 const spring = [0.22, 1, 0.36, 1]
 
@@ -39,7 +39,7 @@ const photos = instagramPosts.slice(0, 3).map((post, index) => ({
     'Η βραδινή πλευρά του μαγαζιού, πιο ζωντανή αλλά πάντα οικεία.',
   ][index] || 'Μια premium γωνιά του χώρου.',
   caption: post.caption,
-  image: ['/l1.png', '/l2.png', '/l3.png'][index],
+  image: ['https://i.imgur.com/EVzlEPH.png', 'https://i.imgur.com/bHlj9oV.png', 'https://i.imgur.com/iffquOm.jpeg'][index],
   accent: [
     'linear-gradient(145deg, rgba(237,196,141,0.92), rgba(250,237,214,0.94))',
     'linear-gradient(145deg, rgba(225,171,145,0.92), rgba(247,223,208,0.94))',

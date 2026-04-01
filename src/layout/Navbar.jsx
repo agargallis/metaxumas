@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { Menu, X, Phone, Clock, ArrowRight } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { business } from '../data/business'
-import logoSrc from '../assets/images/logo.png'
+const logoSrc = 'https://i.imgur.com/FqLbQhc.png'
 
 const navLinks = [
   { to: '/', label: 'Αρχική' },

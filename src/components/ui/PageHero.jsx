@@ -1,6 +1,6 @@
 ﻿import { motion } from 'motion/react'
 import { cn } from '../../lib/utils'
-import heroMark from '../../assets/images/4.png'
+const heroMark = 'https://i.imgur.com/bVglvSP.png'
 
 const ease = [0.22, 1, 0.36, 1]
 
