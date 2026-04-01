@@ -70,7 +70,7 @@ export default function Terms() {
             <p>
               <strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong>
               <br />
-              {business.address.street}, {business.address.area}, {business.address.city}
+              {business.address.street}, Περιστέρι
               <br />
               Email: <a href={`mailto:${business.email}`} style={accentLinkStyle}>{business.email}</a>
               <br />

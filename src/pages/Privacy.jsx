@@ -41,7 +41,7 @@ export default function Privacy() {
           <Section title="1. Υπεύθυνος Επεξεργασίας">
             <p>Υπεύθυνος επεξεργασίας των προσωπικών δεδομένων είναι η επιχείρηση <strong style={{ color: 'rgba(31,18,9,0.82)' }}>{business.name}</strong>.</p>
             <p>
-              Διεύθυνση: {business.address.street}, {business.address.area}, {business.address.city}
+              Διεύθυνση: {business.address.street}, Περιστέρι
               <br />
               Email: <a href={`mailto:${business.email}`} style={accentLinkStyle}>{business.email}</a>
               <br />
