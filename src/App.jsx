@@ -16,19 +16,21 @@ function AnimatedRoutes() {
   const location = useLocation()
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Layout><Home /></Layout>} />
-        <Route path="/menu" element={<Layout><Menu /></Layout>} />
-        <Route path="/live-music" element={<Layout><LiveMusic /></Layout>} />
-        <Route path="/reservations" element={<Layout><Reservations /></Layout>} />
-        <Route path="/reviews" element={<Layout><Reviews /></Layout>} />
-        <Route path="/cookies" element={<Layout><Cookies /></Layout>} />
-        <Route path="/privacy" element={<Layout><Privacy /></Layout>} />
-        <Route path="/terms" element={<Layout><Terms /></Layout>} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AnimatePresence>
+    <Layout>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Home />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/live-music" element={<LiveMusic />} />
+          <Route path="/reservations" element={<Reservations />} />
+          <Route path="/reviews" element={<Reviews />} />
+          <Route path="/cookies" element={<Cookies />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AnimatePresence>
+    </Layout>
   )
 }
 
