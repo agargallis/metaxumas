@@ -133,7 +133,7 @@ function Hero() {
               Κράτηση τραπεζιού
             </Link>
             <Link to="/menu" className="btn-outline text-sm">
-              Δείτε το μενού <ArrowRight size={15} />
+              Δες το μενού <ArrowRight size={15} />
             </Link>
           </motion.div>
 
