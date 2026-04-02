@@ -457,7 +457,7 @@ export default function Reservations() {
                       <textarea
                         id="comments"
                         rows={4}
-                        placeholder="Οτιδήποτε θέλετε να γνωρίζουμε για την κράτησή σας..."
+                        placeholder="Οτιδήποτε θέλεις να γνωρίζουμε για την κράτησή σου..."
                         className="form-field resize-none text-center sm:text-left"
                         {...register('comments')}
                       />
