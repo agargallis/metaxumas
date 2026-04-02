@@ -212,7 +212,7 @@ export default function Announcements() {
                 </div>
               ) : (
                 <a href={`tel:${business.phone}`} className="btn-outline text-sm">
-                  Καλέσέ μας <ArrowRight size={14} />
+                  Κάλεσέ μας <ArrowRight size={14} />
                 </a>
               )}
             </div>

@@ -207,7 +207,7 @@ export default function Navbar() {
                     Κλείσε τραπέζι
                   </Link>
                   <a href={`tel:${business.phone}`} className="btn-outline justify-center text-base">
-                    Καλέσέ μας <Phone size={16} />
+                    Κάλεσέ μας <Phone size={16} />
                   </a>
                 </div>
               </div>
