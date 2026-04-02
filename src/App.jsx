@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'motion/react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './layout/Layout'
 import ScrollToTop from './components/ui/ScrollToTop'
 import Home from './pages/Home'
@@ -12,12 +11,11 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
 
-function AnimatedRoutes() {
-  const location = useLocation()
-
+export default function App() {
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+    <BrowserRouter>
+      <ScrollToTop />
+      <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
@@ -30,15 +28,6 @@ function AnimatedRoutes() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </AnimatePresence>
-  )
-}
-
-export default function App() {
-  return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <AnimatedRoutes />
     </BrowserRouter>
   )
 }

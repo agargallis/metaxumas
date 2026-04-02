@@ -6,6 +6,8 @@ import { motion } from 'motion/react'
 import {
   ArrowRight,
   Calendar,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   ExternalLink,
   Facebook,
@@ -29,23 +31,53 @@ const logoSrc = 'https://i.imgur.com/bVglvSP.png'
 
 const spring = [0.22, 1, 0.36, 1]
 
-const photos = instagramPosts.slice(0, 3).map((post, index) => ({
-  id: post.id,
-  title: ['Γωνιά του χώρου', 'Ατμόσφαιρα για παρέα', 'Στιγμή από βραδιά'][index] || 'Photo placeholder',
-  eyebrow: ['Μεταξύ Μας', 'Μεταξύ Μας', 'Μεταξύ Μας'][index] || 'Μεταξύ Μας',
-  note: [
-    'Χώρος για ήσυχο καφέ και χαλαρή πρώτη στάση της ημέρας.',
-    'Σημείο που δένει με κουβέντα, κρασί και πιο ζεστή ατμόσφαιρα.',
-    'Η βραδινή πλευρά του μαγαζιού, πιο ζωντανή αλλά πάντα οικεία.',
-  ][index] || 'Μια premium γωνιά του χώρου.',
-  caption: post.caption,
-  image: ['https://i.imgur.com/EVzlEPH.png', 'https://i.imgur.com/bHlj9oV.png', 'https://i.imgur.com/iffquOm.jpeg'][index],
-  accent: [
-    'linear-gradient(145deg, rgba(237,196,141,0.92), rgba(250,237,214,0.94))',
-    'linear-gradient(145deg, rgba(225,171,145,0.92), rgba(247,223,208,0.94))',
-    'linear-gradient(145deg, rgba(229,191,156,0.92), rgba(250,235,217,0.94))',
-  ][index],
-}))
+const photoCards = [
+  {
+    title: 'Γωνιά του χώρου',
+    eyebrow: 'Μεταξύ Μας',
+    note: 'Χώρος για ήσυχο καφέ και χαλαρή πρώτη στάση της ημέρας.',
+    image: 'https://i.imgur.com/bHlj9oV.png',
+    accent: 'linear-gradient(145deg, rgba(237,196,141,0.92), rgba(250,237,214,0.94))',
+  },
+  {
+    title: 'Άλλη μια ματιά στον χώρο',
+    eyebrow: 'Μεταξύ Μας',
+    note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
+    image: 'https://i.imgur.com/GO5DSgZ.jpeg',
+    accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
+  },
+  {
+    title: 'Ατμόσφαιρα για παρέα',
+    eyebrow: 'Μεταξύ Μας',
+    note: 'Σημείο που δένει με κουβέντα, κρασί και πιο ζεστή ατμόσφαιρα.',
+    image: 'https://i.imgur.com/mddqjH0.png',
+    accent: 'linear-gradient(145deg, rgba(225,171,145,0.92), rgba(247,223,208,0.94))',
+  },
+  {
+    title: 'Στιγμή από βραδιά',
+    eyebrow: 'Μεταξύ Μας',
+    note: 'Η βραδινή πλευρά του μαγαζιού, πιο ζωντανή αλλά πάντα οικεία.',
+    image: 'https://i.imgur.com/DLNEUsn.jpeg',
+    accent: 'linear-gradient(145deg, rgba(229,191,156,0.92), rgba(250,235,217,0.94))',
+  },
+  {
+    title: 'Άλλη μια ματιά στον χώρο',
+    eyebrow: 'Μεταξύ Μας',
+    note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
+    image: 'https://i.imgur.com/OMKtr8m.jpeg',
+    accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
+  },
+]
+
+const photos = photoCards.map((card, index) => {
+  const post = instagramPosts[index]
+
+  return {
+    id: post?.id || `home-photo-${index + 1}`,
+    caption: post?.caption || card.note,
+    ...card,
+  }
+})
 
 function TikTokIcon({ className = '', size = 18 }) {
   return (
@@ -257,6 +289,44 @@ function PhotoModal({ item, onClose }) {
 
 function StorySection() {
   const [activePhoto, setActivePhoto] = useState(null)
+  const carouselRef = useRef(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(photos.length > 1)
+
+  useEffect(() => {
+    const node = carouselRef.current
+
+    if (!node) return undefined
+
+    const updateControls = () => {
+      const maxScrollLeft = Math.max(node.scrollWidth - node.clientWidth, 0)
+      setCanScrollLeft(node.scrollLeft > 8)
+      setCanScrollRight(node.scrollLeft < maxScrollLeft - 8)
+    }
+
+    updateControls()
+    node.addEventListener('scroll', updateControls, { passive: true })
+    window.addEventListener('resize', updateControls)
+
+    return () => {
+      node.removeEventListener('scroll', updateControls)
+      window.removeEventListener('resize', updateControls)
+    }
+  }, [])
+
+  const scrollPhotos = direction => {
+    const node = carouselRef.current
+    const firstCard = node?.querySelector('.home-photo-slide')
+
+    if (!node) return
+
+    const cardWidth = firstCard?.getBoundingClientRect().width || node.clientWidth * 0.88
+
+    node.scrollBy({
+      left: direction * (cardWidth + 24),
+      behavior: 'smooth',
+    })
+  }
 
   return (
     <>
@@ -280,13 +350,54 @@ function StorySection() {
 
         <SectionHeading label="Ο Χώρος Μας!" title="Μια σύντομη &quot;μυρωδιά&quot; από το μαγαζί μας." />
 
-        <StaggerReveal className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-8">
-          {photos.map(photo => (
-            <StaggerItem key={photo.id}>
-              <PhotoCard item={photo} onOpen={setActivePhoto} />
-            </StaggerItem>
-          ))}
-        </StaggerReveal>
+        <SectionReveal>
+          <div className="mb-5 flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => scrollPhotos(-1)}
+              disabled={!canScrollLeft}
+              className={cn(
+                'flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300',
+                canScrollLeft
+                  ? 'border-[rgba(145,97,39,0.16)] bg-[rgba(255,248,238,0.84)] text-[rgba(90,54,25,0.86)] shadow-[0_14px_30px_rgba(98,61,27,0.08)] hover:-translate-y-1 hover:border-[rgba(184,122,14,0.22)] hover:text-gold-700'
+                  : 'cursor-not-allowed border-[rgba(145,97,39,0.08)] bg-[rgba(255,248,238,0.44)] text-[rgba(90,54,25,0.32)]'
+              )}
+              aria-label="Προηγούμενη φωτογραφία"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollPhotos(1)}
+              disabled={!canScrollRight}
+              className={cn(
+                'flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-300',
+                canScrollRight
+                  ? 'border-[rgba(145,97,39,0.16)] bg-[rgba(255,248,238,0.84)] text-[rgba(90,54,25,0.86)] shadow-[0_14px_30px_rgba(98,61,27,0.08)] hover:-translate-y-1 hover:border-[rgba(184,122,14,0.22)] hover:text-gold-700'
+                  : 'cursor-not-allowed border-[rgba(145,97,39,0.08)] bg-[rgba(255,248,238,0.44)] text-[rgba(90,54,25,0.32)]'
+              )}
+              aria-label="Επόμενη φωτογραφία"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+
+          <StaggerReveal className="overflow-hidden">
+            <div
+              ref={carouselRef}
+              className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {photos.map(photo => (
+                <StaggerItem
+                  key={photo.id}
+                  className="home-photo-slide w-[84%] min-w-[84%] shrink-0 snap-start sm:w-[calc(50%_-_0.75rem)] sm:min-w-[calc(50%_-_0.75rem)] xl:w-[calc(25%_-_1.125rem)] xl:min-w-[calc(25%_-_1.125rem)]"
+                >
+                  <PhotoCard item={photo} onOpen={setActivePhoto} />
+                </StaggerItem>
+              ))}
+            </div>
+          </StaggerReveal>
+        </SectionReveal>
 
         <SectionReveal className="mt-8 flex justify-center">
           <a

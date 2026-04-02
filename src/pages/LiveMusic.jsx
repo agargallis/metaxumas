@@ -346,7 +346,7 @@ function RecurringCard({ event, onOpen }) {
   const visual = recurringVisuals[event.id] || recurringVisuals.r1
 
   return (
-    <div className="group w-full overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.62)] text-left shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_66px_rgba(98,61,27,0.10)]">
+    <div className="group flex h-full w-full flex-col overflow-hidden rounded-[2rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.62)] text-left shadow-[0_18px_50px_rgba(98,61,27,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_66px_rgba(98,61,27,0.10)]">
       <button
         type="button"
         onClick={() => onOpen(event)}
@@ -370,8 +370,8 @@ function RecurringCard({ event, onOpen }) {
         </div>
       </button>
 
-      <div className="p-5 sm:p-6">
-        <p className="mb-5 text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{event.description}</p>
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <p className="mb-5 flex-1 text-sm leading-relaxed text-[rgba(47,29,15,0.58)]">{event.description}</p>
 
         <div className="space-y-2 text-xs text-[rgba(47,29,15,0.46)] mb-5">
           <div className="flex items-center gap-2">
@@ -390,7 +390,7 @@ function RecurringCard({ event, onOpen }) {
           ) : null}
         </div>
 
-        <div className="flex justify-center">
+        <div className="mt-auto flex justify-center">
           <AddToCalendarButton event={event} />
         </div>
       </div>
@@ -513,7 +513,7 @@ export default function LiveMusic() {
             <h2 className="heading-section mx-auto max-w-[42rem] text-[rgba(31,18,9,0.92)]">Δες τις μουσικές ανακοινώσεις μας.</h2>
           </SectionReveal>
 
-          <SectionReveal className="mx-auto mb-10 max-w-[46rem]">
+          <div className="mx-auto mb-10 max-w-[46rem]">
             <div className="flex items-start gap-3 rounded-2xl border border-[rgba(212,148,26,0.22)] bg-[rgba(212,148,26,0.07)] px-5 py-4 text-sm text-[rgba(47,29,15,0.70)]">
               <CalendarPlus size={16} className="mt-0.5 shrink-0 text-gold-500" />
               <p className="leading-relaxed">
@@ -522,11 +522,11 @@ export default function LiveMusic() {
                 <strong className="text-[rgba(31,18,9,0.82)]">Apple Calendar</strong>!
               </p>
             </div>
-          </SectionReveal>
+          </div>
 
           <StaggerReveal className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {recurringEvents.filter(event => event.day !== 'Τετάρτη').map(event => (
-              <StaggerItem key={event.id}>
+              <StaggerItem key={event.id} className="h-full">
                 <RecurringCard event={event} onOpen={setActiveEvent} />
               </StaggerItem>
             ))}
