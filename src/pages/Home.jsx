@@ -43,6 +43,13 @@ const photoCards = [
     title: 'Άλλη μια ματιά στον χώρο',
     eyebrow: 'Μεταξύ Μας',
     note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
+    image: 'https://i.imgur.com/RamBDtT.png?v=20260416',
+    accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
+  },
+  {
+    title: 'Άλλη μια ματιά στον χώρο',
+    eyebrow: 'Μεταξύ Μας',
+    note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
     image: 'https://i.imgur.com/GO5DSgZ.jpeg',
     accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
   },

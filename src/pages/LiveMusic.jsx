@@ -12,19 +12,19 @@ import { cn } from '../lib/utils'
 const recurringVisuals = {
   r1: {
     image: 'https://i.imgur.com/lHVVHTo.png',
-    modalImages: ['https://i.imgur.com/S5UEnDn.jpeg', 'https://i.imgur.com/z5mpbxn.jpeg'],
+    modalImages: ['https://i.imgur.com/S5UEnDn.jpeg', 'https://i.imgur.com/z5mpbxn.jpeg', 'https://i.imgur.com/OPAUEIc.png'],
     overlay: 'from-[rgba(120,52,22,0.24)] via-[rgba(60,26,10,0.20)] to-[rgba(38,20,8,0.58)]',
     badge: 'Παρασκευή βράδυ',
   },
   r2: {
     image: 'https://i.imgur.com/G9RVW7J.png',
-    modalImages: ['https://i.imgur.com/6OLa6lR.jpeg', 'https://i.imgur.com/CzZ08N8.jpeg'],
+    modalImages: ['https://i.imgur.com/6OLa6lR.jpeg', 'https://i.imgur.com/CzZ08N8.jpeg', 'https://i.imgur.com/60od61a.jpeg'],
     overlay: 'from-[rgba(156,87,35,0.22)] via-[rgba(88,39,16,0.20)] to-[rgba(38,20,8,0.58)]',
     badge: 'Σάββατο live',
   },
   r3: {
     image: 'https://i.imgur.com/fSMSMbN.png',
-    modalImages: ['https://i.imgur.com/Apq0MyJ.jpeg', 'https://i.imgur.com/QptOIAp.jpeg'],
+    modalImages: ['https://i.imgur.com/Apq0MyJ.jpeg', 'https://i.imgur.com/QptOIAp.jpeg', 'https://i.imgur.com/6HWXBEX.jpeg'],
     overlay: 'from-[rgba(141,82,55,0.24)] via-[rgba(76,37,19,0.22)] to-[rgba(38,20,8,0.58)]',
     badge: 'Κυριακάτικη παρέα',
   },
@@ -40,7 +40,7 @@ const reelItems = [
   {
     id: 'reel-3',
     video: '/videoa3.mp4',
-    poster: 'https://i.imgur.com/uPoDSGW.jpeg',
+    poster: 'https://i.imgur.com/HqOIXtF.jpeg',
     description: 'Οι νύχτες αποκτούν ρυθμό στο «Μεταξύ Μας»!',
   },
   {
