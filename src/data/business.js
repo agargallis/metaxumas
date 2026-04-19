@@ -38,8 +38,8 @@ export const business = {
   hoursSimple: 'Κάθε μέρα ανοιχτά εκτός της Δευτέρας.',
   hoursLocationSummary: 'Κυριακή: 11:00 π.μ.–1:00 π.μ. · Δευτέρα: Κλειστά · Τρίτη - Πέμπτη: 9:00 π.μ.–1:00 μ.μ. | 5:00 μ.μ.–11:00 μ.μ. · Παρασκευή: 9:00 π.μ.–1:00 μ.μ. | 5:00 μ.μ.–1:00 π.μ. · Σάββατο: 11:00 π.μ.–1:00 π.μ.',
 
-  rating: 4.9,
-  reviewCount: 180,
+  rating: 4.8,
+  reviewCount: 115,
   ratingPlatform: 'Google',
 
   social: {
