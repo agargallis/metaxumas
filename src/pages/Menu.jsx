@@ -1,4 +1,5 @@
 ﻿import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Helmet } from 'react-helmet-async'
 import { motion, AnimatePresence } from 'motion/react'
 import {
@@ -7,6 +8,7 @@ import {
   Coffee,
   Cookie,
   CookingPot,
+  Download,
   GlassWater,
   Leaf,
   Martini,
@@ -17,12 +19,80 @@ import {
   UtensilsCrossed,
   Wine,
   Printer,
+  X,
+  ZoomIn,
 } from 'lucide-react'
 import PageHero from '../components/ui/PageHero'
 import SectionReveal from '../components/ui/SectionReveal'
 import PageTransition from '../components/ui/PageTransition'
 import { menuCategories } from '../data/menu'
 import { cn } from '../lib/utils'
+
+const MENU_IMAGE_URL = 'https://i.imgur.com/YPKUdZt.png'
+
+async function downloadMenuImage() {
+  try {
+    const res = await fetch(MENU_IMAGE_URL)
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'menu-metaxumas.png'
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch {
+    window.open(MENU_IMAGE_URL, '_blank')
+  }
+}
+
+function MenuImageModal({ onClose }) {
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = e => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [onClose])
+
+  return createPortal(
+    <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center p-4">
+      <button
+        className="absolute inset-0 bg-[rgba(38,20,8,0.78)] backdrop-blur-sm"
+        onClick={onClose}
+        aria-label="Κλείσιμο"
+      />
+      <div className="relative z-10 flex w-full max-w-2xl flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={downloadMenuImage}
+            className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-2 text-sm text-white transition-colors hover:bg-white/20"
+          >
+            <Download size={15} />
+            Λήψη μενού
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 border border-white/20 text-white transition-colors hover:bg-white/20"
+            aria-label="Κλείσιμο"
+          >
+            <X size={18} />
+          </button>
+        </div>
+        <img
+          src={MENU_IMAGE_URL}
+          alt="Μενού Μεταξύ Μας"
+          className="max-h-[80vh] w-full rounded-xl object-contain shadow-2xl"
+        />
+      </div>
+    </div>,
+    document.body
+  )
+}
 
 const CATEGORY_ICONS = {
   cafe: GlassWater,
@@ -98,6 +168,7 @@ function MenuCategoryPanel({ category, isActive }) {
 
 export default function Menu() {
   const [activeTab, setActiveTab] = useState(menuCategories[0].id)
+  const [menuImageOpen, setMenuImageOpen] = useState(false)
   const buttonRefs = useRef({})
 
   useEffect(() => {
@@ -208,8 +279,47 @@ export default function Menu() {
               />
             ))}
           </div>
+
+          <SectionReveal className="mx-auto mt-16 max-w-5xl text-center px-4 sm:px-6">
+            <p className="label-upper mb-3">Παιδικα Παρτυ!</p>
+            <h2 className="mx-auto max-w-[48rem] font-display text-[clamp(2.5rem,5vw,4.3rem)] leading-[0.96] tracking-[-0.03em] text-[rgba(31,18,9,0.92)]">Δες το μενού των πάρτυ.</h2>
+          </SectionReveal>
+
+          <SectionReveal className="mx-auto mt-6 max-w-2xl">
+            <div className="flex flex-col items-center gap-4">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => setMenuImageOpen(true)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setMenuImageOpen(true) }}
+                className="group relative w-full cursor-pointer overflow-hidden rounded-2xl border border-[rgba(145,97,39,0.14)] bg-white/40 shadow-sm"
+              >
+                <img
+                  src={MENU_IMAGE_URL}
+                  alt="Εικαστικό μενού"
+                  className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-[rgba(38,20,8,0.18)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-sm font-medium text-[rgba(31,18,9,0.88)]">
+                    <ZoomIn size={15} />
+                    Μεγέθυνση
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={downloadMenuImage}
+                className="inline-flex items-center gap-2 rounded-full border border-[rgba(145,97,39,0.14)] bg-white/40 px-5 py-2.5 text-sm text-[rgba(47,29,15,0.60)] transition-all duration-200 hover:border-[rgba(145,97,39,0.20)] hover:bg-white/64 hover:text-[rgba(31,18,9,0.88)]"
+              >
+                <Download size={15} />
+                Λήψη μενού
+              </button>
+            </div>
+          </SectionReveal>
         </div>
       </section>
+
+      {menuImageOpen && <MenuImageModal onClose={() => setMenuImageOpen(false)} />}
     </PageTransition>
   )
 }
