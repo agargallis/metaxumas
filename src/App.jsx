@@ -115,7 +115,7 @@ function AppShell() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <CookieBanner enabled={!showIntro} />
+      <CookieBanner enabled={!showIntro && !location.pathname.startsWith('/admin')} />
       <LivePromoModal promo={livePromo} open={showLivePromo} onClose={() => setShowLivePromo(false)} />
       {showIntro ? <AppLoader mode="intro" progress={progress} exiting={isExitingIntro} /> : null}
     </>

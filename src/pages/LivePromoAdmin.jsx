@@ -120,6 +120,7 @@ export default function LivePromoAdmin() {
   const livePromo = form.livePromo
   const reviewStats = form.reviewStats
   const meta = useMemo(() => statusMeta[getLivePromoState(livePromo)] || statusMeta.draft, [livePromo])
+  const liveAt = parsePromoDate(livePromo.liveAt)
   const startsAt = parsePromoDate(livePromo.startsAt)
   const endsAt = parsePromoDate(livePromo.endsAt)
 
@@ -309,6 +310,15 @@ export default function LivePromoAdmin() {
                         <textarea value={livePromo.message} onChange={e => setPromoField('message', e.target.value)} className="form-field min-h-[8rem]" />
                       </Field>
 
+                      <Field label="Ημερομηνία live" hint="Αυτή η ημερομηνία θα φαίνεται πάνω στη φωτογραφία στο popup.">
+                        <input
+                          type="datetime-local"
+                          value={livePromo.liveAt || ''}
+                          onChange={e => setPromoField('liveAt', e.target.value)}
+                          className="form-field"
+                        />
+                      </Field>
+
                       <Field label="Φωτογραφία" hint="Διαλέξτε φωτογραφία από τη συσκευή σας.">
                         <div className="space-y-3">
                           <input
@@ -397,6 +407,18 @@ export default function LivePromoAdmin() {
                       <div className="relative aspect-[4/3] overflow-hidden bg-[radial-gradient(circle_at_top,rgba(214,164,79,0.22),transparent_42%),linear-gradient(160deg,rgba(92,48,24,0.88),rgba(28,15,8,0.96))]">
                         {livePromo.imageUrl ? <img src={livePromo.imageUrl} alt={livePromo.title || 'Προεπισκόπηση'} className="h-full w-full object-contain p-4" /> : null}
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(26,12,6,0.08),rgba(26,12,6,0.62))]" />
+                        {liveAt ? (
+                          <div className="absolute inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4">
+                            <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-[rgba(255,243,224,0.92)] sm:gap-3">
+                              <span className="inline-flex items-center gap-2 rounded-full border border-white/18 bg-[rgba(32,14,6,0.42)] px-3 py-1.5 backdrop-blur-md">
+                                {formatDate(liveAt.toISOString())}
+                              </span>
+                              <span className="inline-flex items-center gap-2 rounded-full border border-white/18 bg-[rgba(32,14,6,0.42)] px-3 py-1.5 backdrop-blur-md">
+                                Έναρξη {liveAt.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                       <div className="p-6 text-center">
                         <p className="label-upper mb-3 text-[rgba(239,199,122,0.92)]">Ανακοίνωση</p>
@@ -455,8 +477,9 @@ export default function LivePromoAdmin() {
                   <div className="card-base p-6 text-center sm:p-8">
                     <h2 className="heading-card mb-4 text-[rgba(31,18,9,0.92)]">Στοιχεία</h2>
                     <div className="space-y-3 text-sm text-[rgba(47,29,15,0.64)]">
-                      <p>Έναρξη: {startsAt ? `${formatDate(startsAt.toISOString())} ${startsAt.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' })}` : 'Δεν έχει οριστεί'}</p>
-                      <p>Λήξη: {endsAt ? `${formatDate(endsAt.toISOString())} ${endsAt.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' })}` : 'Δεν έχει οριστεί'}</p>
+                      <p>Ημερομηνία live: {liveAt ? `${formatDate(liveAt.toISOString())} ${liveAt.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' })}` : 'Δεν έχει οριστεί'}</p>
+                      <p>Έναρξη προβολής: {startsAt ? `${formatDate(startsAt.toISOString())} ${startsAt.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' })}` : 'Δεν έχει οριστεί'}</p>
+                      <p>Λήξη προβολής: {endsAt ? `${formatDate(endsAt.toISOString())} ${endsAt.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' })}` : 'Δεν έχει οριστεί'}</p>
                       <p>Βαθμολογία Google: {reviewStats.average} / 5</p>
                       <p>Αξιολογήσεις Google: {reviewStats.total}</p>
                     </div>

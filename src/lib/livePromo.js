@@ -6,6 +6,7 @@ export function createEmptyLivePromo() {
     message: 'Κλείστε το τραπέζι σας για τη live βραδιά πριν γεμίσει ο χώρος.',
     imageUrl: '',
     ctaLabel: 'Κλείσε τραπέζι',
+    liveAt: '',
     startsAt: '',
     endsAt: '',
     venueNote: 'Live βραδιά στο Μεταξύ Μας',
