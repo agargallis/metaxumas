@@ -26,6 +26,7 @@ import { business } from '../data/business'
 import { recurringEvents } from '../data/events'
 import { featuredReviews, ratingStats } from '../data/reviews'
 import { instagramPosts } from '../data/gallery'
+import { useSiteSettings } from '../context/SiteSettingsContext'
 import { cn } from '../lib/utils'
 const logoSrc = 'https://i.imgur.com/bVglvSP.png'
 
@@ -43,7 +44,7 @@ const photoCards = [
     title: 'Άλλη μια ματιά στον χώρο',
     eyebrow: 'Μεταξύ Μας',
     note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
-    image: 'https://i.imgur.com/RamBDtT.png?v=20260416',
+    image: 'https://i.imgur.com/nnzjjl2.jpeg',
     accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
   },
   {
@@ -57,7 +58,7 @@ const photoCards = [
     title: 'Ατμόσφαιρα για παρέα',
     eyebrow: 'Μεταξύ Μας',
     note: 'Σημείο που δένει με κουβέντα, κρασί και πιο ζεστή ατμόσφαιρα.',
-    image: 'https://i.imgur.com/mddqjH0.png',
+    image: 'https://i.imgur.com/FhSCDfn.jpeg',
     accent: 'linear-gradient(145deg, rgba(225,171,145,0.92), rgba(247,223,208,0.94))',
   },
   {
@@ -71,7 +72,7 @@ const photoCards = [
     title: 'Άλλη μια ματιά στον χώρο',
     eyebrow: 'Μεταξύ Μας',
     note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
-    image: 'https://i.imgur.com/OMKtr8m.jpeg',
+    image: 'https://i.imgur.com/1d0giQl.jpeg',
     accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
   },
 ]
@@ -616,6 +617,9 @@ function HouseHighlights() {
 }
 
 function ReviewsSection() {
+  const { settings } = useSiteSettings()
+  const currentRatingStats = settings.reviewStats || ratingStats
+
   return (
     <SectionWrap>
       <SectionHeading label="Οι Κριτικές Μας!" title="Τι λένε οι επισκέπτες μας;" />
@@ -630,10 +634,10 @@ function ReviewsSection() {
           >
             <p className="text-fine mb-3">Μέσος όρος Google</p>
             <div className="flex items-end justify-center gap-3 xl:justify-start">
-              <span className="font-display text-6xl leading-none text-gold-700">{ratingStats.average}</span>
+              <span className="font-display text-6xl leading-none text-gold-700">{currentRatingStats.average}</span>
               <div className="pb-1">
-                <StarRating rating={ratingStats.average} size={14} fullOnFraction />
-                <p className="mt-2 text-xs text-[rgba(47,29,15,0.56)]">{ratingStats.total}+ αξιολογήσεις</p>
+                <StarRating rating={currentRatingStats.average} size={14} fullOnFraction />
+                <p className="mt-2 text-xs text-[rgba(47,29,15,0.56)]">{currentRatingStats.total}+ αξιολογήσεις</p>
               </div>
             </div>
           </a>

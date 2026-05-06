@@ -5,13 +5,18 @@ import { Cookie, X } from 'lucide-react'
 
 const STORAGE_KEY = 'metaximas_cookie_consent'
 
-export default function CookieBanner() {
+export default function CookieBanner({ enabled = true }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    if (!enabled) {
+      setVisible(false)
+      return
+    }
+
     const stored = localStorage.getItem(STORAGE_KEY)
     if (!stored) setVisible(true)
-  }, [])
+  }, [enabled])
 
   function accept() {
     localStorage.setItem(STORAGE_KEY, 'accepted')
@@ -67,7 +72,6 @@ export default function CookieBanner() {
                   to="/cookies"
                   className="underline underline-offset-2 transition-colors duration-200"
                   style={{ color: 'rgba(212,148,26,0.7)' }}
-                  onClick={() => setVisible(false)}
                 >
                   Πολιτική Cookies
                 </Link>

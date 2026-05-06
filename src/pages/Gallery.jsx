@@ -142,7 +142,7 @@ export default function Gallery() {
           <SectionReveal>
             <div className="flex flex-wrap gap-2 justify-center">
               {galleryMoods.map(mood => (
-                <span key={mood} className="text-xs px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-cream-100/50 hover:text-gold-400 hover:border-gold-500/25 transition-colors cursor-default">
+                <span key={mood} className="text-xs px-3 py-1.5 rounded-full bg-white/55 border border-[rgba(145,97,39,0.10)] text-[rgba(47,29,15,0.62)] hover:text-gold-700 hover:border-gold-500/25 transition-colors cursor-default">
                   {mood}
                 </span>
               ))}
@@ -156,7 +156,7 @@ export default function Gallery() {
         <div className="container-wide">
           <SectionReveal className="mb-10">
             <p className="label-upper mb-2">Video</p>
-            <h2 className="heading-card text-cream-100">Live Performances</h2>
+            <h2 className="heading-card text-[rgba(31,18,9,0.9)]">Live Performances</h2>
           </SectionReveal>
 
           <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
@@ -170,12 +170,12 @@ export default function Gallery() {
       </section>
 
       {/* Instagram */}
-      <section className="section-padding bg-charcoal-950/60 border-y border-white/[0.05]">
+      <section className="section-padding">
         <div className="container-wide">
           <SectionReveal className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
               <p className="label-upper mb-2">Social Media</p>
-              <h2 className="heading-card text-cream-100">Instagram & Reels</h2>
+              <h2 className="heading-card text-[rgba(31,18,9,0.9)]">Instagram & Reels</h2>
             </div>
             {business.social.instagram && (
               <a
@@ -200,8 +200,8 @@ export default function Gallery() {
 
           {/* Integration note */}
           <SectionReveal className="mt-8">
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-dashed border-white/[0.08] text-center">
-              <p className="text-xs text-cream-100/35 leading-relaxed">
+            <div className="p-6 rounded-2xl bg-white/45 border border-dashed border-[rgba(145,97,39,0.14)] text-center">
+              <p className="text-xs text-[rgba(47,29,15,0.48)] leading-relaxed">
                 Για αυτόματη ανανέωση Instagram posts, μπορείτε να ενσωματώσετε widget
                 τρίτου παρόχου (π.χ. EmbedSocial, Elfsight) αντικαθιστώντας τα placeholders.
               </p>

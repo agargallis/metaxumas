@@ -112,8 +112,8 @@
 export const featuredReviews = reviews.filter(r => r.featured)
 
 export const ratingStats = {
-  average: 4.8,
-  total: 115,
+  average: 4.9,
+  total: 130,
   breakdown: {
     5: 92,
     4: 6,

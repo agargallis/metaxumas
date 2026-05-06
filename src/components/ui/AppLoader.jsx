@@ -19,7 +19,11 @@ export default function AppLoader({ fullScreen = true, mode = 'spinner', progres
           </div>
 
           <p className="app-intro-loader__welcome">Καλωσήρθες στο Μεταξύ Μας!</p>
-          <p className="app-intro-loader__loading">Loading...</p>
+          <div className="app-intro-loader__ornament" aria-hidden="true">
+            <span className="app-intro-loader__ornament-line" />
+            <span className="app-intro-loader__ornament-dot" />
+            <span className="app-intro-loader__ornament-line" />
+          </div>
 
           <div className="app-intro-loader__track" aria-hidden="true">
             <div className="app-intro-loader__fill" style={{ width: `${progress}%` }} />

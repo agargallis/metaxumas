@@ -3,12 +3,11 @@ import { AnimatePresence } from 'motion/react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import BackToTop from '../components/ui/BackToTop'
-import CookieBanner from '../components/ui/CookieBanner'
 
 export default function Layout() {
   const location = useLocation()
   return (
-    <div className="site-shell flex min-h-screen flex-col overflow-x-clip" style={{ background: 'var(--bg)' }}>
+    <div className="site-shell flex min-h-screen flex-col overflow-x-clip">
       <div className="site-photo-backdrop" aria-hidden="true" />
       <div className="site-atmosphere" aria-hidden="true" />
       <div className="site-icon-pattern" aria-hidden="true" />
@@ -22,7 +21,6 @@ export default function Layout() {
       </main>
       <Footer />
       <BackToTop />
-      <CookieBanner />
     </div>
   )
 }

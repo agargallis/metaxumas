@@ -1,6 +1,7 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { CheckCircle, AlertCircle, Phone, Clock, Users, MessageSquare, AlertTriangle } from 'lucide-react'
 import PageHero from '../components/ui/PageHero'
@@ -232,6 +233,8 @@ function ErrorMessage({ message }) {
 }
 
 export default function Reservations() {
+  const [searchParams] = useSearchParams()
+  const fromLivePromo = Boolean(searchParams.get('livePromo'))
   const [submitted, setSubmitted] = useState(false)
   const [serverError, setServerError] = useState(null)
   const [captchaError, setCaptchaError] = useState(null)
@@ -312,6 +315,17 @@ export default function Reservations() {
 
       <section className="section-padding pt-4 pb-10 sm:pt-6">
         <div className="container-wide">
+          {fromLivePromo ? (
+            <SectionReveal className="mx-auto mb-8 max-w-4xl">
+              <div className="rounded-[1.8rem] border border-[rgba(212,148,26,0.24)] bg-[linear-gradient(135deg,rgba(255,248,238,0.82),rgba(247,235,214,0.76))] px-5 py-4 text-center shadow-[0_18px_44px_rgba(98,61,27,0.06)] sm:px-6">
+                <p className="label-upper mb-2">Live κράτηση</p>
+                <p className="text-sm leading-relaxed text-[rgba(47,29,15,0.66)]">
+                  Ήρθατε από την live ανακοίνωση. Συμπληρώστε τη φόρμα για να κλείσετε τραπέζι για τη μουσική βραδιά.
+                </p>
+              </div>
+            </SectionReveal>
+          ) : null}
+
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_340px] xl:gap-16">
             <div>
               <AnimatePresence mode="wait">

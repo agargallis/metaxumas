@@ -12,7 +12,7 @@ import { cn } from '../lib/utils'
 const recurringVisuals = {
   r1: {
     image: 'https://i.imgur.com/lHVVHTo.png',
-    modalImages: ['https://i.imgur.com/S5UEnDn.jpeg', 'https://i.imgur.com/z5mpbxn.jpeg', 'https://i.imgur.com/OPAUEIc.png', 'https://i.imgur.com/iccX5CT.png'],
+    modalImages: ['https://i.imgur.com/S5UEnDn.jpeg', 'https://i.imgur.com/z5mpbxn.jpeg', 'https://i.imgur.com/OPAUEIc.png', 'https://i.imgur.com/iccX5CT.png', 'https://i.imgur.com/ciaBmIK.jpeg'],
     overlay: 'from-[rgba(120,52,22,0.24)] via-[rgba(60,26,10,0.20)] to-[rgba(38,20,8,0.58)]',
     badge: 'Παρασκευή βράδυ',
   },
