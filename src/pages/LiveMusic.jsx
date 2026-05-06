@@ -5,30 +5,11 @@ import { Clock, Users, Guitar, Mic2, Radio, Star, Pause, PlayCircle, X, Calendar
 import SectionReveal, { StaggerReveal, StaggerItem } from '../components/ui/SectionReveal'
 import PageHero from '../components/ui/PageHero'
 import PageTransition from '../components/ui/PageTransition'
+import { useSiteSettings } from '../context/SiteSettingsContext'
 import { recurringEvents } from '../data/events'
 import { business } from '../data/business'
+import { buildLiveMusicVisuals } from '../lib/pageMedia'
 import { cn } from '../lib/utils'
-
-const recurringVisuals = {
-  r1: {
-    image: 'https://i.imgur.com/lHVVHTo.png',
-    modalImages: ['https://i.imgur.com/S5UEnDn.jpeg', 'https://i.imgur.com/z5mpbxn.jpeg', 'https://i.imgur.com/OPAUEIc.png', 'https://i.imgur.com/iccX5CT.png', 'https://i.imgur.com/ciaBmIK.jpeg'],
-    overlay: 'from-[rgba(120,52,22,0.24)] via-[rgba(60,26,10,0.20)] to-[rgba(38,20,8,0.58)]',
-    badge: 'Παρασκευή βράδυ',
-  },
-  r2: {
-    image: 'https://i.imgur.com/G9RVW7J.png',
-    modalImages: ['https://i.imgur.com/6OLa6lR.jpeg', 'https://i.imgur.com/CzZ08N8.jpeg', 'https://i.imgur.com/60od61a.jpeg', 'https://i.imgur.com/QY4uORh.png'],
-    overlay: 'from-[rgba(156,87,35,0.22)] via-[rgba(88,39,16,0.20)] to-[rgba(38,20,8,0.58)]',
-    badge: 'Σάββατο live',
-  },
-  r3: {
-    image: 'https://i.imgur.com/fSMSMbN.png',
-    modalImages: ['https://i.imgur.com/Apq0MyJ.jpeg', 'https://i.imgur.com/QptOIAp.jpeg', 'https://i.imgur.com/6HWXBEX.jpeg', 'https://i.imgur.com/h5AdrQB.png'],
-    overlay: 'from-[rgba(141,82,55,0.24)] via-[rgba(76,37,19,0.22)] to-[rgba(38,20,8,0.58)]',
-    badge: 'Κυριακάτικη παρέα',
-  },
-}
 
 const reelItems = [
   {
@@ -468,7 +449,9 @@ function ReelCard({ item }) {
 }
 
 export default function LiveMusic() {
+  const { settings } = useSiteSettings()
   const [activeEvent, setActiveEvent] = useState(null)
+  const recurringVisuals = buildLiveMusicVisuals(settings.pageMedia)
   const activeVisual = activeEvent ? (recurringVisuals[activeEvent.id] || recurringVisuals.r1) : null
 
   return (

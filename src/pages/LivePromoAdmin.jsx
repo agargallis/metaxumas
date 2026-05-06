@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { Eye, EyeOff, ImagePlus, LogIn, LogOut, Rocket, Save, Trash2, Upload } from 'lucide-react'
 import PageTransition from '../components/ui/PageTransition'
 import { useSiteSettings } from '../context/SiteSettingsContext'
+import { normalizePageMedia } from '../lib/pageMedia'
 import { cn, formatDate } from '../lib/utils'
 import { createLivePromoCampaignId, getLivePromoState, parsePromoDate } from '../lib/livePromo'
 import { hasSupabaseEnv, supabase } from '../lib/supabase'
@@ -16,9 +17,16 @@ const statusMeta = {
   invalid: { label: 'Λάθος ημερομηνίες', className: 'border-[rgba(122,30,46,0.18)] bg-[rgba(122,30,46,0.10)] text-wine-700' },
 }
 
+const liveMusicPhotoGroups = [
+  { key: 'friday', label: 'Παρασκευή', folder: 'live-music-friday' },
+  { key: 'saturday', label: 'Σάββατο', folder: 'live-music-saturday' },
+  { key: 'sunday', label: 'Κυριακή', folder: 'live-music-sunday' },
+]
+
 function buildFormState(settings) {
   return {
     livePromo: { ...settings.livePromo },
+    pageMedia: normalizePageMedia(settings.pageMedia),
     reviewStats: {
       average: settings.reviewStats.average,
       total: settings.reviewStats.total,
@@ -43,6 +51,59 @@ function InlineMessage({ message, className = '' }) {
   return (
     <div className={cn('rounded-2xl border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.58)] px-4 py-3 text-sm text-[rgba(47,29,15,0.66)]', className)}>
       {message}
+    </div>
+  )
+}
+
+function PhotoTile({ photo, label, disabled, onRemove }) {
+  return (
+    <div className="overflow-hidden rounded-[1.5rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,249,240,0.82)]">
+      <div className="aspect-[4/3] overflow-hidden bg-[rgba(127,91,48,0.06)]">
+        <img src={photo.image} alt={photo.title || label} className="h-full w-full object-cover" />
+      </div>
+      <div className="space-y-3 p-3">
+        <p className="text-xs text-[rgba(47,29,15,0.62)]">{label}</p>
+        <button type="button" onClick={onRemove} className="btn-outline w-full justify-center px-4 text-sm" disabled={disabled}>
+          <Trash2 size={15} />
+          Αφαίρεση
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function PhotoManager({ title, hint, inputId, photos, uploading, onUpload, onRemove }) {
+  return (
+    <div className="rounded-[1.6rem] border border-[rgba(127,91,48,0.12)] bg-[rgba(255,252,246,0.82)] p-4 sm:p-5">
+      <div className="mb-4 space-y-2 text-center sm:text-left">
+        <h3 className="heading-card text-[rgba(31,18,9,0.9)]">{title}</h3>
+        <p className="text-sm leading-relaxed text-[rgba(47,29,15,0.56)]">{hint}</p>
+      </div>
+
+      <input id={inputId} type="file" accept="image/*" multiple onChange={onUpload} className="sr-only" disabled={uploading} />
+
+      <label htmlFor={inputId} className={cn('btn-primary w-full cursor-pointer justify-center px-4 text-sm', uploading && 'pointer-events-none opacity-60')}>
+        <ImagePlus size={15} />
+        {uploading ? 'Ανέβασμα...' : 'Προσθήκη φωτογραφιών'}
+      </label>
+
+      {photos.length ? (
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {photos.map((photo, index) => (
+            <PhotoTile
+              key={photo.id}
+              photo={photo}
+              label={`Φωτογραφία ${index + 1}`}
+              disabled={uploading}
+              onRemove={() => onRemove(photo.id)}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-4 rounded-2xl border border-dashed border-[rgba(127,91,48,0.16)] px-4 py-4 text-sm text-[rgba(47,29,15,0.50)]">
+          Δεν υπάρχουν φωτογραφίες ακόμη.
+        </p>
+      )}
     </div>
   )
 }
@@ -83,9 +144,11 @@ export default function LivePromoAdmin() {
   const [promoMessage, setPromoMessage] = useState('')
   const [uploadMessage, setUploadMessage] = useState('')
   const [ratingsMessage, setRatingsMessage] = useState('')
+  const [mediaMessage, setMediaMessage] = useState('')
   const [authError, setAuthError] = useState('')
   const [saving, setSaving] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
+  const [uploadingSection, setUploadingSection] = useState('')
   const [session, setSession] = useState(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [loginLoading, setLoginLoading] = useState(false)
@@ -118,6 +181,7 @@ export default function LivePromoAdmin() {
   }, [])
 
   const livePromo = form.livePromo
+  const pageMedia = form.pageMedia
   const reviewStats = form.reviewStats
   const meta = useMemo(() => statusMeta[getLivePromoState(livePromo)] || statusMeta.draft, [livePromo])
   const liveAt = parsePromoDate(livePromo.liveAt)
@@ -128,6 +192,7 @@ export default function LivePromoAdmin() {
     setPromoMessage('')
     setUploadMessage('')
     setRatingsMessage('')
+    setMediaMessage('')
   }
 
   function setPromoField(key, value) {
@@ -138,13 +203,18 @@ export default function LivePromoAdmin() {
     setForm(current => ({ ...current, reviewStats: { ...current.reviewStats, [key]: value } }))
   }
 
-  async function persist(nextLivePromo, nextReviewStats, successMessage, scope = 'promo') {
+  function setPageMedia(nextPageMedia) {
+    setForm(current => ({ ...current, pageMedia: normalizePageMedia(nextPageMedia) }))
+  }
+
+  async function persist(nextLivePromo, nextReviewStats, nextPageMedia, successMessage, scope = 'promo') {
     setSaving(true)
     clearMessages()
 
     try {
       await updateSettings({
         livePromo: nextLivePromo,
+        pageMedia: normalizePageMedia(nextPageMedia),
         reviewStats: {
           ...nextReviewStats,
           average: Number(nextReviewStats.average),
@@ -154,6 +224,8 @@ export default function LivePromoAdmin() {
 
       if (scope === 'ratings') {
         setRatingsMessage(successMessage)
+      } else if (scope === 'media') {
+        setMediaMessage(successMessage)
       } else {
         setPromoMessage(successMessage)
       }
@@ -161,6 +233,8 @@ export default function LivePromoAdmin() {
       const fallback = 'Δεν αποθηκεύτηκε. Δοκιμάστε ξανά.'
       if (scope === 'ratings') {
         setRatingsMessage(error?.message || fallback)
+      } else if (scope === 'media') {
+        setMediaMessage(error?.message || fallback)
       } else {
         setPromoMessage(error?.message || fallback)
       }
@@ -195,10 +269,102 @@ export default function LivePromoAdmin() {
     }
   }
 
+  async function uploadGalleryPhotos(files, folder, buildNextPageMedia, successMessage) {
+    if (!files.length) return
+
+    clearMessages()
+    setUploadingSection(folder)
+
+    try {
+      const uploadedPhotos = []
+
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) {
+          throw new Error('Επιλέξτε μόνο αρχεία εικόνας.')
+        }
+
+        const { publicUrl } = await uploadAdminImage(file, folder)
+        uploadedPhotos.push({ id: `${folder}-${Date.now()}-${uploadedPhotos.length + 1}`, image: publicUrl })
+      }
+
+      const nextPageMedia = normalizePageMedia(buildNextPageMedia(uploadedPhotos))
+      setPageMedia(nextPageMedia)
+      await persist(livePromo, reviewStats, nextPageMedia, successMessage, 'media')
+    } finally {
+      setUploadingSection('')
+    }
+  }
+
+  async function handleHomePhotosUpload(event) {
+    const files = Array.from(event.target.files || [])
+
+    try {
+      await uploadGalleryPhotos(
+        files,
+        'home-gallery',
+        uploadedPhotos => ({
+          ...pageMedia,
+          homePhotos: [...pageMedia.homePhotos, ...uploadedPhotos],
+        }),
+        'Οι φωτογραφίες αρχικής αποθηκεύτηκαν.'
+      )
+    } catch (error) {
+      setMediaMessage(error?.message || 'Αποτυχία ανεβάσματος φωτογραφιών.')
+    } finally {
+      event.target.value = ''
+    }
+  }
+
+  async function handleLiveMusicPhotosUpload(dayKey, folder, event) {
+    const files = Array.from(event.target.files || [])
+
+    try {
+      await uploadGalleryPhotos(
+        files,
+        folder,
+        uploadedPhotos => ({
+          ...pageMedia,
+          liveMusicPhotos: {
+            ...pageMedia.liveMusicPhotos,
+            [dayKey]: [...pageMedia.liveMusicPhotos[dayKey], ...uploadedPhotos],
+          },
+        }),
+        `Οι φωτογραφίες για ${liveMusicPhotoGroups.find(group => group.key === dayKey)?.label || dayKey} αποθηκεύτηκαν.`
+      )
+    } catch (error) {
+      setMediaMessage(error?.message || 'Αποτυχία ανεβάσματος φωτογραφιών.')
+    } finally {
+      event.target.value = ''
+    }
+  }
+
+  async function removeHomePhoto(photoId) {
+    const nextPageMedia = normalizePageMedia({
+      ...pageMedia,
+      homePhotos: pageMedia.homePhotos.filter(photo => photo.id !== photoId),
+    })
+
+    setPageMedia(nextPageMedia)
+    await persist(livePromo, reviewStats, nextPageMedia, 'Η φωτογραφία αρχικής αφαιρέθηκε.', 'media')
+  }
+
+  async function removeLiveMusicPhoto(dayKey, photoId) {
+    const nextPageMedia = normalizePageMedia({
+      ...pageMedia,
+      liveMusicPhotos: {
+        ...pageMedia.liveMusicPhotos,
+        [dayKey]: pageMedia.liveMusicPhotos[dayKey].filter(photo => photo.id !== photoId),
+      },
+    })
+
+    setPageMedia(nextPageMedia)
+    await persist(livePromo, reviewStats, nextPageMedia, 'Η φωτογραφία αφαιρέθηκε.', 'media')
+  }
+
   async function handleSaveDraft() {
     const nextPromo = { ...livePromo, enabled: false, updatedAt: new Date().toISOString() }
     setForm(current => ({ ...current, livePromo: nextPromo }))
-    await persist(nextPromo, reviewStats, 'Οι αλλαγές αποθηκεύτηκαν.')
+    await persist(nextPromo, reviewStats, pageMedia, 'Οι αλλαγές αποθηκεύτηκαν.')
   }
 
   async function handlePublish() {
@@ -217,17 +383,17 @@ export default function LivePromoAdmin() {
     }
 
     setForm(current => ({ ...current, livePromo: nextPromo }))
-    await persist(nextPromo, reviewStats, 'Η ανακοίνωση δημοσιεύτηκε.')
+    await persist(nextPromo, reviewStats, pageMedia, 'Η ανακοίνωση δημοσιεύτηκε.')
   }
 
   async function handleUnpublish() {
     const nextPromo = { ...livePromo, enabled: false, updatedAt: new Date().toISOString() }
     setForm(current => ({ ...current, livePromo: nextPromo }))
-    await persist(nextPromo, reviewStats, 'Η ανακοίνωση απενεργοποιήθηκε.')
+    await persist(nextPromo, reviewStats, pageMedia, 'Η ανακοίνωση απενεργοποιήθηκε.')
   }
 
   async function handleSaveRatings() {
-    await persist(livePromo, reviewStats, 'Οι αξιολογήσεις αποθηκεύτηκαν.', 'ratings')
+    await persist(livePromo, reviewStats, pageMedia, 'Οι αξιολογήσεις αποθηκεύτηκαν.', 'ratings')
   }
 
   async function handleLogin(event) {
@@ -283,8 +449,8 @@ export default function LivePromoAdmin() {
           ) : (
             <>
               <div className="mb-8 flex flex-col items-center justify-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
-                <div className="text-sm text-[rgba(47,29,15,0.58)]">{session.user.email}</div>
-                <button type="button" onClick={handleSignOut} className="btn-outline text-sm">
+                <div className="break-all text-sm text-[rgba(47,29,15,0.58)]">{session.user.email}</div>
+                <button type="button" onClick={handleSignOut} className="btn-outline w-full justify-center px-4 text-sm sm:w-auto">
                   <LogOut size={15} />
                   Αποσύνδεση
                 </button>
@@ -311,12 +477,7 @@ export default function LivePromoAdmin() {
                       </Field>
 
                       <Field label="Ημερομηνία live" hint="Αυτή η ημερομηνία θα φαίνεται πάνω στη φωτογραφία στο popup.">
-                        <input
-                          type="datetime-local"
-                          value={livePromo.liveAt || ''}
-                          onChange={e => setPromoField('liveAt', e.target.value)}
-                          className="form-field"
-                        />
+                        <input type="datetime-local" value={livePromo.liveAt || ''} onChange={e => setPromoField('liveAt', e.target.value)} className="form-field" />
                       </Field>
 
                       <Field label="Φωτογραφία" hint="Διαλέξτε φωτογραφία από τη συσκευή σας.">
@@ -330,10 +491,10 @@ export default function LivePromoAdmin() {
                             disabled={uploadingImage}
                           />
 
-                          <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
+                          <div className="grid gap-3 sm:flex sm:flex-wrap sm:justify-start">
                             <label
                               htmlFor="live-promo-image-upload"
-                              className={`btn-outline text-sm ${uploadingImage ? 'pointer-events-none opacity-60' : 'cursor-pointer'}`}
+                              className={cn('btn-outline w-full cursor-pointer justify-center px-4 text-sm sm:w-auto', uploadingImage && 'pointer-events-none opacity-60')}
                             >
                               <ImagePlus size={15} />
                               {uploadingImage ? 'Ανέβασμα...' : 'Επιλογή από συσκευή'}
@@ -347,7 +508,7 @@ export default function LivePromoAdmin() {
                                   setPromoField('imageUrl', '')
                                   setUploadMessage('Η φωτογραφία αφαιρέθηκε.')
                                 }}
-                                className="btn-outline text-sm"
+                                className="btn-outline w-full justify-center px-4 text-sm sm:w-auto"
                                 disabled={uploadingImage}
                               >
                                 <Trash2 size={15} />
@@ -360,7 +521,7 @@ export default function LivePromoAdmin() {
                         </div>
                       </Field>
 
-                      <div className="grid gap-5 text-center md:grid-cols-2 sm:text-left">
+                      <div className="grid gap-5 text-center sm:text-left md:grid-cols-2">
                         <Field label="Έναρξη προβολής">
                           <input type="datetime-local" value={livePromo.startsAt} onChange={e => setPromoField('startsAt', e.target.value)} className="form-field" />
                         </Field>
@@ -379,16 +540,16 @@ export default function LivePromoAdmin() {
                       </div>
                     </div>
 
-                    <div className="mt-8 flex flex-wrap justify-center gap-3 sm:justify-start">
-                      <button type="button" onClick={handleSaveDraft} className="btn-outline text-sm" disabled={saving || uploadingImage}>
+                    <div className="mt-8 grid gap-3 sm:flex sm:flex-wrap sm:justify-start">
+                      <button type="button" onClick={handleSaveDraft} className="btn-outline w-full justify-center px-4 text-sm sm:w-auto" disabled={saving || uploadingImage}>
                         <Save size={15} />
                         Αποθήκευση
                       </button>
-                      <button type="button" onClick={handlePublish} className="btn-primary text-sm" disabled={saving || uploadingImage}>
+                      <button type="button" onClick={handlePublish} className="btn-primary w-full justify-center px-4 text-sm sm:w-auto" disabled={saving || uploadingImage}>
                         <Rocket size={15} />
                         Δημοσίευση
                       </button>
-                      <button type="button" onClick={handleUnpublish} className="btn-outline text-sm" disabled={saving || uploadingImage}>
+                      <button type="button" onClick={handleUnpublish} className="btn-outline w-full justify-center px-4 text-sm sm:w-auto" disabled={saving || uploadingImage}>
                         <EyeOff size={15} />
                         Απενεργοποίηση
                       </button>
@@ -438,7 +599,7 @@ export default function LivePromoAdmin() {
                       <h2 className="heading-card text-[rgba(31,18,9,0.92)]">Στοιχεία Google</h2>
                     </div>
 
-                    <div className="grid gap-5 text-center md:grid-cols-2 sm:text-left">
+                    <div className="grid gap-5 text-center sm:text-left md:grid-cols-2">
                       <Field label="Μέση βαθμολογία">
                         <input
                           type="number"
@@ -462,14 +623,51 @@ export default function LivePromoAdmin() {
                       </Field>
                     </div>
 
-                    <div className="mt-6 flex justify-center sm:justify-start">
-                      <button type="button" onClick={handleSaveRatings} className="btn-primary text-sm" disabled={saving || uploadingImage}>
+                    <div className="mt-6">
+                      <button type="button" onClick={handleSaveRatings} className="btn-primary w-full justify-center px-4 text-sm sm:w-auto" disabled={saving || uploadingImage}>
                         <Upload size={15} />
                         Αποθήκευση
                       </button>
                     </div>
 
                     <InlineMessage message={ratingsMessage} className="mt-4" />
+                  </div>
+
+                  <div className="card-base p-6 text-center sm:p-8 sm:text-left">
+                    <div className="mb-6">
+                      <p className="label-upper mb-2">Φωτογραφίες</p>
+                      <h2 className="heading-card text-[rgba(31,18,9,0.92)]">Διαχείριση σελίδων</h2>
+                      <p className="mt-3 text-sm leading-relaxed text-[rgba(47,29,15,0.56)]">
+                        Εδώ αλλάζετε τις φωτογραφίες που φαίνονται στην αρχική σελίδα και στη σελίδα live music.
+                      </p>
+                    </div>
+
+                    <div className="space-y-5">
+                      <PhotoManager
+                        title="Αρχική σελίδα"
+                        hint="Προσθήκη ή αφαίρεση φωτογραφιών για το carousel της αρχικής."
+                        inputId="home-page-photos"
+                        photos={pageMedia.homePhotos}
+                        uploading={uploadingSection === 'home-gallery'}
+                        onUpload={handleHomePhotosUpload}
+                        onRemove={removeHomePhoto}
+                      />
+
+                      {liveMusicPhotoGroups.map(group => (
+                        <PhotoManager
+                          key={group.key}
+                          title={`Live Music · ${group.label}`}
+                          hint={`Οι φωτογραφίες αυτές χρησιμοποιούνται για τη ${group.label} στη σελίδα live music.`}
+                          inputId={`live-music-${group.key}-photos`}
+                          photos={pageMedia.liveMusicPhotos[group.key]}
+                          uploading={uploadingSection === group.folder}
+                          onUpload={event => handleLiveMusicPhotosUpload(group.key, group.folder, event)}
+                          onRemove={photoId => removeLiveMusicPhoto(group.key, photoId)}
+                        />
+                      ))}
+                    </div>
+
+                    <InlineMessage message={mediaMessage} className="mt-4" />
                   </div>
                 </div>
 
@@ -482,6 +680,10 @@ export default function LivePromoAdmin() {
                       <p>Λήξη προβολής: {endsAt ? `${formatDate(endsAt.toISOString())} ${endsAt.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' })}` : 'Δεν έχει οριστεί'}</p>
                       <p>Βαθμολογία Google: {reviewStats.average} / 5</p>
                       <p>Αξιολογήσεις Google: {reviewStats.total}</p>
+                      <p>Φωτογραφίες αρχικής: {pageMedia.homePhotos.length}</p>
+                      <p>Live Music Παρασκευή: {pageMedia.liveMusicPhotos.friday.length}</p>
+                      <p>Live Music Σάββατο: {pageMedia.liveMusicPhotos.saturday.length}</p>
+                      <p>Live Music Κυριακή: {pageMedia.liveMusicPhotos.sunday.length}</p>
                     </div>
                   </div>
                 </div>

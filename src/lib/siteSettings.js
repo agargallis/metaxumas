@@ -1,5 +1,6 @@
 import { ratingStats as fallbackRatingStats } from '../data/reviews'
 import { createEmptyLivePromo } from './livePromo'
+import { createDefaultPageMedia, normalizePageMedia } from './pageMedia'
 import { hasSupabaseEnv, supabase } from './supabase'
 
 export const SITE_SETTINGS_ROW_ID = 'main'
@@ -16,6 +17,7 @@ export function createDefaultSiteSettings() {
   return {
     reviewStats: createDefaultReviewStats(),
     livePromo: createEmptyLivePromo(),
+    pageMedia: createDefaultPageMedia(),
   }
 }
 
@@ -45,23 +47,35 @@ function mapRowToSiteSettings(row) {
   const fallback = createDefaultSiteSettings()
   if (!row) return fallback
 
+  const livePromo = normalizeLivePromo(row.live_promo)
+  const pageMedia = normalizePageMedia(livePromo.pageMedia)
+  const cleanLivePromo = { ...livePromo }
+  delete cleanLivePromo.pageMedia
+
   return {
     reviewStats: normalizeReviewStats({
       average: row.review_average,
       total: row.review_total,
       breakdown: row.review_breakdown,
     }),
-    livePromo: normalizeLivePromo(row.live_promo),
+    livePromo: cleanLivePromo,
+    pageMedia,
   }
 }
 
 function mapSiteSettingsToRow(settings) {
+  const livePromo = { ...(settings.livePromo || {}) }
+  delete livePromo.pageMedia
+
   return {
     id: SITE_SETTINGS_ROW_ID,
     review_average: settings.reviewStats.average,
     review_total: settings.reviewStats.total,
     review_breakdown: settings.reviewStats.breakdown,
-    live_promo: settings.livePromo,
+    live_promo: {
+      ...livePromo,
+      pageMedia: normalizePageMedia(settings.pageMedia),
+    },
     updated_at: new Date().toISOString(),
   }
 }

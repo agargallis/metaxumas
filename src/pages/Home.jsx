@@ -25,67 +25,11 @@ import PageTransition from '../components/ui/PageTransition'
 import { business } from '../data/business'
 import { recurringEvents } from '../data/events'
 import { featuredReviews, ratingStats } from '../data/reviews'
-import { instagramPosts } from '../data/gallery'
 import { useSiteSettings } from '../context/SiteSettingsContext'
 import { cn } from '../lib/utils'
 const logoSrc = 'https://i.imgur.com/bVglvSP.png'
 
 const spring = [0.22, 1, 0.36, 1]
-
-const photoCards = [
-  {
-    title: 'Γωνιά του χώρου',
-    eyebrow: 'Μεταξύ Μας',
-    note: 'Χώρος για ήσυχο καφέ και χαλαρή πρώτη στάση της ημέρας.',
-    image: 'https://i.imgur.com/bHlj9oV.png',
-    accent: 'linear-gradient(145deg, rgba(237,196,141,0.92), rgba(250,237,214,0.94))',
-  },
-  {
-    title: 'Άλλη μια ματιά στον χώρο',
-    eyebrow: 'Μεταξύ Μας',
-    note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
-    image: 'https://i.imgur.com/nnzjjl2.jpeg',
-    accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
-  },
-  {
-    title: 'Άλλη μια ματιά στον χώρο',
-    eyebrow: 'Μεταξύ Μας',
-    note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
-    image: 'https://i.imgur.com/GO5DSgZ.jpeg',
-    accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
-  },
-  {
-    title: 'Ατμόσφαιρα για παρέα',
-    eyebrow: 'Μεταξύ Μας',
-    note: 'Σημείο που δένει με κουβέντα, κρασί και πιο ζεστή ατμόσφαιρα.',
-    image: 'https://i.imgur.com/FhSCDfn.jpeg',
-    accent: 'linear-gradient(145deg, rgba(225,171,145,0.92), rgba(247,223,208,0.94))',
-  },
-  {
-    title: 'Στιγμή από βραδιά',
-    eyebrow: 'Μεταξύ Μας',
-    note: 'Η βραδινή πλευρά του μαγαζιού, πιο ζωντανή αλλά πάντα οικεία.',
-    image: 'https://i.imgur.com/DLNEUsn.jpeg',
-    accent: 'linear-gradient(145deg, rgba(229,191,156,0.92), rgba(250,235,217,0.94))',
-  },
-  {
-    title: 'Άλλη μια ματιά στον χώρο',
-    eyebrow: 'Μεταξύ Μας',
-    note: 'Μια ακόμη γωνιά του μαγαζιού με την ίδια ζεστή αίσθηση.',
-    image: 'https://i.imgur.com/1d0giQl.jpeg',
-    accent: 'linear-gradient(145deg, rgba(208,168,126,0.92), rgba(248,229,205,0.94))',
-  },
-]
-
-const photos = photoCards.map((card, index) => {
-  const post = instagramPosts[index]
-
-  return {
-    id: post?.id || `home-photo-${index + 1}`,
-    caption: post?.caption || card.note,
-    ...card,
-  }
-})
 
 function TikTokIcon({ className = '', size = 18 }) {
   return (
@@ -296,10 +240,16 @@ function PhotoModal({ item, onClose }) {
 }
 
 function StorySection() {
+  const { settings } = useSiteSettings()
   const [activePhoto, setActivePhoto] = useState(null)
   const carouselRef = useRef(null)
+  const photos = settings.pageMedia.homePhotos
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(photos.length > 1)
+
+  useEffect(() => {
+    setCanScrollRight(photos.length > 1)
+  }, [photos.length])
 
   useEffect(() => {
     const node = carouselRef.current

@@ -250,9 +250,14 @@
     @apply inline-flex items-center gap-2 rounded-full font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400/60;
     position: relative;
     overflow: hidden;
+    justify-content: center;
     padding: 0.875rem 2rem;
     font-size: 0.875rem;
     letter-spacing: 0.02em;
+    line-height: 1.35;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
     color: #fffdf7;
     background: linear-gradient(135deg, #b87a0e 0%, #9e660a 50%, #8c5808 100%);
     box-shadow: 0 4px 20px rgba(140, 90, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
@@ -283,9 +288,14 @@
 
   .btn-outline {
     @apply inline-flex items-center gap-2 rounded-full font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400/60;
+    justify-content: center;
     padding: 0.875rem 2rem;
     font-size: 0.875rem;
     letter-spacing: 0.02em;
+    line-height: 1.35;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
     color: var(--gold);
     border: 1px solid rgba(180, 120, 14, 0.4);
     background: rgba(255, 255, 255, 0.45);
@@ -1003,7 +1013,6 @@
 .print-only {
   display: none;
 }
-
 
 
 
