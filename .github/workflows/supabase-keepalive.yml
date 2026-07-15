@@ -1,0 +1,54 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Runs every Sunday and Wednesday at 00:00 UTC.
+    - cron: "0 0 * * 0,3"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    name: Ping Supabase REST API
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      TABLE_NAME: site_settings
+
+    steps:
+      - name: Keep Supabase project active
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${SUPABASE_URL}" ]]; then
+            echo "::error::Missing GitHub secret: SUPABASE_URL"
+            exit 1
+          fi
+
+          if [[ -z "${SUPABASE_ANON_KEY}" ]]; then
+            echo "::error::Missing GitHub secret: SUPABASE_ANON_KEY"
+            exit 1
+          fi
+
+          endpoint="${SUPABASE_URL%/}/rest/v1/${TABLE_NAME}?select=id&limit=1"
+
+          curl --fail-with-body \
+            --silent \
+            --show-error \
+            --location \
+            --max-time 30 \
+            --retry 2 \
+            --retry-delay 5 \
+            --header "apikey: ${SUPABASE_ANON_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            --header "Accept: application/json" \
+            "${endpoint}" \
+            >/dev/null
+
+          echo "Supabase keep-alive ping succeeded for table '${TABLE_NAME}'."
